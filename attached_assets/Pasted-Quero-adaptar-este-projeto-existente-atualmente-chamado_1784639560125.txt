@@ -1,0 +1,684 @@
+Quero adaptar este projeto existente, atualmente chamado “Escuta DF”, para participar do Hackathon “Conecta UnDF: Soluções para Gestão Participativa”.
+
+IMPORTANTE: não crie um projeto novo e não substitua toda a aplicação. Analise primeiro a estrutura existente, preserve tudo que já estiver funcionando e faça uma evolução incremental, segura e profissional.
+
+NOVO NOME DO SISTEMA
+
+UnDF Participa
+
+Subtítulo:
+Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+Sua participação transforma a Universidade.
+
+OBJETIVO DO PROJETO
+
+Transformar o atual Escuta DF em uma plataforma voltada à comunidade acadêmica da Universidade do Distrito Federal — UnDF.
+
+A plataforma deve permitir que estudantes, docentes, servidores e gestores registrem demandas, sugestões e propostas, acompanhem o andamento das solicitações e visualizem dados públicos de transparência.
+
+O sistema não deve parecer apenas uma ouvidoria. Ele deve ser apresentado como uma plataforma de gestão participativa, priorização coletiva, transparência institucional e apoio à tomada de decisão.
+
+DIRETRIZES TÉCNICAS OBRIGATÓRIAS
+
+1. Antes de alterar qualquer arquivo:
+- analise toda a arquitetura do projeto;
+- identifique frontend, backend, banco de dados, autenticação, rotas, componentes e variáveis de ambiente;
+- informe resumidamente quais tecnologias estão sendo utilizadas;
+- identifique quais funcionalidades já estão funcionando;
+- identifique quais funcionalidades dependem de serviços externos;
+- não remova dependências ou recursos sem necessidade.
+
+2. Preserve:
+- autenticação existente;
+- cadastro de usuários;
+- registro de manifestações;
+- geração e consulta de protocolo;
+- painel administrativo;
+- banco de dados;
+- upload de imagens ou arquivos;
+- gravação ou envio de áudio;
+- recursos de acessibilidade;
+- responsividade;
+- estrutura PWA, caso já exista;
+- páginas de transparência;
+- funcionalidades que já estiverem operacionais.
+
+3. Não usar dados fictícios em telas que deveriam estar conectadas ao banco.
+Quando ainda não existir backend para uma funcionalidade, implementar o fluxo corretamente ou deixar claramente identificado como demonstração do MVP.
+
+4. Não quebrar o sistema atual.
+Realizar as alterações por etapas e testar a aplicação após cada etapa.
+
+5. Não alterar variáveis de ambiente existentes sem explicar.
+Não expor chaves, senhas ou tokens no código.
+
+6. Manter o projeto preparado para publicação no Replit e, se possível, também para frontend no Vercel.
+
+IDENTIDADE VISUAL
+
+Substituir toda referência visual e textual a:
+
+- Escuta DF;
+- Governo do Distrito Federal;
+- cidadão;
+- órgãos do GDF;
+- manifestações governamentais;
+- administração pública distrital.
+
+Por referências relacionadas a:
+
+- UnDF Participa;
+- Universidade do Distrito Federal;
+- comunidade acadêmica;
+- estudantes, docentes, servidores e gestores;
+- unidades acadêmicas;
+- coordenações;
+- pró-reitorias;
+- setores administrativos;
+- gestão universitária participativa.
+
+A identidade visual deve ser:
+
+- moderna;
+- institucional;
+- tecnológica;
+- acessível;
+- limpa;
+- profissional;
+- responsiva;
+- adequada para uma apresentação de hackathon.
+
+Não fazer apenas uma troca de cores. Reorganizar textos, hierarquia visual, chamadas para ação e experiência do usuário.
+
+Manter boa legibilidade, contraste, navegação por teclado, foco visível e textos alternativos.
+
+PÁGINA INICIAL
+
+A primeira tela precisa explicar a solução em menos de 10 segundos.
+
+Título principal:
+Sua voz ajuda a construir a UnDF.
+
+Texto:
+Registre demandas, apresente propostas, acompanhe respostas e participe das decisões que transformam a Universidade.
+
+Botões principais:
+- Registrar demanda
+- Explorar demandas
+- Acompanhar protocolo
+
+Incluir uma seção resumida com o funcionamento:
+
+1. Registre
+Envie uma demanda, sugestão ou proposta por texto, imagem ou áudio.
+
+2. Acompanhe
+Consulte o protocolo e veja cada etapa do atendimento.
+
+3. Participe
+Apoie demandas da comunidade e ajude a definir prioridades.
+
+4. Transforme
+A gestão utiliza os dados para planejar melhorias e prestar contas.
+
+Incluir indicadores dinâmicos, conectados ao banco quando possível:
+
+- demandas registradas;
+- demandas resolvidas;
+- pessoas participantes;
+- tempo médio de resposta;
+- propostas apoiadas.
+
+TIPOS DE PARTICIPAÇÃO
+
+Criar ou adaptar o cadastro para os seguintes tipos:
+
+- Problema;
+- Solicitação;
+- Sugestão;
+- Proposta para a UnDF;
+- Elogio;
+- Denúncia;
+- Consulta ou participação institucional.
+
+CATEGORIAS
+
+Substituir as categorias antigas pelas seguintes:
+
+- Ensino e atividades acadêmicas;
+- Infraestrutura;
+- Assistência estudantil;
+- Acessibilidade e inclusão;
+- Tecnologia e sistemas;
+- Comunicação institucional;
+- Transporte e mobilidade;
+- Segurança;
+- Biblioteca e espaços de estudo;
+- Atendimento administrativo;
+- Pesquisa, extensão e inovação;
+- Eventos e atividades universitárias;
+- Sustentabilidade;
+- Convivência e bem-estar;
+- Outros.
+
+UNIDADES E SETORES RESPONSÁVEIS
+
+Preparar o sistema para encaminhamento a setores como:
+
+- Reitoria;
+- Vice-Reitoria;
+- Pró-Reitoria de Graduação;
+- Pró-Reitoria de Extensão;
+- Pró-Reitoria de Pesquisa e Pós-Graduação;
+- Pró-Reitoria de Desenvolvimento Universitário;
+- Assistência estudantil;
+- Tecnologia da Informação;
+- Coordenações de curso;
+- Biblioteca;
+- Infraestrutura e manutenção;
+- Comunicação;
+- Segurança;
+- Secretaria acadêmica;
+- Outros setores cadastráveis pelo administrador.
+
+Não deixar esses setores presos diretamente no código.
+Criar estrutura para cadastro e edição pelo painel administrativo, quando tecnicamente viável.
+
+FLUXO DE STATUS
+
+Utilizar os seguintes status:
+
+1. Recebida;
+2. Em triagem;
+3. Encaminhada ao setor responsável;
+4. Em análise;
+5. Em execução;
+6. Concluída;
+7. Respondida com justificativa;
+8. Arquivada.
+
+O usuário deve visualizar uma linha do tempo clara com:
+
+- data de criação;
+- alterações de status;
+- setor responsável;
+- respostas institucionais;
+- previsão ou prazo, quando disponível;
+- data da conclusão.
+
+FORMULÁRIO DE REGISTRO
+
+O formulário deve conter:
+
+- tipo de participação;
+- título;
+- descrição detalhada;
+- categoria;
+- unidade ou campus relacionado;
+- público afetado;
+- nível de urgência;
+- opção de anonimato;
+- anexo de imagem ou documento;
+- gravação ou envio de áudio;
+- aceite dos termos de uso e privacidade.
+
+Criar validações claras.
+
+Mostrar contador de caracteres.
+
+Permitir pré-visualização antes do envio.
+
+Após o envio:
+
+- gerar protocolo;
+- exibir confirmação;
+- permitir copiar o protocolo;
+- apresentar botão para acompanhar;
+- mostrar orientação para guardar o número.
+
+ÁUDIO E ACESSIBILIDADE
+
+Manter e melhorar a funcionalidade de áudio existente.
+
+O usuário deve conseguir:
+
+- iniciar gravação;
+- pausar, quando tecnicamente possível;
+- finalizar;
+- ouvir antes de enviar;
+- excluir e gravar novamente;
+- enviar o áudio junto à manifestação.
+
+Adicionar texto explicativo:
+
+“Você pode registrar sua demanda por áudio. Esse recurso amplia a acessibilidade e facilita a participação de toda a comunidade.”
+
+Caso a transcrição automática não esteja configurada, o áudio deve continuar sendo enviado normalmente.
+
+Não fingir que existe transcrição por IA caso não esteja implementada.
+
+FUNÇÃO “TAMBÉM SOU AFETADO”
+
+Implementar uma função de apoio coletivo nas demandas públicas.
+
+Nome do botão:
+Também sou afetado
+
+Comportamento:
+
+- usuários autenticados podem apoiar uma demanda;
+- cada usuário só pode apoiar uma vez;
+- o usuário pode retirar o apoio;
+- exibir o número total de pessoas afetadas;
+- impedir que o autor aumente artificialmente o total;
+- atualizar o número após a ação;
+- armazenar os apoios no banco;
+- ordenar demandas também por quantidade de apoios.
+
+Exemplo:
+
+“74 pessoas também são afetadas por esta situação.”
+
+Adicionar filtros:
+
+- mais apoiadas;
+- mais recentes;
+- em andamento;
+- resolvidas;
+- por categoria;
+- por unidade;
+- por nível de urgência.
+
+PRIVACIDADE
+
+Demandas identificadas como privadas, denúncias ou conteúdos sensíveis não devem aparecer publicamente.
+
+Antes da publicação, permitir classificação como:
+
+- pública;
+- pública sem identificação do autor;
+- privada;
+- restrita à administração.
+
+Não exibir:
+
+- nome;
+- e-mail;
+- matrícula;
+- telefone;
+- documentos;
+- dados pessoais;
+- conteúdo sensível.
+
+Adicionar aviso sobre LGPD e proteção de dados.
+
+ÁREA “PROPOSTAS PARA A UNDF”
+
+Criar uma área específica para propostas de melhoria institucional.
+
+Cada proposta deve apresentar:
+
+- título;
+- descrição;
+- autor ou opção de anonimato;
+- categoria;
+- público beneficiado;
+- justificativa;
+- impacto esperado;
+- quantidade de apoios;
+- status institucional;
+- resposta da Universidade.
+
+Status possíveis:
+
+- Em participação;
+- Em avaliação;
+- Encaminhada;
+- Planejada;
+- Em implementação;
+- Implementada;
+- Não aprovada, com justificativa.
+
+Adicionar botão:
+Apoiar proposta
+
+Permitir ordenar por:
+
+- mais apoiadas;
+- mais recentes;
+- em avaliação;
+- implementadas.
+
+PAINEL PÚBLICO DE TRANSPARÊNCIA
+
+Criar ou adaptar a página pública de transparência com dados reais do banco.
+
+Indicadores:
+
+- total de demandas;
+- demandas recebidas no mês;
+- demandas resolvidas;
+- percentual de resolução;
+- tempo médio de resposta;
+- demandas por categoria;
+- demandas por unidade;
+- demandas por status;
+- propostas mais apoiadas;
+- setores mais acionados;
+- evolução mensal;
+- satisfação dos usuários, caso exista esse dado.
+
+Utilizar gráficos simples, responsivos e legíveis.
+
+Adicionar filtros por:
+
+- período;
+- unidade;
+- categoria;
+- status;
+- tipo de participação.
+
+Não inventar números.
+Quando o banco estiver vazio, mostrar estado vazio profissional com mensagem explicativa.
+
+PAINEL ADMINISTRATIVO
+
+Manter ou criar uma área administrativa protegida.
+
+O administrador deve conseguir:
+
+- visualizar todas as demandas;
+- pesquisar por protocolo, título ou autor;
+- filtrar por categoria, unidade, status, urgência e período;
+- abrir uma demanda;
+- alterar status;
+- encaminhar para setor;
+- escrever resposta;
+- registrar observação interna;
+- definir prazo;
+- marcar como pública ou privada;
+- identificar possíveis duplicidades;
+- visualizar anexos e áudios;
+- acompanhar histórico;
+- gerenciar propostas;
+- cadastrar categorias;
+- cadastrar setores;
+- cadastrar unidades;
+- visualizar indicadores.
+
+Separar:
+
+- resposta pública;
+- observação interna.
+
+Observações internas nunca devem aparecer para o usuário.
+
+INTELIGÊNCIA ARTIFICIAL
+
+Adicionar uma área visual chamada:
+
+Assistente Inteligente
+
+Nome sugerido:
+Nara — Assistente Inteligente do UnDF Participa
+
+A IA poderá futuramente:
+
+- transcrever áudios;
+- resumir manifestações;
+- sugerir categoria;
+- recomendar setor responsável;
+- identificar demandas semelhantes;
+- detectar prioridade;
+- anonimizar dados pessoais;
+- gerar relatórios gerenciais;
+- simplificar respostas institucionais.
+
+Porém:
+
+- implementar apenas recursos que possam funcionar de verdade;
+- não criar uma falsa integração;
+- caso não exista chave de API, criar uma estrutura modular e uma demonstração explicitamente identificada como “recurso em preparação”;
+- não bloquear o funcionamento principal da plataforma por ausência de IA.
+
+Se já existir integração com Gemini, OpenAI ou outro serviço, reaproveitar a arquitetura com tratamento de erros e proteção das chaves.
+
+PÁGINA SOBRE
+
+Criar uma página “Sobre o projeto” com o seguinte conteúdo:
+
+“O UnDF Participa é uma plataforma digital de gestão participativa criada para aproximar a comunidade acadêmica da gestão universitária. A solução centraliza demandas, propostas e sugestões, amplia a transparência e transforma a participação em dados para tomada de decisão.”
+
+Adicionar seção sobre o problema:
+
+“As demandas acadêmicas podem ficar dispersas em e-mails, mensagens, formulários e diferentes setores. Isso dificulta o acompanhamento, gera duplicidade e impede a visualização das prioridades coletivas.”
+
+Adicionar seção sobre o impacto:
+
+- fortalecimento da participação estudantil;
+- transparência institucional;
+- redução de demandas duplicadas;
+- priorização com base em evidências;
+- melhoria na comunicação;
+- apoio ao planejamento da gestão.
+
+ODS 16
+
+Inserir uma seção clara relacionando o projeto ao ODS 16 — Paz, Justiça e Instituições Eficazes.
+
+Texto:
+
+“O UnDF Participa contribui para o ODS 16 ao fortalecer uma instituição mais transparente, inclusiva, responsável e participativa. A plataforma amplia o acesso à informação, permite acompanhar respostas institucionais e incentiva a participação da comunidade nas decisões universitárias.”
+
+DEMONSTRAÇÃO PARA O HACKATHON
+
+Criar dados de demonstração apenas por meio de seed separado ou mecanismo identificado como modo demonstração.
+
+Exemplos de demandas:
+
+1. Internet instável em salas do Campus Norte.
+Categoria: Tecnologia e sistemas.
+Apoios: 74.
+Status: Em análise.
+
+2. Necessidade de mais tomadas nos espaços de estudo.
+Categoria: Infraestrutura.
+Apoios: 51.
+Status: Encaminhada.
+
+3. Ampliação do horário da biblioteca em período de provas.
+Categoria: Biblioteca e espaços de estudo.
+Apoios: 96.
+Status: Planejada.
+
+4. Melhorar a comunicação sobre editais e bolsas.
+Categoria: Comunicação institucional.
+Apoios: 83.
+Status: Em execução.
+
+5. Implantação de rota acessível entre os blocos.
+Categoria: Acessibilidade e inclusão.
+Apoios: 67.
+Status: Em análise.
+
+Esses dados não devem ficar misturados aos dados reais.
+Criar uma forma simples de identificar e remover os registros de demonstração.
+
+EXPERIÊNCIA DO USUÁRIO
+
+Adicionar mensagens claras de:
+
+- carregamento;
+- sucesso;
+- erro;
+- formulário incompleto;
+- falha de conexão;
+- falta de permissão;
+- estado vazio;
+- confirmação antes de excluir.
+
+Não deixar botões sem função.
+
+Não usar textos genéricos como “Lorem ipsum”.
+
+Verificar todas as rotas, links e botões.
+
+Garantir funcionamento em celular, tablet e computador.
+
+TELA DE APRESENTAÇÃO DO MVP
+
+Criar uma página ou modo de apresentação chamado:
+
+Demonstração do MVP
+
+A tela deve facilitar a apresentação do projeto no hackathon, mostrando:
+
+- problema;
+- solução;
+- público beneficiado;
+- jornada do usuário;
+- principais funcionalidades;
+- indicadores;
+- gestão participativa;
+- ODS 16;
+- tecnologias utilizadas;
+- impactos esperados.
+
+Não transformar essa página em um slide genérico.
+Ela deve utilizar dados e telas reais da plataforma.
+
+SEGURANÇA
+
+- Proteger rotas administrativas.
+- Não permitir alteração de status por usuário comum.
+- Validar dados no frontend e backend.
+- Sanitizar entradas de texto.
+- Limitar tipos e tamanhos de arquivos.
+- Não expor dados pessoais em APIs públicas.
+- Não armazenar senha em texto puro.
+- Não exibir stack trace ao usuário.
+- Adicionar tratamento global de erros quando necessário.
+
+BANCO DE DADOS
+
+Antes de modificar o banco:
+
+- analisar o schema atual;
+- criar migrações seguras;
+- não apagar tabelas existentes;
+- não remover dados;
+- adicionar relacionamentos necessários.
+
+Estruturas que podem ser necessárias:
+
+- usuários;
+- manifestações;
+- categorias;
+- unidades;
+- setores;
+- histórico de status;
+- apoios em demandas;
+- propostas;
+- apoios em propostas;
+- respostas;
+- observações internas;
+- anexos;
+- áudios;
+- notificações.
+
+Criar índices para consultas frequentes quando apropriado.
+
+Não usar mudanças destrutivas sem explicar.
+
+ENTREGAS FINAIS
+
+Ao finalizar, entregar:
+
+1. aplicação funcionando;
+2. resumo das alterações;
+3. lista de arquivos modificados;
+4. lista das novas funcionalidades;
+5. instruções para executar localmente;
+6. instruções para publicar no Replit;
+7. variáveis de ambiente necessárias;
+8. instruções para preparar o banco;
+9. credenciais de demonstração, se forem criadas;
+10. roteiro rápido de teste;
+11. funcionalidades completas;
+12. funcionalidades parcialmente implementadas;
+13. funcionalidades planejadas;
+14. problemas conhecidos;
+15. sugestões de evolução.
+
+ORDEM DE EXECUÇÃO
+
+Executar nesta ordem:
+
+ETAPA 1 — Diagnóstico técnico
+- analisar arquitetura;
+- identificar funcionalidades;
+- verificar banco e autenticação;
+- listar riscos.
+
+ETAPA 2 — Identidade e conteúdo
+- mudar nome;
+- mudar textos;
+- adaptar página inicial;
+- adaptar categorias e setores;
+- remover referências antigas.
+
+ETAPA 3 — Fluxo universitário
+- adaptar formulário;
+- adaptar status;
+- adaptar acompanhamento;
+- adaptar painel administrativo.
+
+ETAPA 4 — Gestão participativa
+- implementar “Também sou afetado”;
+- implementar propostas;
+- implementar apoios;
+- implementar filtros.
+
+ETAPA 5 — Transparência
+- criar indicadores reais;
+- criar gráficos;
+- criar filtros;
+- criar página do ODS 16.
+
+ETAPA 6 — Qualidade
+- testar rotas;
+- corrigir erros;
+- testar responsividade;
+- testar acessibilidade;
+- testar permissões;
+- revisar textos.
+
+ETAPA 7 — Publicação
+- preparar para Replit;
+- confirmar comando de execução;
+- confirmar porta;
+- documentar variáveis;
+- garantir persistência do banco.
+
+REGRA FINAL
+
+Não faça mudanças superficiais.
+
+O resultado deve parecer uma solução criada especificamente para a UnDF, e não apenas o antigo Escuta DF com o nome alterado.
+
+Priorize primeiro um MVP funcional e demonstrável:
+
+1. página inicial;
+2. cadastro de demanda;
+3. protocolo;
+4. acompanhamento;
+5. áudio;
+6. “Também sou afetado”;
+7. painel público;
+8. painel administrativo;
+9. propostas;
+10. ODS 16.
+
+Comece apresentando o diagnóstico técnico do projeto e o plano de implementação. Depois realize as alterações por etapas, testando o sistema ao final de cada uma.

@@ -1,36 +1,957 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
+  # Do not change the title — controls generated filenames
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 1.0.0
+  description: |
+    UnDF Participa — API de Gestão Participativa da Universidade do Distrito Federal.
+
+    Esta API é o contrato entre o frontend React e o backend Express.
+    Todas as rotas sob /api/demands e /api/proposals que mutam estado
+    requerem autenticação via sessão (cookie httpOnly). Rotas de leitura
+    pública não requerem autenticação, mas dados sensíveis são omitidos
+    automaticamente pelo backend para demandas anônimas.
+
 servers:
   - url: /api
     description: Base API path
+
 tags:
   - name: health
-    description: Health operations
+    description: Health and liveness
+  - name: Auth
+    description: Browser and mobile authentication endpoints.
+  - name: auth
+    description: Autenticação e perfil do usuário
+  - name: demands
+    description: Demandas, sugestões e solicitações da comunidade acadêmica
+  - name: proposals
+    description: Propostas formais para melhoria da UnDF
+  - name: transparency
+    description: Dados públicos de transparência institucional
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
-          description: Healthy
+          description: OK
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ---------- Auth ----------
+
+  /auth/user:
+    get:
+      tags: [Auth]
+      operationId: getCurrentAuthUser
+      summary: Get the currently authenticated user
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+      responses:
+        '200':
+          description: Auth status resolved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserEnvelope'
+  /login:
+    get:
+      tags: [Auth]
+      operationId: beginBrowserLogin
+      summary: Start the browser OIDC login flow
+      parameters:
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the OIDC authorization endpoint.
+  /callback:
+    get:
+      tags: [Auth]
+      operationId: handleBrowserLoginCallback
+      summary: Complete the browser OIDC login flow
+      parameters:
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: iss
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to the returnTo path on success or /api/login on failure.
+  /logout:
+    get:
+      tags: [Auth]
+      operationId: logoutBrowserSession
+      summary: Clear the session and begin OIDC logout
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+        - $ref: '#/components/parameters/SessionCookie'
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+            default: /
+      responses:
+        '302':
+          description: Redirect to the OIDC provider logout URL.
+  /mobile-auth/token-exchange:
+    post:
+      tags: [Auth]
+      operationId: exchangeMobileAuthorizationCode
+      summary: Exchange a mobile OIDC code for a session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileTokenExchangeRequest'
+      responses:
+        '200':
+          description: Session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobileTokenExchangeSuccess'
+        '400':
+          description: Missing or invalid required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '500':
+          description: Token exchange failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /mobile-auth/logout:
+    post:
+      tags: [Auth]
+      operationId: logoutMobileSession
+      summary: Delete a mobile session token
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationSessionHeader'
+      responses:
+        '200':
+          description: Logout processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSuccess'
+
+  # ---------- Demands ----------
+
+  /demands:
+    get:
+      operationId: listDemands
+      tags: [demands]
+      summary: Lista demandas públicas com filtros e paginação
+      parameters:
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/DemandCategory"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/DemandStatus"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: sort
+          in: query
+          description: Campo de ordenação
+          schema:
+            type: string
+            enum: [createdAt, supportCount]
+            default: createdAt
+      responses:
+        "200":
+          description: Lista paginada de demandas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandListResponse"
+
+    post:
+      operationId: createDemand
+      tags: [demands]
+      summary: Registra nova demanda (requer autenticação)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDemandInput"
+      responses:
+        "201":
+          description: Demanda criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Demand"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /demands/protocol/{protocol}:
+    get:
+      operationId: getDemandByProtocol
+      tags: [demands]
+      summary: Consulta demanda pelo número de protocolo (público)
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Demanda encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandWithDetails"
+        "404":
+          description: Protocolo não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /demands/{id}/support:
+    post:
+      operationId: toggleDemandSupport
+      tags: [demands]
+      summary: Adiciona ou remove apoio "Também sou afetado" (requer autenticação)
+      description: |
+        Operação idempotente — se o usuário já apoiou, remove o apoio.
+        Retorna o estado atual após a operação.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Estado do apoio após operação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportToggleResponse"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Demanda não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ---------- Proposals ----------
+
+  /proposals:
+    get:
+      operationId: listProposals
+      tags: [proposals]
+      summary: Lista propostas da comunidade com filtros
+      parameters:
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/DemandCategory"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/ProposalStatus"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [createdAt, supportCount]
+            default: supportCount
+      responses:
+        "200":
+          description: Lista paginada de propostas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProposalListResponse"
+
+    post:
+      operationId: createProposal
+      tags: [proposals]
+      summary: Submete nova proposta formal (requer autenticação)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProposalInput"
+      responses:
+        "201":
+          description: Proposta criada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Proposal"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /proposals/{id}/support:
+    post:
+      operationId: toggleProposalSupport
+      tags: [proposals]
+      summary: Apoia ou remove apoio de uma proposta (requer autenticação)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Estado do apoio após operação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportToggleResponse"
+        "401":
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Proposta não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ---------- Transparency ----------
+
+  /transparency/stats:
+    get:
+      operationId: getTransparencyStats
+      tags: [transparency]
+      summary: Indicadores públicos de transparência institucional
+      description: |
+        Agrega métricas reais do banco de dados para o portal de transparência.
+        Usado na página ODS 16 e no painel público.
+      responses:
+        "200":
+          description: Estatísticas de transparência
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransparencyStats"
+
+  /transparency/demands-by-category:
+    get:
+      operationId: getDemandsByCategory
+      tags: [transparency]
+      summary: Distribuição de demandas por categoria (para gráficos)
+      responses:
+        "200":
+          description: Contagem por categoria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryCount"
+
+  /transparency/demands-by-status:
+    get:
+      operationId: getDemandsByStatus
+      tags: [transparency]
+      summary: Distribuição de demandas por status (para gráficos)
+      responses:
+        "200":
+          description: Contagem por status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StatusCount"
+
+  /transparency/monthly-trend:
+    get:
+      operationId: getMonthlyTrend
+      tags: [transparency]
+      summary: Tendência mensal de registros (últimos 12 meses)
+      responses:
+        "200":
+          description: Série temporal mensal
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonthlyCount"
+
+  # ---------- Admin ----------
+
+  /admin/demands:
+    get:
+      operationId: adminListDemands
+      tags: [demands]
+      summary: Lista todas as demandas com dados completos (apenas admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/DemandStatus"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Demandas completas para gestão
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandListResponse"
+        "403":
+          description: Acesso negado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/demands/{id}/status:
+    patch:
+      operationId: updateDemandStatus
+      tags: [demands]
+      summary: Atualiza status e resposta de uma demanda (apenas admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDemandStatusInput"
+      responses:
+        "200":
+          description: Demanda atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Demand"
+        "403":
+          description: Acesso negado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Demanda não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
+  parameters:
+    AuthorizationSessionHeader:
+      name: Authorization
+      in: header
+      required: false
+      description: Opaque session token — `Bearer <sid>`.
+      schema:
+        type: string
+    SessionCookie:
+      name: sid
+      in: cookie
+      required: false
+      description: Browser session cookie.
+      schema:
+        type: string
   schemas:
+    AuthUser:
+      type: object
+      required: [id, email, firstName, lastName, profileImageUrl]
+      properties:
+        id:
+          type: string
+        email:
+          type: [string, 'null']
+        firstName:
+          type: [string, 'null']
+        lastName:
+          type: [string, 'null']
+        profileImageUrl:
+          type: [string, 'null']
+    AuthUserEnvelope:
+      type: object
+      required: [user]
+      properties:
+        user:
+          oneOf:
+            - $ref: '#/components/schemas/AuthUser'
+            - type: 'null'
+    MobileTokenExchangeRequest:
+      type: object
+      required: [code, code_verifier, redirect_uri, state]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        code_verifier:
+          type: string
+          minLength: 1
+        redirect_uri:
+          type: string
+          minLength: 1
+        state:
+          type: string
+          minLength: 1
+        nonce:
+          type: string
+          minLength: 1
+    MobileTokenExchangeSuccess:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+    LogoutSuccess:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+          const: true
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
     HealthStatus:
       type: object
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required: [message]
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+      required: [message]
+
+    # ---------- Enums ----------
+
+    DemandCategory:
+      type: string
+      enum:
+        - Infraestrutura
+        - "Ensino e Pesquisa"
+        - "Assistência Estudantil"
+        - Administração
+        - Tecnologia
+        - Acessibilidade
+        - "Cultura e Esporte"
+        - "Sugestão de Melhoria"
+
+    DemandStatus:
+      type: string
+      enum: [received, processing, completed, archived]
+
+    DemandType:
+      type: string
+      enum: [text, audio, image, video]
+
+    ProposalStatus:
+      type: string
+      enum: [open, under_review, approved, rejected, implemented]
+
+    # ---------- Auth ----------
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        profileImageUrl:
+          type: string
+          nullable: true
+        role:
+          type: string
+          enum: [student, faculty, staff, admin]
+      required: [id, role]
+
+    # ---------- Demands ----------
+
+    Demand:
+      type: object
+      properties:
+        id:
+          type: integer
+        protocol:
+          type: string
+        type:
+          $ref: "#/components/schemas/DemandType"
+        category:
+          $ref: "#/components/schemas/DemandCategory"
+        content:
+          type: string
+          nullable: true
+        mediaUrl:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        isAnonymous:
+          type: boolean
+        targetUnit:
+          type: string
+          nullable: true
+        status:
+          $ref: "#/components/schemas/DemandStatus"
+        adminResponse:
+          type: string
+          nullable: true
+        supportCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - protocol
+        - type
+        - category
+        - isAnonymous
+        - status
+        - supportCount
+        - createdAt
+        - updatedAt
+
+    DemandWithDetails:
+      allOf:
+        - $ref: "#/components/schemas/Demand"
+        - type: object
+          properties:
+            userSupported:
+              type: boolean
+              description: Indica se o usuário autenticado atual já apoiou esta demanda
+
+    DemandListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Demand"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+      required: [data, total, page, limit, totalPages]
+
+    CreateDemandInput:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/DemandType"
+        category:
+          $ref: "#/components/schemas/DemandCategory"
+        content:
+          type: string
+          nullable: true
+          maxLength: 5000
+        mediaUrl:
+          type: string
+          nullable: true
+        latitude:
+          type: string
+          nullable: true
+        longitude:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        isAnonymous:
+          type: boolean
+          default: false
+        targetUnit:
+          type: string
+          nullable: true
+      required: [type, category]
+
+    UpdateDemandStatusInput:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/DemandStatus"
+        adminResponse:
+          type: string
+          nullable: true
+      required: [status]
+
+    SupportToggleResponse:
+      type: object
+      properties:
+        supported:
+          type: boolean
+        supportCount:
+          type: integer
+      required: [supported, supportCount]
+
+    # ---------- Proposals ----------
+
+    Proposal:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          $ref: "#/components/schemas/DemandCategory"
+        status:
+          $ref: "#/components/schemas/ProposalStatus"
+        targetUnit:
+          type: string
+          nullable: true
+        adminDecision:
+          type: string
+          nullable: true
+        supportCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - category
+        - status
+        - supportCount
+        - createdAt
+        - updatedAt
+
+    ProposalListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Proposal"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+      required: [data, total, page, limit, totalPages]
+
+    CreateProposalInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 10
+          maxLength: 200
+        description:
+          type: string
+          minLength: 30
+          maxLength: 5000
+        category:
+          $ref: "#/components/schemas/DemandCategory"
+        targetUnit:
+          type: string
+          nullable: true
+      required: [title, description, category]
+
+    # ---------- Transparency ----------
+
+    TransparencyStats:
+      type: object
+      properties:
+        totalDemands:
+          type: integer
+        demandsResolved:
+          type: integer
+        demandsInProgress:
+          type: integer
+        demandsReceived:
+          type: integer
+        totalProposals:
+          type: integer
+        proposalsApproved:
+          type: integer
+        avgResolutionDays:
+          type: number
+          nullable: true
+        totalParticipants:
+          type: integer
+      required:
+        - totalDemands
+        - demandsResolved
+        - demandsInProgress
+        - demandsReceived
+        - totalProposals
+        - proposalsApproved
+        - totalParticipants
+
+    CategoryCount:
+      type: object
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
+      required: [category, count]
+
+    StatusCount:
+      type: object
+      properties:
+        status:
+          type: string
+        count:
+          type: integer
+        label:
+          type: string
+      required: [status, count, label]
+
+    MonthlyCount:
+      type: object
+      properties:
+        month:
+          type: string
+          description: "YYYY-MM"
+        count:
+          type: integer
+        label:
+          type: string
+          description: "Nome abreviado do mês em pt-BR"
+      required: [month, count, label]

@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-body: 'Open Sans', sans-serif;
+  --font-display: 'Montserrat', sans-serif;
+
+  /* Official GDF Colors & Accessible Palette */
+  --background: 0 0% 100%;
+  --foreground: 220 13% 18%;
+  /* Dark gray for text */
+
+  --primary: 220 100% 30%;
+  /* #003399 Deep Blue */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 140 100% 30%;
+  /* #009933 Green */
+  --secondary-foreground: 0 0% 100%;
+
+  --accent: 48 100% 50%;
+  /* #FFCC00 Yellow - Used sparingly for highlights */
+  --accent-foreground: 220 13% 10%;
+
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 25% 40%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 220 100% 30%;
+  /* Focus ring same as primary */
+
+  --radius: 0.75rem;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased min-h-screen flex flex-col;
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-primary;
+  }
+
+  /* High visibility focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-4 ring-accent/50 ring-offset-2;
+  }
+}
+
+@layer utilities {
+  .bg-hero-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Skip link for keyboard users */
+  .skip-link {
+    @apply absolute top-0 left-0 p-3 bg-primary text-white -translate-y-full transition-transform focus:translate-y-0 z-50 font-bold shadow-lg rounded-br-lg;
+  }
+}

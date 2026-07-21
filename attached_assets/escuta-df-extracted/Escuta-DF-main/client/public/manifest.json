@@ -1,0 +1,22 @@
+{
+  "name": "Escuta DF",
+  "short_name": "EscutaDF",
+  "description": "Ouvidoria digital acessível do Governo do Distrito Federal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#003399",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

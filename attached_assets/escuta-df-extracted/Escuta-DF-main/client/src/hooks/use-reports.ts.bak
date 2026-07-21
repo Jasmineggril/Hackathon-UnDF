@@ -1,0 +1,100 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api, buildUrl } from "@shared/routes";
+import type { InsertReport } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
+import { isUnauthorizedError } from "@/lib/auth-utils";
+import { supabase } from "@/lib/supabase";
+
+export function useCreateReport() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (data: InsertReport) => {
+      // ATENÇÃO: Essa função está sendo substituída por chamada direta no CreateReport.tsx
+      // Mas mantemos aqui como fallback ou referência
+      const res = await fetch(api.reports.create.path, {
+        method: api.reports.create.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error("401: Unauthorized");
+        }
+        if (res.status === 400) {
+          const error = api.reports.create.responses[400].parse(await res.json());
+          throw new Error(error.message || "Erro de validação ao enviar manifesto.");
+        }
+        throw new Error("Falha ao enviar manifesto. Tente novamente.");
+      }
+
+      return api.reports.create.responses[201].parse(await res.json());
+    },
+    onSuccess: () => {
+      toast({
+        title: "Sucesso!",
+        description: "Sua manifestação foi enviada para processamento.",
+        className: "bg-green-600 text-white border-none",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error as Error)) {
+        toast({
+          title: "Sessão expirada",
+          description: "Redirecionando para login...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Erro no envio",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+}
+
+export function useReportStatus(protocol: string) {
+  return useQuery({
+    queryKey: [api.reports.status.path, protocol],
+    queryFn: async () => {
+      if (!protocol || protocol.length < 5) return null;
+
+      // Busca direta no Supabase (bypassing server api que requer Postgres local)
+      const { data, error } = await supabase
+        .from('manifestacoes')
+        .select('*')
+        .eq('protocolo', protocol)
+        .single();
+
+      if (error || !data) {
+        // Se der erro ou não achar, retornamos null para a UI tratar como "não encontrado"
+        return null;
+      }
+
+      // Mapeamento dos campos do Supabase para o formato esperado pelo frontend
+      return {
+        id: data.id,
+        protocol: data.protocolo,
+        type: data.tipo_manifestacao,
+        category: data.category || "Solicitação",
+        status: data.status,
+        content: data.relato,
+        mediaUrl: data.media_url,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        address: data.address,
+        isAnonymous: data.is_anonimo,
+        createdAt: data.created_at,
+      };
+    },
+    enabled: !!protocol && protocol.length > 5,
+  });
+}

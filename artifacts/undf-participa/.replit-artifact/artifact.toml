@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "UnDF Participa"
+version = "1.0.0"
+id = "artifacts/undf-participa"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21016
+
+[services.development]
+run = "pnpm --filter @workspace/undf-participa run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/undf-participa", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/undf-participa/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21016"
+BASE_PATH = "/"

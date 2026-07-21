@@ -1,0 +1,839 @@
+PADRÃO DE ENGENHARIA E CAPACIDADE TÉCNICA
+
+Quero que esta adaptação seja executada com capacidade técnica extremamente alta, equivalente a um projeto profissional desenvolvido por uma equipe sênior de engenharia de software.
+
+O código deve demonstrar domínio real de:
+
+- arquitetura de software;
+- engenharia de requisitos;
+- desenvolvimento frontend e backend;
+- modelagem de banco de dados;
+- segurança da informação;
+- acessibilidade;
+- experiência do usuário;
+- observabilidade;
+- testes;
+- desempenho;
+- escalabilidade;
+- manutenção;
+- documentação técnica;
+- integração de inteligência artificial;
+- boas práticas de desenvolvimento.
+
+Não quero apenas uma interface visualmente bonita. Quero uma solução tecnicamente sólida, organizada, segura, explicável e preparada para evolução.
+
+PRINCÍPIOS OBRIGATÓRIOS
+
+Aplicar, sempre que forem adequados ao projeto:
+
+- Clean Code;
+- SOLID;
+- separação de responsabilidades;
+- baixo acoplamento;
+- alta coesão;
+- DRY, evitando duplicação desnecessária;
+- KISS, evitando complexidade artificial;
+- YAGNI, sem criar recursos inúteis;
+- componentização consistente;
+- arquitetura em camadas;
+- tipagem forte;
+- tratamento de erros;
+- validação de dados;
+- segurança por padrão;
+- privacidade por padrão;
+- acessibilidade por padrão;
+- configuração por ambiente;
+- princípio do menor privilégio;
+- documentação técnica atualizada.
+
+Não aplicar padrões apenas para parecer sofisticado. Toda decisão arquitetural deve ter justificativa prática.
+
+ARQUITETURA
+
+Antes de modificar o sistema:
+
+1. Mapear a arquitetura atual.
+2. Identificar responsabilidades de cada pasta, módulo e serviço.
+3. Verificar se o projeto possui separação adequada entre:
+   - apresentação;
+   - regras de negócio;
+   - acesso a dados;
+   - autenticação;
+   - serviços externos;
+   - validações;
+   - utilitários;
+   - configuração.
+4. Identificar dívida técnica.
+5. Propor melhorias sem reescrever desnecessariamente o projeto.
+6. Manter compatibilidade com a arquitetura existente sempre que ela for adequada.
+7. Refatorar apenas quando houver ganho claro de qualidade, segurança ou manutenção.
+
+Caso seja necessário reorganizar partes do projeto, utilizar uma estrutura coerente e previsível, por exemplo:
+
+Frontend:
+- components;
+- pages;
+- layouts;
+- hooks;
+- services;
+- repositories;
+- schemas;
+- types;
+- utils;
+- constants;
+- contexts;
+- assets.
+
+Backend:
+- routes;
+- controllers;
+- services;
+- repositories;
+- middlewares;
+- validators;
+- models;
+- schemas;
+- database;
+- config;
+- errors;
+- utils.
+
+Não obrigar essa estrutura caso a arquitetura atual utilize outro padrão consistente.
+
+TYPESCRIPT E TIPAGEM
+
+Utilizar TypeScript com rigor.
+
+Obrigatório:
+
+- evitar uso de `any`;
+- criar interfaces e tipos claros;
+- tipar propriedades de componentes;
+- tipar respostas de APIs;
+- tipar variáveis de ambiente;
+- tipar estados e eventos;
+- usar enums ou constantes tipadas quando apropriado;
+- tratar valores opcionais;
+- evitar coerções perigosas;
+- utilizar validação em tempo de execução para dados externos.
+
+Quando houver dados recebidos por formulário, API, banco ou serviço externo, não confiar apenas na tipagem estática. Validar os dados no backend.
+
+COMENTÁRIOS NO CÓDIGO
+
+Quero comentários técnicos em todo o código relevante, de forma profissional, clara e útil.
+
+Os comentários devem explicar:
+
+- objetivo do módulo;
+- responsabilidade da função;
+- regras de negócio;
+- decisões arquiteturais;
+- validações importantes;
+- fluxos de autenticação;
+- lógica de autorização;
+- tratamento de erros;
+- integrações externas;
+- consultas complexas;
+- critérios de segurança;
+- comportamentos não óbvios;
+- limitações conhecidas;
+- motivos de decisões técnicas.
+
+Não adicionar comentários inúteis que apenas repitam o código.
+
+Exemplo de comentário ruim:
+
+// Incrementa o contador
+contador++;
+
+Exemplo de comentário adequado:
+
+// Atualiza localmente a quantidade de apoios para fornecer resposta imediata
+// ao usuário. Caso a API falhe, o valor anterior será restaurado.
+setSupportCount(previous => previous + 1);
+
+Cada arquivo relevante deve começar com um comentário de cabeçalho informando:
+
+- finalidade do arquivo;
+- responsabilidade principal;
+- dependências relevantes;
+- observações de segurança ou manutenção, quando aplicável.
+
+Exemplo:
+
+/**
+ * Serviço responsável pelo gerenciamento de manifestações acadêmicas.
+ *
+ * Responsabilidades:
+ * - criar e consultar manifestações;
+ * - aplicar regras de visibilidade;
+ * - registrar alterações de status;
+ * - garantir que informações privadas não sejam expostas.
+ *
+ * Segurança:
+ * - todos os dados recebidos devem ser validados antes da persistência;
+ * - respostas públicas não podem incluir dados pessoais do autor.
+ */
+
+Para funções públicas ou complexas, utilizar documentação no padrão JSDoc ou TSDoc.
+
+Exemplo:
+
+/**
+ * Registra o apoio de um usuário a uma demanda pública.
+ *
+ * Regras:
+ * - cada usuário pode apoiar apenas uma vez;
+ * - o autor não pode apoiar a própria demanda;
+ * - demandas privadas ou arquivadas não podem receber apoio.
+ *
+ * @param demandId Identificador da demanda.
+ * @param userId Identificador do usuário autenticado.
+ * @returns Quantidade atualizada de apoios.
+ * @throws ConflictError Quando o apoio já existe.
+ * @throws ForbiddenError Quando a ação não é permitida.
+ */
+async function supportDemand(
+  demandId: string,
+  userId: string
+): Promise<number> {
+  // implementação
+}
+
+Não comentar cada linha mecanicamente. O objetivo é demonstrar domínio técnico e tornar o código compreensível para professores, avaliadores e futuros desenvolvedores.
+
+REGRAS DE NEGÓCIO
+
+Centralizar regras de negócio em serviços ou módulos próprios.
+
+Não colocar regras complexas diretamente:
+
+- em componentes visuais;
+- em rotas;
+- em consultas isoladas;
+- em manipuladores de botão.
+
+Exemplos de regras que devem ficar centralizadas:
+
+- quem pode apoiar uma demanda;
+- quais demandas podem ser públicas;
+- quem pode alterar status;
+- quando uma manifestação pode ser arquivada;
+- como o tempo médio de resposta é calculado;
+- como demandas duplicadas são tratadas;
+- quais dados devem ser anonimizados;
+- quais registros entram no painel público;
+- quais transições de status são permitidas.
+
+Criar uma máquina de estados ou regra explícita de transição de status.
+
+Exemplo:
+
+Recebida → Em triagem
+Em triagem → Encaminhada
+Encaminhada → Em análise
+Em análise → Em execução
+Em execução → Concluída
+Concluída → Respondida com justificativa
+
+Impedir transições inválidas.
+
+BANCO DE DADOS
+
+Realizar modelagem relacional consistente.
+
+Aplicar:
+
+- chaves primárias;
+- chaves estrangeiras;
+- restrições de unicidade;
+- índices;
+- timestamps;
+- integridade referencial;
+- enums ou tabelas de domínio quando adequado;
+- exclusão lógica quando necessária;
+- rastreabilidade de alterações;
+- migrações versionadas.
+
+Para a função “Também sou afetado”, criar restrição única composta entre:
+
+- usuário;
+- demanda.
+
+Isso deve impedir apoios duplicados no próprio banco, e não apenas na interface.
+
+Criar índices para:
+
+- protocolo;
+- status;
+- categoria;
+- unidade;
+- setor responsável;
+- data de criação;
+- visibilidade;
+- quantidade de apoios, quando a estratégia de consulta justificar;
+- pesquisas frequentes do painel.
+
+Evitar consultas N+1.
+
+Utilizar transações em operações que alterem múltiplos registros relacionados.
+
+Exemplo:
+
+- atualizar status;
+- criar histórico;
+- gerar notificação;
+- registrar responsável.
+
+Essas operações devem ser atômicas.
+
+SEGURANÇA
+
+Aplicar uma revisão de segurança real.
+
+Obrigatório:
+
+- autenticação segura;
+- autorização por perfil;
+- proteção de rotas administrativas;
+- validação no backend;
+- sanitização de entradas;
+- proteção contra exposição de dados pessoais;
+- prevenção de SQL Injection por meio do ORM ou queries parametrizadas;
+- proteção contra XSS;
+- tratamento seguro de uploads;
+- limites de tamanho de arquivos;
+- lista permitida de tipos MIME;
+- nomes de arquivos não previsíveis;
+- proteção de variáveis de ambiente;
+- senhas armazenadas com hash seguro;
+- mensagens de erro sem detalhes internos;
+- logs sem senhas, tokens ou dados sensíveis;
+- controle de tentativas em operações críticas, quando possível;
+- configuração adequada de CORS;
+- cabeçalhos de segurança;
+- cookies seguros, caso sejam utilizados;
+- expiração e revogação de sessão;
+- princípio do menor privilégio.
+
+Implementar perfis de acesso, quando compatíveis com a aplicação:
+
+- estudante;
+- servidor;
+- gestor;
+- administrador.
+
+Cada perfil deve acessar apenas o necessário.
+
+Criar middleware centralizado de autorização.
+
+Exemplo:
+
+requireRole(["admin", "manager"])
+
+Não confiar em permissões controladas apenas pelo frontend.
+
+LGPD E PRIVACIDADE
+
+Aplicar privacidade desde a arquitetura.
+
+Classificações:
+
+- pública identificada;
+- pública anonimizada;
+- privada;
+- restrita à administração.
+
+Garantir que APIs públicas nunca retornem:
+
+- e-mail;
+- matrícula;
+- telefone;
+- documento;
+- endereço;
+- token;
+- observações internas;
+- informações sensíveis;
+- metadados desnecessários.
+
+Criar DTOs ou serializadores específicos para respostas públicas.
+
+Não retornar diretamente entidades completas do banco.
+
+Registrar consentimentos relevantes com:
+
+- versão dos termos;
+- data;
+- finalidade;
+- usuário, quando identificado.
+
+Implementar exclusão lógica ou processo compatível com solicitações de privacidade, quando tecnicamente possível.
+
+UPLOAD DE ARQUIVOS E ÁUDIO
+
+Validar no frontend e backend:
+
+- extensão;
+- tipo MIME;
+- tamanho;
+- quantidade de arquivos;
+- duração do áudio, se possível.
+
+Não confiar no nome informado pelo usuário.
+
+Gerar identificador seguro para cada arquivo.
+
+Bloquear formatos executáveis.
+
+Impedir que uploads privados sejam acessíveis por URL pública direta.
+
+Separar metadados do arquivo do armazenamento físico.
+
+FRONTEND
+
+O frontend deve demonstrar engenharia profissional.
+
+Aplicar:
+
+- componentes reutilizáveis;
+- estados de carregamento;
+- estados vazios;
+- estados de erro;
+- feedback de sucesso;
+- validação acessível;
+- tratamento de requisições concorrentes;
+- bloqueio de envio duplicado;
+- atualização otimista somente com rollback;
+- tratamento centralizado de API;
+- componentes de formulário consistentes;
+- responsividade;
+- navegação previsível;
+- foco visível;
+- semântica HTML;
+- suporte a teclado;
+- mensagens compreensíveis.
+
+Evitar:
+
+- componentes gigantes;
+- lógica de negócio dentro do JSX;
+- funções anônimas complexas na renderização;
+- valores mágicos espalhados;
+- estilos duplicados;
+- chamadas diretas à API em vários componentes sem abstração.
+
+Criar hooks especializados quando necessário, como:
+
+- useAuth;
+- useDemands;
+- useDemandSupport;
+- useProposals;
+- useDashboardMetrics;
+- useAudioRecorder.
+
+BACKEND
+
+O backend deve possuir separação clara.
+
+Rotas:
+- apenas definem endpoints e middlewares.
+
+Controllers:
+- recebem requisição;
+- chamam serviço;
+- retornam resposta.
+
+Services:
+- executam regras de negócio.
+
+Repositories:
+- realizam acesso ao banco.
+
+Validators:
+- validam payloads.
+
+Middlewares:
+- autenticação;
+- autorização;
+- erros;
+- logs;
+- segurança.
+
+Criar tratamento global de erros com classes específicas:
+
+- ValidationError;
+- AuthenticationError;
+- AuthorizationError;
+- NotFoundError;
+- ConflictError;
+- BusinessRuleError;
+- ExternalServiceError.
+
+Não repetir blocos `try/catch` sem necessidade em todos os controladores.
+
+Criar resposta padronizada para erros.
+
+Exemplo:
+
+{
+  "error": {
+    "code": "DEMAND_ALREADY_SUPPORTED",
+    "message": "Você já apoiou esta demanda."
+  }
+}
+
+APIS
+
+Organizar endpoints de forma consistente.
+
+Exemplos:
+
+GET /api/demands
+POST /api/demands
+GET /api/demands/:id
+POST /api/demands/:id/support
+DELETE /api/demands/:id/support
+PATCH /api/demands/:id/status
+POST /api/demands/:id/responses
+GET /api/proposals
+POST /api/proposals
+POST /api/proposals/:id/support
+GET /api/dashboard/public
+GET /api/admin/dashboard
+
+Aplicar:
+
+- paginação;
+- filtros;
+- ordenação;
+- limites;
+- validação;
+- autorização;
+- códigos HTTP adequados.
+
+Utilizar:
+
+- 200 para sucesso;
+- 201 para criação;
+- 204 para exclusão sem conteúdo;
+- 400 para entrada inválida;
+- 401 para não autenticado;
+- 403 para não autorizado;
+- 404 para não encontrado;
+- 409 para conflito;
+- 422 para regra de negócio, se o padrão atual justificar;
+- 500 somente para falhas internas.
+
+DESEMPENHO
+
+Avaliar desempenho das principais telas.
+
+Aplicar quando necessário:
+
+- paginação;
+- consultas agregadas;
+- índices;
+- cache controlado;
+- carregamento sob demanda;
+- divisão de código;
+- memoização somente quando justificada;
+- compressão;
+- otimização de imagens;
+- redução de chamadas redundantes;
+- debounce em busca;
+- cancelamento de requisições;
+- skeletons de carregamento.
+
+Não realizar otimizações prematuras sem diagnóstico.
+
+OBSERVABILIDADE
+
+Adicionar logs estruturados no backend.
+
+Os logs devem informar:
+
+- rota;
+- método;
+- código de resposta;
+- duração;
+- identificador de correlação;
+- tipo de erro;
+- usuário, somente quando apropriado e sem dados sensíveis.
+
+Não registrar:
+
+- senha;
+- token;
+- conteúdo sensível;
+- áudio;
+- documentos;
+- dados pessoais desnecessários.
+
+Criar health check:
+
+GET /api/health
+
+Resposta esperada:
+
+{
+  "status": "ok",
+  "database": "connected",
+  "timestamp": "..."
+}
+
+Caso o banco esteja indisponível, retornar estado coerente.
+
+TESTES
+
+Criar testes para os fluxos críticos.
+
+Prioridades:
+
+1. autenticação;
+2. criação de demanda;
+3. geração de protocolo;
+4. visibilidade pública e privada;
+5. apoio único por usuário;
+6. retirada de apoio;
+7. transição de status;
+8. autorização administrativa;
+9. proteção de dados;
+10. métricas do painel;
+11. criação e apoio de propostas;
+12. upload;
+13. tratamento de erros.
+
+Criar:
+
+- testes unitários para regras de negócio;
+- testes de integração para API;
+- testes de componentes essenciais;
+- teste de fluxo principal, se a estrutura permitir.
+
+Não escrever testes vazios apenas para aumentar números.
+
+Cada teste deve verificar comportamento real.
+
+ACESSIBILIDADE
+
+Buscar conformidade com WCAG 2.1 nível AA.
+
+Aplicar:
+
+- contraste adequado;
+- foco visível;
+- navegação por teclado;
+- labels associados;
+- mensagens de erro acessíveis;
+- `aria-live` em mensagens dinâmicas;
+- títulos hierárquicos;
+- landmarks;
+- botões com nomes acessíveis;
+- ícones acompanhados de texto ou `aria-label`;
+- alternativas textuais;
+- não depender apenas de cor;
+- modais com foco controlado;
+- feedback de gravação de áudio acessível;
+- suporte a redução de movimento.
+
+DOCUMENTAÇÃO
+
+Atualizar ou criar README técnico contendo:
+
+1. visão geral;
+2. objetivo;
+3. arquitetura;
+4. tecnologias;
+5. estrutura de diretórios;
+6. requisitos;
+7. instalação;
+8. variáveis de ambiente;
+9. banco de dados;
+10. migrações;
+11. execução;
+12. testes;
+13. publicação;
+14. segurança;
+15. perfis de acesso;
+16. endpoints;
+17. decisões arquiteturais;
+18. limitações;
+19. roadmap;
+20. licença.
+
+Criar arquivo:
+
+ARCHITECTURE.md
+
+Conteúdo:
+
+- visão de componentes;
+- fluxo de dados;
+- autenticação;
+- autorização;
+- persistência;
+- uploads;
+- IA;
+- privacidade;
+- diagramas em Mermaid, quando útil.
+
+Criar arquivo:
+
+SECURITY.md
+
+Conteúdo:
+
+- modelo de ameaças resumido;
+- dados sensíveis;
+- controles implementados;
+- gerenciamento de segredos;
+- política de reporte de vulnerabilidades;
+- limitações conhecidas.
+
+Criar arquivo:
+
+API.md
+
+Documentar:
+
+- endpoint;
+- método;
+- autenticação;
+- parâmetros;
+- payload;
+- resposta;
+- erros possíveis.
+
+DECISÕES ARQUITETURAIS
+
+Para decisões relevantes, criar registros ADR em:
+
+docs/adr/
+
+Exemplos:
+
+- ADR-001 — Estratégia de autenticação;
+- ADR-002 — Modelo de visibilidade das manifestações;
+- ADR-003 — Implementação de apoio coletivo;
+- ADR-004 — Separação entre resposta pública e observação interna;
+- ADR-005 — Estratégia para recursos de IA.
+
+Cada ADR deve conter:
+
+- contexto;
+- decisão;
+- alternativas;
+- consequências;
+- status.
+
+QUALIDADE DE CÓDIGO
+
+Configurar e executar:
+
+- lint;
+- formatação;
+- verificação de tipos;
+- testes;
+- build.
+
+Ao final, nenhum erro de TypeScript deve permanecer.
+
+Não ignorar erros com:
+
+- `@ts-ignore`;
+- `eslint-disable`;
+- casts forçados;
+- tipos `any`;
+
+salvo quando existir justificativa técnica documentada.
+
+Criar scripts como:
+
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run typecheck
+npm run test
+npm run test:coverage
+
+Adaptar os comandos às tecnologias reais do projeto.
+
+CRITÉRIOS DE ACEITAÇÃO
+
+Uma funcionalidade somente pode ser declarada pronta quando:
+
+- o código foi implementado;
+- o TypeScript foi validado;
+- o fluxo foi testado;
+- o estado de erro foi verificado;
+- a permissão foi validada;
+- a responsividade foi conferida;
+- a acessibilidade básica foi conferida;
+- o banco persistiu corretamente;
+- o comportamento foi documentado.
+
+RELATÓRIO TÉCNICO FINAL
+
+Ao concluir, gerar um relatório técnico detalhado contendo:
+
+- diagnóstico inicial;
+- arquitetura identificada;
+- arquitetura final;
+- decisões tomadas;
+- problemas encontrados;
+- correções realizadas;
+- schema do banco;
+- endpoints;
+- regras de segurança;
+- privacidade;
+- testes executados;
+- resultados do build;
+- limitações;
+- riscos;
+- backlog;
+- instruções de publicação;
+- evidências das funcionalidades.
+
+O relatório deve ser escrito com linguagem de engenharia de software, demonstrando domínio técnico, mas sem inventar resultados.
+
+REGRA DE HONESTIDADE TÉCNICA
+
+Não dizer que algo foi:
+
+- implementado;
+- integrado;
+- testado;
+- protegido;
+- otimizado;
+- validado;
+- publicado;
+
+sem ter realmente executado e verificado.
+
+Diferenciar claramente:
+
+- funcional;
+- parcialmente funcional;
+- simulado;
+- preparado para integração;
+- planejado.
+
+RESULTADO ESPERADO
+
+O projeto final deve parecer desenvolvido por profissionais experientes, com:
+
+- arquitetura compreensível;
+- código legível;
+- comentários técnicos úteis;
+- regras de negócio bem definidas;
+- segurança;
+- privacidade;
+- testes;
+- documentação;
+- excelente experiência de usuário;
+- alta capacidade de manutenção;
+- apresentação competitiva para o Hackathon.
+
+A implementação deve demonstrar capacidade técnica real, não apenas quantidade de código.
