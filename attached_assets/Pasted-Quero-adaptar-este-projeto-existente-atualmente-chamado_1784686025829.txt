@@ -1,0 +1,1387 @@
+Quero adaptar este projeto existente, atualmente chamado “Escuta DF”, para participar do Hackathon “Conecta UnDF: Soluções para Gestão Participativa”.
+
+Não crie um projeto novo. Analise a aplicação existente, preserve o que já funciona e faça uma evolução incremental, segura e profissional.
+
+==================================================
+IDENTIDADE DO PROJETO
+==================================================
+
+Novo nome:
+
+Voz UnDF
+
+Subtítulo:
+
+Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+
+Sua voz participa. A Universidade transforma.
+
+Descrição resumida:
+
+O Voz UnDF é uma plataforma digital criada para aproximar estudantes, docentes, servidores e gestores da Universidade do Distrito Federal. A solução centraliza demandas, sugestões e propostas, permite acompanhamento transparente e transforma a participação da comunidade acadêmica em dados para a tomada de decisão.
+
+Substitua todas as referências a:
+
+- Escuta DF;
+- Governo do Distrito Federal;
+- cidadão;
+- órgãos públicos do GDF;
+- administração pública distrital;
+- manifestações governamentais;
+- IZA ou nomes antigos da assistente.
+
+Por referências relacionadas a:
+
+- Voz UnDF;
+- Universidade do Distrito Federal;
+- comunidade acadêmica;
+- estudantes;
+- docentes;
+- servidores;
+- gestores;
+- coordenações;
+- pró-reitorias;
+- unidades acadêmicas;
+- setores administrativos;
+- gestão universitária participativa.
+
+Não faça apenas uma troca de nome e cores. O resultado deve parecer uma solução criada especificamente para a UnDF.
+
+==================================================
+OBJETIVO
+==================================================
+
+Transformar o Escuta DF em uma plataforma universitária de:
+
+- participação acadêmica;
+- registro de demandas;
+- apresentação de propostas;
+- acompanhamento por protocolo;
+- priorização coletiva;
+- transparência institucional;
+- comunicação entre comunidade e gestão;
+- apoio à tomada de decisão;
+- gestão participativa;
+- contribuição para o ODS 16.
+
+A plataforma não deve parecer apenas uma ouvidoria.
+
+Ela deve funcionar como uma ferramenta de gestão colaborativa, na qual a comunidade registra problemas e propostas, apoia prioridades e acompanha as respostas da Universidade.
+
+==================================================
+PADRÃO TÉCNICO
+==================================================
+
+A implementação deve demonstrar capacidade técnica extremamente elevada, equivalente a um projeto desenvolvido por profissionais experientes em Engenharia de Software.
+
+Aplicar, quando forem adequados:
+
+- Clean Code;
+- SOLID;
+- DRY;
+- KISS;
+- YAGNI;
+- arquitetura em camadas;
+- separação de responsabilidades;
+- baixo acoplamento;
+- alta coesão;
+- tipagem forte;
+- validação de dados;
+- segurança por padrão;
+- privacidade por padrão;
+- acessibilidade por padrão;
+- tratamento centralizado de erros;
+- documentação técnica;
+- testes automatizados;
+- observabilidade;
+- configuração por ambiente;
+- princípio do menor privilégio.
+
+Não criar complexidade artificial apenas para parecer avançado.
+
+Toda decisão técnica deve gerar benefícios reais de segurança, clareza, manutenção, desempenho ou escalabilidade.
+
+==================================================
+DIAGNÓSTICO INICIAL OBRIGATÓRIO
+==================================================
+
+Antes de alterar os arquivos:
+
+1. Analise toda a estrutura do projeto.
+2. Identifique as tecnologias do frontend e backend.
+3. Identifique banco de dados, ORM, autenticação e serviços externos.
+4. Localize rotas, páginas, componentes, APIs, modelos e schemas.
+5. Verifique as variáveis de ambiente.
+6. Execute o projeto no estado atual.
+7. Verifique erros no terminal e no console do navegador.
+8. Identifique funcionalidades que já estão operacionais.
+9. Identifique funcionalidades incompletas ou simuladas.
+10. Apresente um plano incremental de implementação.
+
+Depois do diagnóstico, execute efetivamente as alterações. Não permaneça apenas descrevendo o que deve ser feito.
+
+==================================================
+PRESERVAÇÃO DO PROJETO
+==================================================
+
+Preserve tudo que já estiver funcionando, especialmente:
+
+- autenticação;
+- cadastro de usuários;
+- formulário de manifestação;
+- geração de protocolo;
+- consulta por protocolo;
+- painel administrativo;
+- banco de dados;
+- upload de imagens e documentos;
+- gravação e envio de áudio;
+- páginas de transparência;
+- recursos de acessibilidade;
+- responsividade;
+- estrutura PWA;
+- integrações existentes.
+
+Não remova recursos ou dependências sem necessidade.
+
+Não apague tabelas ou dados existentes.
+
+Antes de modificar o banco, analise o schema atual e crie migrações seguras.
+
+==================================================
+IDENTIDADE VISUAL
+==================================================
+
+Crie uma identidade visual moderna, institucional, tecnológica, inclusiva e profissional.
+
+A página deve funcionar bem em:
+
+- celular;
+- tablet;
+- notebook;
+- computador.
+
+Utilize boa hierarquia visual, espaçamento consistente, contraste adequado e componentes acessíveis.
+
+Não utilize textos genéricos, Lorem Ipsum ou botões sem função.
+
+A identidade deve transmitir:
+
+- participação;
+- confiança;
+- transparência;
+- inovação;
+- inclusão;
+- pertencimento universitário.
+
+Título principal da página inicial:
+
+Sua voz ajuda a construir a UnDF.
+
+Texto principal:
+
+Registre demandas, apresente propostas, acompanhe respostas e participe das decisões que transformam a Universidade.
+
+Botões principais:
+
+- Registrar demanda
+- Explorar demandas
+- Acompanhar protocolo
+
+Adicionar o slogan:
+
+Sua voz participa. A Universidade transforma.
+
+==================================================
+COMO FUNCIONA
+==================================================
+
+Criar uma seção com quatro etapas:
+
+1. Registre
+
+Envie uma demanda, sugestão ou proposta por texto, imagem, documento ou áudio.
+
+2. Acompanhe
+
+Consulte o protocolo e visualize cada etapa do atendimento.
+
+3. Participe
+
+Apoie demandas e propostas que também afetam você.
+
+4. Transforme
+
+A gestão utiliza as informações para planejar melhorias e prestar contas à comunidade.
+
+==================================================
+TIPOS DE PARTICIPAÇÃO
+==================================================
+
+Adaptar o formulário para oferecer:
+
+- Problema;
+- Solicitação;
+- Sugestão;
+- Proposta para a UnDF;
+- Elogio;
+- Denúncia;
+- Consulta institucional.
+
+Cada tipo deve possuir explicação curta e acessível.
+
+==================================================
+CATEGORIAS
+==================================================
+
+Utilizar as seguintes categorias:
+
+- Ensino e atividades acadêmicas;
+- Infraestrutura;
+- Assistência estudantil;
+- Acessibilidade e inclusão;
+- Tecnologia e sistemas;
+- Comunicação institucional;
+- Transporte e mobilidade;
+- Segurança;
+- Biblioteca e espaços de estudo;
+- Atendimento administrativo;
+- Pesquisa, extensão e inovação;
+- Eventos e atividades universitárias;
+- Sustentabilidade;
+- Convivência e bem-estar;
+- Outros.
+
+As categorias não devem ficar rigidamente presas ao código.
+
+Quando tecnicamente viável, permitir cadastro, edição e desativação pelo painel administrativo.
+
+==================================================
+UNIDADES E SETORES
+==================================================
+
+Preparar o sistema para encaminhamento a setores como:
+
+- Reitoria;
+- Vice-Reitoria;
+- Pró-Reitoria de Graduação;
+- Pró-Reitoria de Extensão;
+- Pró-Reitoria de Pesquisa e Pós-Graduação;
+- Pró-Reitoria de Desenvolvimento Universitário;
+- Assistência estudantil;
+- Tecnologia da Informação;
+- Coordenações de curso;
+- Biblioteca;
+- Infraestrutura e manutenção;
+- Comunicação;
+- Segurança;
+- Secretaria acadêmica;
+- outros setores cadastrados pelo administrador.
+
+Criar relacionamento adequado entre manifestações, unidades e setores responsáveis.
+
+==================================================
+FORMULÁRIO DE DEMANDA
+==================================================
+
+O formulário deve conter:
+
+- tipo de participação;
+- título;
+- descrição;
+- categoria;
+- unidade ou campus;
+- público afetado;
+- nível de urgência;
+- opção de anonimato;
+- classificação de visibilidade;
+- imagem ou documento;
+- gravação ou envio de áudio;
+- aceite dos termos e política de privacidade.
+
+Classificações de visibilidade:
+
+- pública identificada;
+- pública com autor anônimo;
+- privada;
+- restrita à administração.
+
+Adicionar:
+
+- validação no frontend e backend;
+- contador de caracteres;
+- mensagens de erro claras;
+- pré-visualização;
+- prevenção de envio duplicado;
+- estado de carregamento;
+- confirmação após o envio.
+
+Depois do registro:
+
+- gerar protocolo único;
+- mostrar confirmação;
+- permitir copiar o protocolo;
+- permitir acessar a página de acompanhamento;
+- orientar o usuário a guardar o número.
+
+==================================================
+FLUXO DE STATUS
+==================================================
+
+Utilizar os seguintes status:
+
+1. Recebida;
+2. Em triagem;
+3. Encaminhada ao setor responsável;
+4. Em análise;
+5. Em execução;
+6. Concluída;
+7. Respondida com justificativa;
+8. Arquivada.
+
+Criar regras explícitas para as transições.
+
+Não permitir transições inválidas.
+
+O usuário deve visualizar uma linha do tempo contendo:
+
+- criação;
+- alterações de status;
+- setor responsável;
+- respostas institucionais;
+- prazo estimado;
+- conclusão.
+
+Cada alteração de status deve ser registrada em um histórico próprio.
+
+==================================================
+ÁUDIO E ACESSIBILIDADE
+==================================================
+
+Preserve e aperfeiçoe a gravação de áudio existente.
+
+O usuário deve conseguir:
+
+- iniciar a gravação;
+- pausar, quando suportado;
+- continuar;
+- finalizar;
+- ouvir antes de enviar;
+- excluir;
+- gravar novamente;
+- anexar o áudio à demanda.
+
+Texto explicativo:
+
+Você pode registrar sua demanda por áudio. Esse recurso amplia a acessibilidade e facilita a participação de toda a comunidade acadêmica.
+
+Validar:
+
+- tipo do arquivo;
+- formato;
+- tamanho;
+- duração, quando possível;
+- permissões do navegador;
+- falhas na gravação.
+
+Caso não exista transcrição automática configurada, o áudio deve continuar funcionando normalmente.
+
+Não fingir que a transcrição foi implementada.
+
+==================================================
+FUNÇÃO “TAMBÉM SOU AFETADO”
+==================================================
+
+Implementar a função:
+
+Também sou afetado
+
+Regras:
+
+- somente usuários autenticados podem apoiar;
+- cada usuário pode apoiar uma demanda apenas uma vez;
+- o usuário pode retirar o apoio;
+- o autor não pode apoiar a própria demanda;
+- demandas privadas não podem receber apoio;
+- demandas arquivadas não podem receber novos apoios;
+- o total deve ser armazenado e calculado corretamente;
+- a interface deve ser atualizada após a ação;
+- em atualização otimista, implementar rollback se a API falhar.
+
+Criar restrição única no banco entre:
+
+- usuário;
+- demanda.
+
+Exemplo de exibição:
+
+74 pessoas também são afetadas por esta situação.
+
+Adicionar ordenação por:
+
+- mais apoiadas;
+- mais recentes;
+- em andamento;
+- resolvidas.
+
+Adicionar filtros por:
+
+- categoria;
+- unidade;
+- status;
+- urgência;
+- período.
+
+==================================================
+PROPOSTAS PARA A UNDF
+==================================================
+
+Criar uma área chamada:
+
+Propostas para a UnDF
+
+Cada proposta deve apresentar:
+
+- título;
+- descrição;
+- autor ou anonimato;
+- categoria;
+- público beneficiado;
+- justificativa;
+- impacto esperado;
+- número de apoios;
+- status institucional;
+- resposta da Universidade;
+- data de criação.
+
+Status:
+
+- Em participação;
+- Em avaliação;
+- Encaminhada;
+- Planejada;
+- Em implementação;
+- Implementada;
+- Não aprovada, com justificativa.
+
+Adicionar botão:
+
+Apoiar proposta
+
+Cada usuário pode apoiar uma proposta uma única vez e também retirar o apoio.
+
+Adicionar filtros:
+
+- mais apoiadas;
+- mais recentes;
+- em avaliação;
+- planejadas;
+- implementadas.
+
+==================================================
+PAINEL PÚBLICO DE TRANSPARÊNCIA
+==================================================
+
+Criar ou adaptar a página pública de transparência.
+
+Indicadores:
+
+- total de demandas;
+- demandas registradas no mês;
+- demandas resolvidas;
+- percentual de resolução;
+- tempo médio de resposta;
+- participantes;
+- propostas registradas;
+- propostas mais apoiadas;
+- demandas por categoria;
+- demandas por unidade;
+- demandas por status;
+- setores mais acionados;
+- evolução mensal.
+
+Adicionar filtros por:
+
+- período;
+- unidade;
+- categoria;
+- status;
+- tipo de participação.
+
+Os dados devem vir do banco.
+
+Não inventar indicadores.
+
+Quando não houver dados, mostrar um estado vazio profissional.
+
+Nenhum dado pessoal deve aparecer no painel público.
+
+==================================================
+PAINEL ADMINISTRATIVO
+==================================================
+
+Manter ou criar uma área administrativa protegida.
+
+O administrador ou gestor deve conseguir:
+
+- visualizar todas as demandas;
+- pesquisar por protocolo, título ou autor;
+- filtrar por categoria, unidade, status, urgência e período;
+- visualizar detalhes;
+- alterar status;
+- encaminhar ao setor;
+- escrever resposta pública;
+- registrar observação interna;
+- definir prazo;
+- alterar visibilidade;
+- visualizar anexos;
+- ouvir áudios;
+- visualizar histórico;
+- gerenciar propostas;
+- gerenciar categorias;
+- gerenciar unidades;
+- gerenciar setores;
+- visualizar indicadores.
+
+Separar claramente:
+
+- resposta pública;
+- observação interna.
+
+Observações internas nunca podem aparecer para usuários comuns ou em APIs públicas.
+
+==================================================
+PERFIS E AUTORIZAÇÃO
+==================================================
+
+Criar ou adaptar os perfis:
+
+- estudante;
+- docente;
+- servidor;
+- gestor;
+- administrador.
+
+Cada perfil deve acessar apenas as funcionalidades necessárias.
+
+Não controlar permissões apenas pela interface.
+
+Criar autorização obrigatória no backend.
+
+Exemplos:
+
+- estudante não altera status;
+- gestor responde demandas do seu setor;
+- administrador gerencia categorias e usuários;
+- informações restritas não aparecem em endpoints públicos.
+
+==================================================
+ASSISTENTE INTELIGENTE
+==================================================
+
+Nome:
+
+VozIA — Assistente Inteligente do Voz UnDF
+
+Possibilidades:
+
+- transcrever áudios;
+- resumir manifestações;
+- sugerir categoria;
+- sugerir setor responsável;
+- identificar demandas semelhantes;
+- detectar prioridade;
+- anonimizar dados pessoais;
+- auxiliar na elaboração de respostas;
+- gerar relatórios gerenciais.
+
+Implemente apenas recursos que possam funcionar de verdade.
+
+Caso não exista chave de API:
+
+- não crie uma falsa integração;
+- mantenha o sistema principal funcionando;
+- prepare uma arquitetura modular;
+- identifique visualmente o recurso como “Em preparação”;
+- documente as variáveis necessárias para futura ativação.
+
+Caso já exista integração com OpenAI, Gemini ou outro serviço:
+
+- preserve a estrutura;
+- proteja as chaves;
+- valide respostas;
+- trate indisponibilidade;
+- crie timeout;
+- registre erros sem expor dados sensíveis;
+- não envie informações pessoais sem necessidade.
+
+==================================================
+ODS 16
+==================================================
+
+Criar uma seção específica sobre:
+
+ODS 16 — Paz, Justiça e Instituições Eficazes
+
+Texto:
+
+O Voz UnDF contribui para o ODS 16 ao fortalecer uma instituição mais transparente, inclusiva, responsável e participativa. A plataforma amplia o acesso à informação, permite acompanhar respostas institucionais e incentiva a participação da comunidade nas decisões universitárias.
+
+Destacar:
+
+- transparência;
+- participação;
+- inclusão;
+- acesso à informação;
+- responsabilização institucional;
+- decisões colaborativas;
+- confiança entre comunidade e gestão.
+
+==================================================
+PÁGINA SOBRE
+==================================================
+
+Criar uma página “Sobre o Voz UnDF”.
+
+Texto principal:
+
+O Voz UnDF é uma plataforma digital de gestão participativa criada para aproximar a comunidade acadêmica da gestão universitária. A solução centraliza demandas, propostas e sugestões, amplia a transparência e transforma a participação em dados para tomada de decisão.
+
+Problema:
+
+As demandas acadêmicas podem ficar dispersas em e-mails, mensagens, formulários e diferentes setores. Isso dificulta o acompanhamento, gera duplicidades e impede a visualização das prioridades coletivas.
+
+Impactos esperados:
+
+- fortalecimento da participação estudantil;
+- transparência institucional;
+- redução de demandas duplicadas;
+- priorização com base em evidências;
+- melhoria na comunicação;
+- acompanhamento das respostas;
+- apoio ao planejamento da gestão;
+- inclusão por meio de texto, imagem e áudio.
+
+==================================================
+TELA DE DEMONSTRAÇÃO DO MVP
+==================================================
+
+Criar uma página chamada:
+
+Demonstração do MVP
+
+Ela deve facilitar a apresentação no Hackathon e mostrar:
+
+- problema;
+- solução;
+- público beneficiado;
+- jornada do usuário;
+- registro por texto, imagem e áudio;
+- protocolo;
+- acompanhamento;
+- “Também sou afetado”;
+- propostas;
+- painel público;
+- painel administrativo;
+- ODS 16;
+- tecnologias utilizadas;
+- impactos esperados.
+
+Não transformar a página em slides genéricos.
+
+Ela deve utilizar telas, componentes e dados reais da própria plataforma.
+
+==================================================
+DADOS DE DEMONSTRAÇÃO
+==================================================
+
+Criar dados de demonstração por meio de seed separado e identificado.
+
+Exemplos:
+
+1. Internet instável em salas do Campus Norte.
+Categoria: Tecnologia e sistemas.
+Apoios: 74.
+Status: Em análise.
+
+2. Necessidade de mais tomadas nos espaços de estudo.
+Categoria: Infraestrutura.
+Apoios: 51.
+Status: Encaminhada ao setor responsável.
+
+3. Ampliação do horário da biblioteca no período de provas.
+Categoria: Biblioteca e espaços de estudo.
+Apoios: 96.
+Status: Planejada.
+
+4. Melhorar a comunicação sobre editais e bolsas.
+Categoria: Comunicação institucional.
+Apoios: 83.
+Status: Em execução.
+
+5. Implantação de rota acessível entre os blocos.
+Categoria: Acessibilidade e inclusão.
+Apoios: 67.
+Status: Em análise.
+
+Não misture dados de demonstração com registros reais.
+
+Crie uma forma segura de identificar e remover o seed.
+
+==================================================
+BANCO DE DADOS
+==================================================
+
+Analise o schema existente antes de qualquer mudança.
+
+Não apagar tabelas ou registros.
+
+Criar migrações versionadas e seguras.
+
+Estruturas que podem ser necessárias:
+
+- usuários;
+- perfis;
+- manifestações;
+- categorias;
+- unidades;
+- setores;
+- histórico de status;
+- apoios em demandas;
+- propostas;
+- apoios em propostas;
+- respostas públicas;
+- observações internas;
+- anexos;
+- áudios;
+- notificações;
+- consentimentos.
+
+Aplicar:
+
+- chaves primárias;
+- chaves estrangeiras;
+- índices;
+- restrições de unicidade;
+- integridade referencial;
+- timestamps;
+- exclusão lógica quando necessária;
+- transações;
+- rastreabilidade.
+
+Evitar consultas N+1.
+
+Utilizar transação em operações como:
+
+- alterar status;
+- registrar histórico;
+- criar notificação;
+- atribuir setor responsável.
+
+==================================================
+TYPESCRIPT
+==================================================
+
+Utilizar TypeScript com rigor.
+
+Evitar:
+
+- any;
+- @ts-ignore;
+- casts forçados;
+- eslint-disable sem justificativa;
+- objetos sem tipos;
+- respostas de API não tipadas.
+
+Criar:
+
+- interfaces;
+- tipos de domínio;
+- DTOs;
+- schemas de validação;
+- respostas tipadas;
+- tipos para variáveis de ambiente;
+- tipos para erros;
+- tipos para propriedades e eventos.
+
+Dados recebidos de formulários, APIs, banco ou serviços externos devem ser validados em tempo de execução, além da tipagem estática.
+
+==================================================
+ARQUITETURA
+==================================================
+
+Separar responsabilidades de forma clara.
+
+No frontend, considerar:
+
+- components;
+- pages;
+- layouts;
+- hooks;
+- services;
+- schemas;
+- types;
+- constants;
+- utils;
+- contexts.
+
+No backend, considerar:
+
+- routes;
+- controllers;
+- services;
+- repositories;
+- validators;
+- middlewares;
+- database;
+- config;
+- errors;
+- utils.
+
+Não force essa estrutura caso o projeto já utilize uma arquitetura consistente.
+
+Rotas devem definir endpoints.
+
+Controllers devem receber e responder requisições.
+
+Services devem concentrar regras de negócio.
+
+Repositories devem realizar acesso ao banco.
+
+Validators devem validar dados.
+
+Middlewares devem tratar autenticação, autorização, erros e segurança.
+
+==================================================
+COMENTÁRIOS E DOCUMENTAÇÃO NO CÓDIGO
+==================================================
+
+Adicionar comentários técnicos profissionais em todos os pontos relevantes.
+
+Os comentários devem explicar:
+
+- finalidade de módulos;
+- responsabilidades;
+- regras de negócio;
+- decisões arquiteturais;
+- segurança;
+- privacidade;
+- autorização;
+- consultas complexas;
+- integrações externas;
+- comportamentos não óbvios;
+- limitações.
+
+Não adicionar comentários inúteis que apenas repitam o código.
+
+Exemplo ruim:
+
+// Soma um ao total
+total++;
+
+Exemplo adequado:
+
+// Atualiza o contador imediatamente para melhorar a experiência do usuário.
+// Em caso de falha na API, o estado anterior será restaurado.
+setSupportCount(previous => previous + 1);
+
+Cada arquivo relevante deve possuir um cabeçalho semelhante a:
+
+/**
+ * Serviço responsável pelo gerenciamento das demandas acadêmicas.
+ *
+ * Responsabilidades:
+ * - criar e consultar manifestações;
+ * - aplicar regras de visibilidade;
+ * - registrar alterações de status;
+ * - impedir exposição de informações privadas.
+ *
+ * Segurança:
+ * - todos os dados são validados antes da persistência;
+ * - respostas públicas utilizam DTO específico;
+ * - observações internas nunca são expostas.
+ */
+
+Utilizar JSDoc ou TSDoc em funções públicas, serviços e regras complexas.
+
+Não comentar cada linha mecanicamente.
+
+O código deve parecer produzido por alguém experiente, e não artificialmente preenchido com comentários.
+
+==================================================
+SEGURANÇA
+==================================================
+
+Aplicar uma revisão real de segurança.
+
+Obrigatório:
+
+- autenticação segura;
+- autorização no backend;
+- proteção das rotas administrativas;
+- validação de entrada;
+- sanitização;
+- prevenção de XSS;
+- queries parametrizadas ou ORM;
+- proteção contra exposição de dados pessoais;
+- tratamento seguro de uploads;
+- limites de tamanho;
+- validação de MIME;
+- nomes de arquivos não previsíveis;
+- proteção de variáveis de ambiente;
+- mensagens de erro seguras;
+- CORS configurado;
+- cabeçalhos de segurança;
+- logs sem dados sensíveis;
+- hash seguro de senhas;
+- sessão segura;
+- princípio do menor privilégio.
+
+Não armazenar senhas em texto puro.
+
+Não exibir stack trace ao usuário.
+
+Não registrar tokens, senhas, documentos ou áudios em logs.
+
+==================================================
+LGPD E PRIVACIDADE
+==================================================
+
+APIs públicas nunca devem retornar:
+
+- e-mail;
+- matrícula;
+- telefone;
+- documentos;
+- endereço;
+- token;
+- observações internas;
+- dados sensíveis;
+- metadados desnecessários.
+
+Criar DTOs específicos para respostas públicas.
+
+Não retornar diretamente registros completos do banco.
+
+Registrar consentimentos relevantes com:
+
+- versão dos termos;
+- data;
+- finalidade;
+- usuário, quando identificado.
+
+Demandas privadas, denúncias e conteúdos sensíveis não devem aparecer publicamente.
+
+==================================================
+TRATAMENTO DE ERROS
+==================================================
+
+Criar tratamento centralizado de erros.
+
+Utilizar classes ou padrões equivalentes para:
+
+- ValidationError;
+- AuthenticationError;
+- AuthorizationError;
+- NotFoundError;
+- ConflictError;
+- BusinessRuleError;
+- ExternalServiceError.
+
+Padronizar respostas:
+
+{
+  "error": {
+    "code": "DEMAND_ALREADY_SUPPORTED",
+    "message": "Você já apoiou esta demanda."
+  }
+}
+
+Não repetir blocos de try/catch desnecessariamente em todos os controladores.
+
+==================================================
+APIS
+==================================================
+
+Organizar endpoints de forma consistente.
+
+Exemplos:
+
+GET /api/demands
+POST /api/demands
+GET /api/demands/:id
+POST /api/demands/:id/support
+DELETE /api/demands/:id/support
+PATCH /api/demands/:id/status
+POST /api/demands/:id/responses
+
+GET /api/proposals
+POST /api/proposals
+GET /api/proposals/:id
+POST /api/proposals/:id/support
+DELETE /api/proposals/:id/support
+
+GET /api/dashboard/public
+GET /api/admin/dashboard
+GET /api/health
+
+Aplicar:
+
+- autenticação;
+- autorização;
+- paginação;
+- filtros;
+- ordenação;
+- limites;
+- validação;
+- códigos HTTP adequados.
+
+==================================================
+OBSERVABILIDADE
+==================================================
+
+Adicionar logs estruturados no backend.
+
+Registrar:
+
+- método;
+- rota;
+- código de resposta;
+- duração;
+- identificador de correlação;
+- tipo de erro.
+
+Não registrar dados pessoais ou sensíveis.
+
+Criar endpoint:
+
+GET /api/health
+
+Resposta esperada:
+
+{
+  "status": "ok",
+  "database": "connected",
+  "timestamp": "..."
+}
+
+==================================================
+TESTES
+==================================================
+
+Criar testes para os fluxos críticos:
+
+1. autenticação;
+2. criação de demanda;
+3. geração de protocolo;
+4. consulta por protocolo;
+5. visibilidade pública e privada;
+6. apoio único por usuário;
+7. retirada de apoio;
+8. impedimento de apoio pelo autor;
+9. transições de status;
+10. autorização administrativa;
+11. proteção de dados;
+12. métricas do painel;
+13. criação de proposta;
+14. apoio em proposta;
+15. upload;
+16. tratamento de erros.
+
+Criar, conforme a estrutura existente:
+
+- testes unitários;
+- testes de integração;
+- testes de componentes;
+- teste do fluxo principal.
+
+Não criar testes vazios apenas para aumentar cobertura.
+
+==================================================
+ACESSIBILIDADE
+==================================================
+
+Buscar conformidade com WCAG 2.1 nível AA.
+
+Aplicar:
+
+- contraste adequado;
+- navegação por teclado;
+- foco visível;
+- labels associados;
+- HTML semântico;
+- mensagens acessíveis;
+- aria-live;
+- nomes acessíveis em botões;
+- alternativas textuais;
+- títulos hierárquicos;
+- ícones com texto ou aria-label;
+- feedback acessível na gravação de áudio;
+- não depender apenas de cores;
+- suporte à redução de movimento.
+
+==================================================
+DOCUMENTAÇÃO
+==================================================
+
+Atualizar ou criar:
+
+README.md
+
+Incluindo:
+
+- visão geral;
+- objetivo;
+- tecnologias;
+- arquitetura;
+- estrutura de diretórios;
+- requisitos;
+- instalação;
+- variáveis de ambiente;
+- banco de dados;
+- migrações;
+- execução;
+- testes;
+- publicação no Replit;
+- segurança;
+- perfis;
+- endpoints;
+- limitações;
+- roadmap.
+
+Criar:
+
+ARCHITECTURE.md
+
+Com:
+
+- arquitetura;
+- fluxo de dados;
+- autenticação;
+- autorização;
+- banco;
+- uploads;
+- IA;
+- privacidade;
+- diagramas Mermaid.
+
+Criar:
+
+SECURITY.md
+
+Com:
+
+- dados sensíveis;
+- ameaças principais;
+- controles;
+- segredos;
+- vulnerabilidades;
+- limitações.
+
+Criar:
+
+API.md
+
+Com documentação dos endpoints.
+
+Criar registros ADR em:
+
+docs/adr/
+
+Exemplos:
+
+- ADR-001 — Estratégia de autenticação;
+- ADR-002 — Visibilidade das demandas;
+- ADR-003 — Apoio coletivo;
+- ADR-004 — Resposta pública e observação interna;
+- ADR-005 — Estratégia de inteligência artificial.
+
+==================================================
+QUALIDADE E BUILD
+==================================================
+
+Executar:
+
+- lint;
+- formatação;
+- typecheck;
+- testes;
+- build.
+
+Criar ou adaptar scripts como:
+
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run typecheck
+npm run test
+npm run test:coverage
+
+Nenhum erro de TypeScript deve permanecer sem justificativa documentada.
+
+Não declarar uma funcionalidade concluída sem executá-la e testá-la.
+
+==================================================
+ORDEM DE EXECUÇÃO
+==================================================
+
+ETAPA 1 — Diagnóstico
+
+- analisar arquitetura;
+- executar o sistema atual;
+- verificar banco;
+- verificar autenticação;
+- identificar riscos;
+- apresentar o plano.
+
+ETAPA 2 — Identidade Voz UnDF
+
+- alterar nome;
+- alterar textos;
+- adaptar identidade;
+- remover referências antigas;
+- atualizar página inicial.
+
+ETAPA 3 — Fluxo universitário
+
+- adaptar categorias;
+- adaptar setores;
+- adaptar formulário;
+- adaptar status;
+- adaptar protocolo;
+- adaptar acompanhamento.
+
+ETAPA 4 — Gestão participativa
+
+- implementar “Também sou afetado”;
+- implementar propostas;
+- implementar apoios;
+- implementar filtros.
+
+ETAPA 5 — Transparência
+
+- indicadores;
+- gráficos;
+- filtros;
+- ODS 16;
+- página Sobre.
+
+ETAPA 6 — Administração
+
+- permissões;
+- gestão de demandas;
+- respostas;
+- observações internas;
+- setores;
+- categorias;
+- unidades.
+
+ETAPA 7 — Qualidade
+
+- segurança;
+- privacidade;
+- acessibilidade;
+- testes;
+- lint;
+- typecheck;
+- build.
+
+ETAPA 8 — Publicação
+
+- preparar para Replit;
+- confirmar porta;
+- confirmar comando de execução;
+- documentar banco;
+- documentar variáveis;
+- garantir persistência.
+
+==================================================
+PRIORIDADES DO MVP
+==================================================
+
+Priorize nesta ordem:
+
+1. identidade Voz UnDF;
+2. página inicial;
+3. cadastro de demanda;
+4. áudio;
+5. protocolo;
+6. acompanhamento;
+7. “Também sou afetado”;
+8. painel público;
+9. painel administrativo;
+10. propostas;
+11. ODS 16;
+12. demonstração do MVP.
+
+Caso não seja possível concluir tudo, entregue primeiro esses fluxos funcionando de verdade.
+
+==================================================
+REGRA DE HONESTIDADE TÉCNICA
+==================================================
+
+Não diga que algo foi:
+
+- implementado;
+- testado;
+- integrado;
+- protegido;
+- otimizado;
+- validado;
+- publicado;
+
+sem ter realmente executado e verificado.
+
+Diferencie claramente:
+
+- funcional;
+- parcialmente funcional;
+- simulado;
+- preparado para integração;
+- planejado.
+
+==================================================
+ENTREGA FINAL
+==================================================
+
+Ao finalizar, entregar:
+
+1. aplicação funcionando;
+2. resumo das alterações;
+3. arquivos modificados;
+4. novas funcionalidades;
+5. schema e migrações;
+6. endpoints;
+7. variáveis de ambiente;
+8. instruções para executar;
+9. instruções para publicar no Replit;
+10. credenciais de demonstração;
+11. roteiro de testes;
+12. testes executados;
+13. resultado do lint;
+14. resultado do typecheck;
+15. resultado do build;
+16. funcionalidades concluídas;
+17. funcionalidades parciais;
+18. limitações;
+19. problemas conhecidos;
+20. roadmap.
+
+Apresente uma tabela final com:
+
+- funcionalidade;
+- status;
+- arquivos envolvidos;
+- testes executados;
+- evidência;
+- limitações.
+
+REGRA FINAL:
+
+Não faça mudanças superficiais.
+
+O resultado deve parecer uma solução criada especialmente para a UnDF e construída por uma equipe experiente de Engenharia de Software.
+
+Comece pelo diagnóstico, mas depois modifique efetivamente os arquivos, execute a aplicação, teste os fluxos e corrija os erros encontrados.
