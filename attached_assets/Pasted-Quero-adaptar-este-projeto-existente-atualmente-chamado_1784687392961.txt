@@ -1,0 +1,156 @@
+Quero adaptar este projeto existente, atualmente chamado “Escuta DF”, para participar do Hackathon “Conecta UnDF: Soluções para Gestão Participativa”.
+
+Não crie um projeto novo. Analise a aplicação existente, preserve o que já funciona e faça uma evolução incremental, segura e profissional.
+
+==================================================
+IDENTIDADE DO PROJETO
+==================================================
+
+Novo nome:
+
+Voz UnDF
+
+Subtítulo:
+
+Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+
+Sua voz participa. A Universidade transforma.
+
+Descrição resumida:
+
+O Voz UnDF é uma plataforma digital criada para aproximar estudantes, docentes, servidores e gestores da Universidade do Distrito Federal. A solução centraliza demandas, sugestões e propostas, permite acompanhamento transparente e transforma a participação da comunidade acadêmica em dados para a tomada de decisão.
+
+Substitua todas as referências a:
+
+- Escuta DF;
+- Governo do Distrito Federal;
+- cidadão;
+- órgãos públicos do GDF;
+- administração pública distrital;
+- manifestações governamentais;
+- IZA ou nomes antigos da assistente.
+
+Por referências relacionadas a:
+
+- Voz UnDF;
+- Universidade do Distrito Federal;
+- comunidade acadêmica;
+- estudantes;
+- docentes;
+- servidores;
+- gestores;
+- coordenações;
+- pró-reitorias;
+- unidades acadêmicas;
+- setores administrativos;
+- gestão universitária participativa.
+
+Não faça apenas uma troca de nome e cores. O resultado deve parecer uma solução criada especificamente para a UnDF.
+
+==================================================
+OBJETIVO
+==================================================
+
+Transformar o Escuta DF em uma plataforma universitária de:
+
+- participação acadêmica;
+- registro de demandas;
+- apresentação de propostas;
+- acompanhamento por protocolo;
+- priorização coletiva;
+- transparência institucional;
+- comunicação entre comunidade e gestão;
+- apoio à tomada de decisão;
+- gestão participativa;
+- contribuição para o ODS 16.
+
+A plataforma não deve parecer apenas uma ouvidoria.
+
+Ela deve funcionar como uma ferramenta de gestão colaborativa, na qual a comunidade registra problemas e propostas, apoia prioridades e acompanha as respostas da Universidade.
+
+==================================================
+PADRÃO TÉCNICO
+==================================================
+
+A implementação deve demonstrar capacidade técnica extremamente elevada, equivalente a um projeto desenvolvido por profissionais experientes em Engenharia de Software.
+
+Aplicar, quando forem adequados:
+
+- Clean Code;
+- SOLID;
+- DRY;
+- KISS;
+- YAGNI;
+- arquitetura em camadas;
+- separação de responsabilidades;
+- baixo acoplamento;
+- alta coesão;
+- tipagem forte;
+- validação de dados;
+- segurança por padrão;
+- privacidade por padrão;
+- acessibilidade por padrão;
+- tratamento centralizado de erros;
+- documentação técnica;
+- testes automatizados;
+- observabilidade;
+- configuração por ambiente;
+- princípio do menor privilégio.
+
+Não criar complexidade artificial apenas para parecer avançado.
+
+Toda decisão técnica deve gerar benefícios reais de segurança, clareza, manutenção, desempenho ou escalabilidade.
+
+==================================================
+DIAGNÓSTICO INICIAL OBRIGATÓRIO
+==================================================
+
+Antes de alterar os arquivos:
+
+1. Analise toda a estrutura do projeto.
+2. Identifique as tecnologias do frontend e backend.
+3. Identifique banco de dados, ORM, autenticação e serviços externos.
+4. Localize rotas, páginas, componentes, APIs, modelos e schemas.
+5. Verifique as variáveis de ambiente.
+6. Execute o projeto no estado atual.
+7. Verifique erros no terminal e no console do navegador.
+8. Identifique funcionalidades que já estão operacionais.
+9. Identifique funcionalidades incompletas ou simuladas.
+10. Apresente um plano incremental de implementação.
+
+Depois do diagnóstico, execute efetivamente as alterações. Não permaneça apenas descrevendo o que deve ser feito.
+
+==================================================
+PRESERVAÇÃO DO PROJETO
+==================================================
+
+Preserve tudo que já estiver funcionando, especialmente:
+
+- autenticação;
+- cadastro de usuários;
+- formulário de manifestação;
+- geração de protocolo;
+- consulta por protocolo;
+- painel administrativo;
+- banco de dados;
+- upload de imagens e documentos;
+- gravação e envio de áudio;
+- páginas de transparência;
+- recursos de acessibilidade;
+- responsividade;
+- estrutura PWA;
+- integrações existentes.
+
+Não remova recursos ou dependências sem necessidade.
+
+Não apague tabelas ou dados existentes.
+
+Antes de modificar o banco, analise o schema atual e crie migrações seguras.
+
+==================================================
+IDENTIDADE VISUAL
+==================================================
+
+Crie uma identidade visual moderna, institucional, tecnológ...
