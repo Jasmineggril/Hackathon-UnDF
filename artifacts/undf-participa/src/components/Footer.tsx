@@ -12,11 +12,11 @@ export function Footer() {
                   <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                 </svg>
               </div>
-              <span className="text-xl font-bold tracking-tight text-primary">UnDF Participa</span>
+                    <span className="text-xl font-bold tracking-tight text-primary">Voz UnDF</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm">
-              Plataforma de gestão participativa da Universidade do Distrito Federal.
-              Conectando estudantes, docentes e servidores para construir uma universidade melhor.
+              Plataforma Inteligente de Participação e Gestão Colaborativa da Universidade do Distrito Federal.
+              Registre demandas, apoie propostas e acompanhe respostas institucionais.
             </p>
           </div>
           
@@ -33,7 +33,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-foreground">Institucional</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/sobre" className="hover:text-primary transition-colors">Sobre o UnDF Participa</Link></li>
+              <li><Link href="/sobre" className="hover:text-primary transition-colors">Sobre o Voz UnDF</Link></li>
               <li><Link href="/ods16" className="hover:text-primary transition-colors">Nosso compromisso: ODS 16</Link></li>
               <li><a href="https://undf.edu.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Portal da UnDF</a></li>
             </ul>

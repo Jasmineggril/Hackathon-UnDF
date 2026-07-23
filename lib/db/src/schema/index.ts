@@ -1,6 +1,6 @@
 /**
  * @module schema
- * @description Schema centralizado do banco de dados da plataforma UnDF Participa.
+ * @description Schema centralizado do banco de dados da plataforma Voz UnDF.
  *
  * Arquitetura de dados:
  * - `users` / `sessions`: gerenciados pelo Replit Auth (OIDC). Não remover.
@@ -72,8 +72,7 @@ export type User = typeof users.$inferSelect;
 
 /**
  * Categorias alinhadas ao contexto universitário da UnDF.
- * Diferente do Escuta-DF que era focado em serviços do GDF,
- * aqui as categorias refletem a estrutura organizacional acadêmica.
+ * As categorias abaixo refletem a estrutura organizacional acadêmica e as necessidades da comunidade universitária.
  */
 export const DEMAND_CATEGORIES = [
   "Infraestrutura",

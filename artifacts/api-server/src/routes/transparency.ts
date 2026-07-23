@@ -1,6 +1,6 @@
 /**
  * @module routes/transparency
- * @description Rotas do Portal de Transparência da UnDF Participa.
+ * @description Rotas do Portal de Transparência do Voz UnDF.
  *
  * Todos os endpoints são públicos e fornecem dados agregados reais do banco.
  * Nenhum dado individual ou PII é exposto — apenas contagens e métricas.

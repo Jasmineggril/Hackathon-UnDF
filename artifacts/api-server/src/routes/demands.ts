@@ -1,6 +1,6 @@
 /**
  * @module routes/demands
- * @description Rotas de Demandas da plataforma UnDF Participa.
+ * @description Rotas de Demandas da plataforma Voz UnDF.
  *
  * Arquitetura de autorização:
  * - Leitura (GET): pública — qualquer visitante pode listar e consultar demandas.

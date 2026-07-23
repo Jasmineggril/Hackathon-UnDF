@@ -1,6 +1,6 @@
 /**
  * @module seed
- * @description Dados de exemplo para o banco de dados do UnDF Participa.
+ * @description Dados de exemplo para o banco de dados do Voz UnDF.
  *
  * Execução: pnpm --filter @workspace/db run seed
  *
@@ -164,7 +164,7 @@ const SEED_DEMANDS = [
     type: "text" as const,
     category: "Assistência Estudantil" as const,
     content:
-      "Vários estudantes do interior do DF têm dificuldade para pagar os passagens de ônibus intermunicipais. A meia-passagem só vale dentro do DF. Solicitamos que a UnDF articule junto ao GDF um benefício de transporte para esses estudantes.",
+      "Vários estudantes do interior do DF têm dificuldade para pagar as passagens de ônibus intermunicipais. Solicitamos que a UnDF avalie mecanismos de apoio ao transporte estudantil para esses estudantes.",
     isAnonymous: false,
     status: "received" as const,
     supportCount: 203,
@@ -233,7 +233,7 @@ const SEED_PROPOSALS = [
 ];
 
 async function seed() {
-  console.log("Iniciando seed do banco de dados UnDF Participa...");
+  console.log("Iniciando seed do banco de dados Voz UnDF...");
 
   // Inserir demandas (ignorar conflitos de protocolo para idempotência)
   for (const demand of SEED_DEMANDS) {

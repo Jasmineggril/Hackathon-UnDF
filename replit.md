@@ -1,4 +1,4 @@
-# UnDF Participa
+# Voz UnDF
 
 Plataforma Inteligente de Participação e Gestão Colaborativa da Universidade do Distrito Federal. Permite que estudantes, docentes, servidores e gestores registrem demandas, sugestões e propostas, acompanhem o andamento das solicitações e visualizem dados públicos de transparência.
 

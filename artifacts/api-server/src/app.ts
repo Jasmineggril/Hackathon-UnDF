@@ -1,6 +1,6 @@
 /**
  * @module app
- * @description Configuração central do servidor Express para o UnDF Participa.
+ * @description Configuração central do servidor Express para o Voz UnDF.
  *
  * Middleware pipeline (ordem importa):
  * 1. pinoHttp — logging estruturado de todas as requisições

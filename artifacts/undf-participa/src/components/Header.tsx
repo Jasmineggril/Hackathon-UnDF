@@ -50,7 +50,7 @@ export function Header() {
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
               </svg>
             </div>
-            <span className="text-lg font-bold tracking-tight text-primary">UnDF Participa</span>
+              <span className="text-lg font-bold tracking-tight text-primary">Voz UnDF</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <NavLinks />
@@ -96,7 +96,7 @@ export function Header() {
                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                   </svg>
                 </div>
-                <span className="text-lg font-bold tracking-tight text-primary">UnDF Participa</span>
+                  <span className="text-lg font-bold tracking-tight text-primary">Voz UnDF</span>
               </Link>
               <nav className="flex flex-col gap-4 mt-2">
                 <NavLinks />

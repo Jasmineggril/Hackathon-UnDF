@@ -1,0 +1,17 @@
+{
+  "name": "Voz UnDF",
+  "short_name": "VozUnDF",
+  "description": "Voz UnDF — Plataforma Inteligente de Participação e Gestão Colaborativa",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

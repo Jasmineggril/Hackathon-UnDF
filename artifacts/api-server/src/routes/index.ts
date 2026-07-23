@@ -1,6 +1,6 @@
 /**
  * @module routes/index
- * @description Roteador central da API do UnDF Participa.
+ * @description Roteador central da API do Voz UnDF.
  *
  * Organização das rotas por domínio:
  * - /health — liveness probe para orquestração de containers

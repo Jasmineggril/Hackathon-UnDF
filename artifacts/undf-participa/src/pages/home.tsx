@@ -18,19 +18,17 @@ export default function Home() {
               <span>Gestão Democrática e Transparente</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              A universidade que <span className="text-primary">construímos juntos</span>
+              Sua voz ajuda a construir a UnDF.
             </h1>
             <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-              O UnDF Participa é o canal oficial para estudantes, docentes e servidores enviarem demandas, apoiarem propostas e acompanharem a gestão universitária.
+              Registre demandas, apresente propostas, acompanhe respostas e participe das decisões que transformam a Universidade.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-2 w-full sm:w-auto">
               <Button size="lg" asChild className="gap-2">
-                <Link href="/demandas/nova">
-                  Registrar Demanda <ArrowRight className="w-4 h-4" />
-                </Link>
+                <Link href="/demandas/nova">Registrar demanda <ArrowRight className="w-4 h-4" /></Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/propostas">Ver Propostas</Link>
+                <Link href="/demandas">Explorar demandas</Link>
               </Button>
             </div>
           </div>
@@ -53,6 +51,39 @@ export default function Home() {
                 </div>
                 <h3 className="font-semibold text-lg">Propostas</h3>
                 <p className="text-sm text-muted-foreground">Sugira melhorias acadêmicas ou inovações para a UnDF.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works Section */}
+      <section className="py-12 bg-white border-b">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-center mb-6">Como funciona</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="font-semibold">1. Registre</h3>
+                <p className="text-sm text-muted-foreground">Envie uma demanda, sugestão ou proposta por texto, imagem, documento ou áudio.</p>
+              </CardContent>
+            </Card>
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="font-semibold">2. Acompanhe</h3>
+                <p className="text-sm text-muted-foreground">Receba um protocolo e visualize o andamento da sua manifestação.</p>
+              </CardContent>
+            </Card>
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="font-semibold">3. Participe</h3>
+                <p className="text-sm text-muted-foreground">Apoie demandas e propostas que também afetam você.</p>
+              </CardContent>
+            </Card>
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="font-semibold">4. Transforme</h3>
+                <p className="text-sm text-muted-foreground">A gestão usa os dados para planejar ações, responder e prestar contas.</p>
               </CardContent>
             </Card>
           </div>
@@ -118,7 +149,7 @@ export default function Home() {
           <div className="md:w-2/3">
             <h2 className="text-3xl font-bold mb-4">Compromisso com o ODS 16</h2>
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              O UnDF Participa é uma iniciativa alinhada ao Objetivo de Desenvolvimento Sustentável 16 da ONU. 
+              O Voz UnDF é uma iniciativa alinhada ao Objetivo de Desenvolvimento Sustentável 16 da ONU. 
               Trabalhamos para desenvolver instituições eficazes, responsáveis e transparentes em todos os níveis, 
               garantindo a tomada de decisão responsiva, inclusiva e participativa.
             </p>
