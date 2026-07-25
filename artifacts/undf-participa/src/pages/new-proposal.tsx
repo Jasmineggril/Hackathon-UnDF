@@ -1,111 +1,91 @@
-import { useState } from 'react';
-import { useLocation } from 'wouter';
-import { useCreateProposal, DemandCategory } from '@workspace/api-client-react';
-import { useAuth } from '@workspace/auth-web';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner';
-import { Loader2, ArrowLeft, Lightbulb } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useCreateProposal } from "@workspace/api-client-react";
+import { DemandCategory } from "@workspace/api-client-react";
+import { useAuth } from "@workspace/auth-web";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Megaphone } from "lucide-react";
+
+const proposalSchema = z.object({
+  title: z.string().min(10, "Mínimo de 10 caracteres").max(200, "Máximo de 200 caracteres"),
+  description: z.string().min(30, "Mínimo de 30 caracteres").max(5000, "Máximo de 5000 caracteres"),
+  category: z.nativeEnum(DemandCategory),
+  targetUnit: z.string().optional(),
+});
 
 export default function NewProposal() {
-  const { isAuthenticated, login } = useAuth();
-  const [, navigate] = useLocation();
+  const { isAuthenticated } = useAuth();
+  const [, setLocation] = useLocation();
   const createProposal = useCreateProposal();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState<DemandCategory>('Sugestão de Melhoria');
-  const [targetUnit, setTargetUnit] = useState('');
+  const form = useForm<z.infer<typeof proposalSchema>>({
+    resolver: zodResolver(proposalSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      category: "Infraestrutura" as DemandCategory,
+      targetUnit: "",
+    },
+  });
 
   if (!isAuthenticated) {
-    return (
-      <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
-        <Card>
-          <CardContent className="pt-6">
-            <h2 className="text-xl font-bold mb-4">Autenticação Necessária</h2>
-            <p className="text-muted-foreground mb-6">
-              Você precisa estar logado para submeter uma proposta.
-            </p>
-            <Button onClick={login}>Entrar</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    window.location.href = "/login";
+    return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (title.trim().length < 10) {
-      toast.error('O título deve ter pelo menos 10 caracteres.');
-      return;
+  const onSubmit = async (values: z.infer<typeof proposalSchema>) => {
+    try {
+      await createProposal.mutateAsync({ data: values });
+      setLocation("/propostas");
+    } catch (error) {
+      console.error(error);
     }
-    if (description.trim().length < 30) {
-      toast.error('A descrição deve ter pelo menos 30 caracteres.');
-      return;
-    }
-
-    createProposal.mutate(
-      {
-        data: {
-          title: title.trim(),
-          description: description.trim(),
-          category,
-          targetUnit: targetUnit.trim() || null,
-        },
-      },
-      {
-        onSuccess: () => {
-          toast.success('Proposta submetida com sucesso!');
-          navigate('/propostas');
-        },
-        onError: () => {
-          toast.error('Erro ao submeter proposta. Tente novamente.');
-        },
-      }
-    );
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <Button variant="ghost" onClick={() => navigate('/propostas')} className="mb-6 gap-2">
-        <ArrowLeft className="w-4 h-4" /> Voltar
-      </Button>
+    <div className="container mx-auto px-4 py-12 max-w-3xl">
+      <div className="mb-8">
+        <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+          <Megaphone className="w-8 h-8 text-primary" />
+        </div>
+        <h1 className="text-3xl font-bold text-foreground">Sugerir Nova Proposta</h1>
+        <p className="text-muted-foreground mt-2">
+          As propostas são projetos mais estruturados que demandam aprovação e análise da gestão. 
+          Descreva sua ideia com clareza para atrair apoio da comunidade.
+        </p>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-primary" />
-            Enviar Nova Proposta
-          </CardTitle>
-          <CardDescription>
-            Proponha melhorias, inovações ou soluções para a comunidade universitária.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label>Título da Proposta *</Label>
-              <Input
-                placeholder="Ex: Criação de espaço de estudo colaborativo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                maxLength={200}
-              />
-              <p className="text-xs text-muted-foreground text-right">
-                {title.length}/200
-              </p>
-            </div>
+      <div className="bg-card border rounded-xl p-6 md:p-8 shadow-sm">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Título da Proposta <span className="text-destructive">*</span></Label>
+            <Input 
+              id="title"
+              placeholder="Ex: Instalação de bicicletários sustentáveis no Campus Norte"
+              {...form.register("title")}
+              className={form.formState.errors.title ? "border-destructive" : ""}
+            />
+            {form.formState.errors.title && (
+              <p className="text-xs text-destructive">{form.formState.errors.title.message}</p>
+            )}
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Categoria *</Label>
-              <Select value={category} onValueChange={(v) => setCategory(v as DemandCategory)}>
-                <SelectTrigger>
-                  <SelectValue />
+              <Label>Categoria <span className="text-destructive">*</span></Label>
+              <Select 
+                onValueChange={(v) => form.setValue("category", v as DemandCategory)}
+                defaultValue={form.getValues("category")}
+              >
+                <SelectTrigger className={form.formState.errors.category ? "border-destructive" : ""}>
+                  <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(DemandCategory).map((cat) => (
@@ -114,42 +94,45 @@ export default function NewProposal() {
                 </SelectContent>
               </Select>
             </div>
-
+            
             <div className="space-y-2">
-              <Label>Descrição Detalhada *</Label>
-              <Textarea
-                placeholder="Descreva sua proposta, justificativa e benefícios esperados..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={8}
-                maxLength={5000}
-              />
-              <p className="text-xs text-muted-foreground text-right">
-                {description.length}/5000 (mínimo 30)
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Unidade/Local alvo (opcional)</Label>
-              <Input
-                placeholder="Ex: Diretoria Acadêmica, Centro de Tecnologia"
-                value={targetUnit}
-                onChange={(e) => setTargetUnit(e.target.value)}
+              <Label htmlFor="targetUnit">Unidade de Aplicação</Label>
+              <Input 
+                id="targetUnit"
+                placeholder="Ex: Reitoria, Todos os campi..."
+                {...form.register("targetUnit")}
               />
             </div>
+          </div>
 
-            <div className="flex gap-4 pt-4">
-              <Button type="submit" disabled={createProposal.isPending} className="gap-2">
-                {createProposal.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-                Submeter Proposta
-              </Button>
-              <Button type="button" variant="outline" onClick={() => navigate('/propostas')}>
-                Cancelar
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          <div className="space-y-2">
+            <Label htmlFor="description">Descrição do Projeto <span className="text-destructive">*</span></Label>
+            <Textarea 
+              id="description"
+              placeholder="Descreva a justificativa, o impacto esperado, quem será beneficiado e uma estimativa de viabilidade..."
+              className={`min-h-[200px] resize-y ${form.formState.errors.description ? "border-destructive" : ""}`}
+              {...form.register("description")}
+            />
+            {form.formState.errors.description && (
+              <p className="text-xs text-destructive">{form.formState.errors.description.message}</p>
+            )}
+            <p className="text-xs text-muted-foreground">Seja claro e objetivo. Propostas bem detalhadas recebem mais apoio.</p>
+          </div>
+
+          <div className="flex justify-end pt-6 border-t gap-4">
+            <Link href="/propostas">
+              <Button type="button" variant="ghost">Cancelar</Button>
+            </Link>
+            <Button 
+              type="submit" 
+              className="bg-primary hover:bg-primary/90 min-w-[150px]"
+              disabled={createProposal.isPending}
+            >
+              {createProposal.isPending ? "Enviando..." : "Submeter Proposta"}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

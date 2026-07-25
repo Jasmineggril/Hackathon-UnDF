@@ -4,10 +4,12 @@ import * as schema from "./schema";
 
 const { Pool } = pg;
 
-const databaseUrl = process.env.DATABASE_URL;
+// Prefer DIRECT_URL (Supabase direct connection) over DATABASE_URL
+// because Replit's runtime overrides DATABASE_URL with its own PostgreSQL.
+const databaseUrl = process.env.DIRECT_URL || process.env.DATABASE_URL;
 if (!databaseUrl) {
   throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
+    "DATABASE_URL or DIRECT_URL must be set. Did you forget to provision a database?",
   );
 }
 

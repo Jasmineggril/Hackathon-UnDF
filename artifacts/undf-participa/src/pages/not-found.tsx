@@ -1,17 +1,29 @@
-import { Link } from 'wouter';
-import { Button } from '@/components/ui/button';
+import { Link } from "wouter";
+import { Search, Home, FileQuestion } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-      <h1 className="text-6xl font-bold text-primary mb-4">404</h1>
-      <h2 className="text-2xl font-semibold mb-2">Página não encontrada</h2>
-      <p className="text-muted-foreground max-w-md mb-8">
-        A página que você está procurando não existe ou foi movida.
+    <div className="min-h-[calc(100vh-16rem)] flex flex-col items-center justify-center p-4 text-center">
+      <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
+        <FileQuestion className="w-10 h-10 text-muted-foreground" />
+      </div>
+      <h1 className="text-4xl font-bold text-foreground mb-2">Página não encontrada</h1>
+      <p className="text-lg text-muted-foreground mb-8 max-w-md text-balance">
+        O endereço que você tentou acessar não existe ou a página foi movida em nossa plataforma.
       </p>
-      <Button asChild>
-        <Link href="/">Voltar para a Página Inicial</Link>
-      </Button>
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <Link href="/">
+          <Button variant="default" className="bg-primary flex items-center gap-2">
+            <Home className="w-4 h-4" /> Voltar ao Início
+          </Button>
+        </Link>
+        <Link href="/protocolo">
+          <Button variant="outline" className="flex items-center gap-2">
+            <Search className="w-4 h-4" /> Buscar Protocolo
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

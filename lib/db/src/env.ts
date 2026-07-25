@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-loadEnv({ path: path.join(__dirname, "../../.env") });
+loadEnv({ path: path.join(__dirname, "../../.env"), override: true });
 
 function required(name: string): string {
   const val = process.env[name];
@@ -18,7 +18,7 @@ function optional(name: string): string | undefined {
 }
 
 export const env = {
-  DATABASE_URL: required("DATABASE_URL"),
+  DATABASE_URL: process.env["DIRECT_URL"] ?? required("DATABASE_URL"),
   DIRECT_URL: optional("DIRECT_URL"),
   SUPABASE_URL: required("SUPABASE_URL"),
   SUPABASE_PUBLISHABLE_KEY: required("SUPABASE_PUBLISHABLE_KEY"),

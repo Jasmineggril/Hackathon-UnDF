@@ -5,6 +5,9 @@ import { Route, Switch, Router as WouterRouter } from 'wouter';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import AccessibilityPanel from '@/components/AccessibilityPanel';
+import VLibrasWidget from '@/components/VLibrasWidget';
+import CookieBanner from '@/components/CookieBanner';
 
 import Home from '@/pages/home';
 import Demands from '@/pages/demands';
@@ -60,6 +63,9 @@ function App() {
           <Layout>
             <Router />
           </Layout>
+          <AccessibilityPanel />
+          <VLibrasWidget />
+          <CookieBanner />
         </WouterRouter>
         <Toaster position="top-right" richColors />
       </TooltipProvider>

@@ -1,0 +1,535 @@
+Quero revisar e refinar apenas o frontend do projeto Voz UnDF.
+
+Não altere a arquitetura do backend, autenticação, banco de dados, APIs ou regras de negócio já implementadas, salvo quando uma pequena adaptação de interface for indispensável.
+
+O objetivo é transformar a interface atual em um frontend finalista para o Hackathon “Conecta UnDF: Soluções para Gestão Participativa”.
+
+IDENTIDADE
+
+Nome:
+Voz UnDF
+
+Subtítulo:
+Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+Sua voz participa. A Universidade transforma.
+
+Mensagem principal:
+O Voz UnDF transforma manifestações individuais em prioridades coletivas, aproxima a comunidade acadêmica da gestão e permite acompanhar, com transparência, como a Universidade responde.
+
+DIREÇÃO VISUAL
+
+Criar uma interface:
+
+- minimalista;
+- institucional;
+- moderna;
+- universitária;
+- acessível;
+- elegante;
+- responsiva;
+- com aparência de projeto finalista.
+
+Usar:
+
+- fundo claro;
+- azul institucional;
+- verde suave como cor complementar;
+- tons neutros;
+- tipografia limpa;
+- bastante espaço em branco;
+- bordas discretas;
+- poucos cards;
+- ícones simples;
+- microinterações leves.
+
+Evitar:
+
+- excesso de gradientes;
+- efeitos brilhantes;
+- sombras pesadas;
+- excesso de cores;
+- aparência genérica de template;
+- aparência de portal governamental antigo;
+- textos longos;
+- elementos decorativos sem função.
+
+PÁGINA INICIAL
+
+Criar um hero objetivo.
+
+Título:
+Sua voz ajuda a construir a UnDF.
+
+Texto:
+Registre demandas, apresente propostas, acompanhe respostas e participe das decisões que transformam a Universidade.
+
+Botões principais:
+
+- Registrar demanda;
+- Explorar demandas;
+- Acompanhar protocolo.
+
+Ação secundária:
+
+- Conhecer o Voz UnDF.
+
+Criar seção:
+
+Por que o Voz UnDF é diferente?
+
+Itens:
+
+1. Demandas coletivas
+Estudantes podem indicar “Também sou afetado”, reduzindo duplicidades e ajudando a gestão a identificar prioridades.
+
+2. Participação acessível
+Envio por texto, imagem, documento ou áudio, com Libras e recursos de acessibilidade.
+
+3. Propostas para a Universidade
+A comunidade pode sugerir, apoiar e acompanhar melhorias.
+
+4. Transparência
+Protocolos, status, prazos, respostas e indicadores públicos.
+
+5. Gestão baseada em dados
+A Universidade identifica recorrências e prioridades reais.
+
+6. Inclusão
+VLibras, modo de foco, alto contraste e acessibilidade cognitiva.
+
+COMO FUNCIONA
+
+Criar quatro etapas visuais:
+
+1. Registre
+Envie uma demanda, sugestão ou proposta.
+
+2. Acompanhe
+Receba um protocolo e acompanhe o andamento.
+
+3. Participe
+Apoie demandas e propostas.
+
+4. Transforme
+A gestão utiliza os dados para planejar melhorias.
+
+FUNCIONALIDADES DO ESCUTA DF QUE DEVEM SER PRESERVADAS NA INTERFACE
+
+- cadastro;
+- login;
+- manifestação por texto;
+- imagem;
+- documento;
+- gravação de áudio;
+- anonimato;
+- protocolo;
+- consulta por protocolo;
+- acompanhamento;
+- painel do usuário;
+- painel administrativo;
+- resposta institucional;
+- alteração de status;
+- transparência;
+- acessibilidade;
+- LGPD;
+- segurança.
+
+Não remova funcionalidades existentes.
+
+Apenas adapte a linguagem e o visual para o contexto da UnDF.
+
+DIFERENCIAIS DO VOZ UNDF
+
+Destacar na interface:
+
+- Também sou afetado;
+- apoio coletivo;
+- propostas para a UnDF;
+- priorização baseada em evidências;
+- painel público;
+- participação por áudio;
+- VLibras;
+- modo de foco;
+- acessibilidade cognitiva;
+- acompanhamento transparente;
+- resposta institucional;
+- ODS 16.
+
+CABEÇALHO
+
+Criar cabeçalho simples e responsivo com:
+
+- logo Voz UnDF;
+- Início;
+- Demandas;
+- Propostas;
+- Transparência;
+- ODS;
+- Sobre;
+- Entrar.
+
+Quando autenticado:
+
+- Meu painel;
+- Minhas demandas;
+- Minhas propostas;
+- Sair.
+
+Gestor ou administrador:
+
+- Painel da gestão.
+
+No celular:
+
+- menu hambúrguer;
+- foco controlado;
+- fechamento com Escape;
+- acessibilidade por teclado.
+
+LIBRAS
+
+Adicionar uma única integração oficial do VLibras.
+
+Criar botão flutuante:
+
+Libras
+
+Tooltip:
+
+Traduzir conteúdo para Libras com VLibras.
+
+Regras:
+
+- uma única instância;
+- permitir fechar;
+- funcionar no celular;
+- não cobrir botões;
+- posicionamento responsivo;
+- navegação por teclado.
+
+Adicionar aviso:
+
+O VLibras é um recurso complementar e não substitui a construção acessível da plataforma.
+
+ACESSIBILIDADE
+
+Criar um botão ou menu flutuante chamado:
+
+Acessibilidade
+
+Ao abrir, mostrar painel pequeno e discreto com:
+
+Visual:
+- aumentar texto;
+- diminuir texto;
+- alto contraste;
+- escala de cinza;
+- destacar links;
+- fonte legível.
+
+Movimento:
+- reduzir animações;
+- pausar efeitos.
+
+Cognitiva:
+- modo de foco;
+- modo de leitura;
+- maior espaçamento;
+- largura de leitura reduzida;
+- reduzir distrações.
+
+Motora:
+- foco visível;
+- navegação por teclado;
+- áreas clicáveis adequadas.
+
+Salvar apenas preferências visuais no localStorage.
+
+Não armazenar dados pessoais no localStorage.
+
+TDAH E ACESSIBILIDADE COGNITIVA
+
+Criar:
+
+Modo de foco
+
+Descrição:
+Reduz distrações visuais e facilita a leitura para pessoas com TDAH, dislexia ou sensibilidade a estímulos.
+
+Quando ativado:
+
+- remover animações;
+- reduzir cores;
+- ocultar elementos decorativos;
+- aumentar espaçamento;
+- destacar conteúdo principal;
+- reduzir largura de leitura;
+- simplificar navegação.
+
+Não afirmar que trata TDAH.
+
+Apresentar como recurso de acessibilidade cognitiva.
+
+PÁGINA DE DEMANDAS
+
+Melhorar a listagem de demandas públicas.
+
+Cada item deve mostrar:
+
+- título;
+- categoria;
+- unidade;
+- status;
+- data;
+- número de apoios;
+- botão Também sou afetado;
+- botão Ver detalhes.
+
+Adicionar filtros:
+
+- mais apoiadas;
+- mais recentes;
+- em andamento;
+- resolvidas;
+- categoria;
+- unidade;
+- status.
+
+FORMULÁRIO DE DEMANDA
+
+Organizar em etapas visuais:
+
+1. Tipo;
+2. Assunto;
+3. Prioridade e privacidade;
+4. Evidências;
+5. Revisão.
+
+Adicionar:
+
+- indicador de progresso;
+- contador de caracteres;
+- validação;
+- pré-visualização;
+- mensagens claras;
+- loading;
+- prevenção de envio duplicado;
+- confirmação;
+- botão copiar protocolo.
+
+ÁUDIO
+
+A interface deve permitir:
+
+- iniciar;
+- pausar;
+- continuar;
+- finalizar;
+- ouvir;
+- excluir;
+- regravar;
+- enviar.
+
+Mostrar:
+
+- duração;
+- estado da gravação;
+- permissão do microfone;
+- limite de tamanho;
+- formatos aceitos.
+
+PÁGINA DE PROPOSTAS
+
+Cada proposta deve mostrar:
+
+- título;
+- resumo;
+- categoria;
+- público beneficiado;
+- número de apoios;
+- status;
+- resposta institucional;
+- botão Apoiar proposta.
+
+Filtros:
+
+- mais apoiadas;
+- mais recentes;
+- em avaliação;
+- planejadas;
+- implementadas.
+
+PAINEL DE TRANSPARÊNCIA
+
+Melhorar visualmente os indicadores reais já existentes.
+
+Mostrar:
+
+- total de demandas;
+- demandas no mês;
+- demandas resolvidas;
+- demandas em andamento;
+- percentual de resolução;
+- tempo médio de resposta;
+- demandas mais apoiadas;
+- propostas mais apoiadas;
+- categorias mais recorrentes;
+- unidades mais citadas;
+- evolução mensal.
+
+Usar gráficos simples e acessíveis.
+
+Não inventar números.
+
+PAINEL DA GESTÃO
+
+Melhorar a organização visual sem alterar as regras do backend.
+
+Separar claramente:
+
+- fila de demandas;
+- filtros;
+- detalhes;
+- anexos;
+- áudio;
+- alteração de status;
+- setor responsável;
+- prazo;
+- resposta pública;
+- observação interna;
+- histórico;
+- indicadores.
+
+Observação interna deve ter sinalização visual clara de conteúdo restrito.
+
+ODS
+
+Criar uma seção minimalista:
+
+Objetivos de Desenvolvimento Sustentável
+
+ODS principal:
+
+ODS 16 — Paz, Justiça e Instituições Eficazes
+
+ODS complementares:
+
+- ODS 4 — Educação de Qualidade;
+- ODS 5 — Igualdade de Gênero;
+- ODS 9 — Indústria, Inovação e Infraestrutura;
+- ODS 10 — Redução das Desigualdades;
+- ODS 17 — Parcerias e Meios de Implementação.
+
+Não mostrar todos os 17 ODS.
+
+Dar mais destaque ao ODS 16.
+
+LGPD E GOVERNANÇA
+
+Garantir links visíveis no rodapé para:
+
+- Política de Privacidade;
+- Política de Cookies;
+- Termos de Uso;
+- Governança;
+- Regras de participação;
+- Acessibilidade.
+
+Criar banner de cookies minimalista com:
+
+- Aceitar necessários;
+- Aceitar todos;
+- Recusar opcionais;
+- Personalizar.
+
+Não utilizar cookies publicitários.
+
+RODAPÉ
+
+Criar rodapé simples com:
+
+- Voz UnDF;
+- Universidade do Distrito Federal;
+- Transparência;
+- ODS;
+- Governança;
+- Acessibilidade;
+- Privacidade;
+- Cookies;
+- Termos;
+- Contato;
+- status do sistema.
+
+Adicionar:
+
+Sua voz participa. A Universidade transforma.
+
+Não usar endereço ou telefone fictício.
+
+RESPONSIVIDADE
+
+Testar em:
+
+- 320px;
+- 375px;
+- 768px;
+- 1024px;
+- 1440px.
+
+Verificar:
+
+- menu;
+- formulários;
+- gráficos;
+- tabelas;
+- modal;
+- VLibras;
+- painel de acessibilidade;
+- áudio;
+- painel da gestão.
+
+Não permitir rolagem horizontal.
+
+VALIDAÇÃO
+
+Após as alterações:
+
+1. executar frontend;
+2. testar todas as rotas;
+3. testar login e cadastro;
+4. testar demanda;
+5. testar áudio;
+6. testar protocolo;
+7. testar apoio;
+8. testar propostas;
+9. testar transparência;
+10. testar painel da gestão;
+11. testar VLibras;
+12. testar acessibilidade;
+13. testar modo de foco;
+14. testar cookies;
+15. testar responsividade;
+16. executar typecheck;
+17. executar build.
+
+Não alterar endpoints, banco ou autenticação sem necessidade.
+
+Não declarar uma função pronta sem testar.
+
+Ao final, informar:
+
+- páginas alteradas;
+- componentes criados;
+- componentes removidos;
+- melhorias visuais;
+- recursos de acessibilidade;
+- integração VLibras;
+- modo de foco;
+- ODS utilizados;
+- resultado do typecheck;
+- resultado do build;
+- limitações.
+
+O resultado final deve parecer uma plataforma universitária moderna, acessível, segura e competitiva para o primeiro lugar do Hackathon.

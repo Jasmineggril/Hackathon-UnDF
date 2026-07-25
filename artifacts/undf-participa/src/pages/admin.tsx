@@ -1,226 +1,233 @@
-import { useState } from 'react';
-import { useAuth } from '@workspace/auth-web';
-import { useAdminListDemands, useUpdateDemandStatus, DemandStatus } from '@workspace/api-client-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { StatusBadge } from '@/components/StatusBadge';
-import { toast } from 'sonner';
-import { Loader2, Shield, ArrowLeft } from 'lucide-react';
-import { Link } from 'wouter';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { 
+  Search, ShieldAlert, CheckCircle2, Archive, Loader2, ArrowRight
+} from "lucide-react";
+import { useAdminListDemands, useUpdateDemandStatus, getAdminListDemandsQueryKey } from "@workspace/api-client-react";
+import { DemandStatus } from "@workspace/api-client-react";
+import { useAuth } from "@workspace/auth-web";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Admin() {
-  const { user, isAuthenticated, login } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<DemandStatus | undefined>();
-  const [page, setPage] = useState(1);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [newStatus, setNewStatus] = useState<DemandStatus>('processing');
-  const [adminResponse, setAdminResponse] = useState('');
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  
+  const [newStatus, setNewStatus] = useState<DemandStatus | "">("");
+  const [adminResponse, setAdminResponse] = useState("");
 
-  const { data, isLoading } = useAdminListDemands({ status: statusFilter, page, limit: 20 });
+  const { data, isLoading } = useAdminListDemands({
+    page: 1,
+    limit: 50,
+    status: statusFilter
+  }, {
+    query: {
+      enabled: isAuthenticated && (user?.role === 'gestor' || user?.role === 'administrador')
+    }
+  });
+
   const updateStatus = useUpdateDemandStatus();
 
   if (!isAuthenticated || (user?.role !== 'gestor' && user?.role !== 'administrador')) {
     return (
-      <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
-        <Card>
-          <CardContent className="pt-6">
-            <Shield className="w-12 h-12 text-destructive mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-4">Acesso Restrito</h2>
-            <p className="text-muted-foreground mb-6">
-              Esta área é exclusiva para gestores e administradores da plataforma Voz UnDF.
-            </p>
-            {!isAuthenticated && (
-              <Button onClick={login}>Entrar</Button>
-            )}
-          </CardContent>
-        </Card>
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-16rem)] p-4 text-center">
+        <ShieldAlert className="w-16 h-16 text-destructive mb-4" />
+        <h1 className="text-2xl font-bold mb-2">Acesso Restrito</h1>
+        <p className="text-muted-foreground">Esta área é exclusiva para gestores da universidade.</p>
       </div>
     );
   }
 
-  const handleUpdateStatus = (demandId: number) => {
-    updateStatus.mutate(
-      { id: demandId, data: { status: newStatus, adminResponse: adminResponse.trim() || null } },
-      {
-        onSuccess: () => {
-          toast.success('Status atualizado com sucesso!');
-          setEditingId(null);
-          setAdminResponse('');
-        },
-        onError: () => {
-          toast.error('Erro ao atualizar status.');
-        },
-      }
-    );
+  const selectedDemand = data?.data.find(d => d.id === selectedId);
+
+  const handleUpdate = async () => {
+    if (!selectedId || !newStatus) return;
+    try {
+      await updateStatus.mutateAsync({
+        id: selectedId,
+        data: {
+          status: newStatus as DemandStatus,
+          adminResponse: adminResponse || undefined
+        }
+      });
+      queryClient.invalidateQueries({ queryKey: getAdminListDemandsQueryKey() });
+      setNewStatus("");
+      setAdminResponse("");
+      // keep it selected to show updated state
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const STATUS_OPTIONS = [
-    { value: 'received', label: 'Recebida' },
-    { value: 'processing', label: 'Em Análise' },
-    { value: 'completed', label: 'Concluída' },
-    { value: 'archived', label: 'Arquivada' },
-  ];
+  const getStatusLabel = (s: string) => {
+    switch(s) {
+      case 'received': return "Recebida";
+      case 'processing': return "Em Análise";
+      case 'completed': return "Resolvida";
+      case 'archived': return "Arquivada";
+      default: return s;
+    }
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <Shield className="w-7 h-7 text-primary" />
-            Painel Administrativo
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie demandas e respostas da comunidade.
-          </p>
+    <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
+      {/* Sidebar List */}
+      <div className="w-full md:w-[400px] border-r bg-muted/20 flex flex-col h-full">
+        <div className="p-4 border-b bg-card z-10 flex flex-col gap-4">
+          <h2 className="font-bold text-lg flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-secondary" /> Painel da Gestão
+          </h2>
+          <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? undefined : v as DemandStatus)}>
+            <SelectTrigger className="w-full bg-background">
+              <SelectValue placeholder="Filtrar por Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas</SelectItem>
+              <SelectItem value="received">Recebidas</SelectItem>
+              <SelectItem value="processing">Em Análise</SelectItem>
+              <SelectItem value="completed">Resolvidas</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Link href="/transparencia">
-          <Button variant="outline" className="gap-2">
-            <ArrowLeft className="w-4 h-4" /> Transparência
-          </Button>
-        </Link>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {isLoading ? (
+            <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+          ) : data?.data.length === 0 ? (
+            <p className="text-sm text-center text-muted-foreground p-4">Nenhuma demanda encontrada.</p>
+          ) : (
+            data?.data.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => {
+                  setSelectedId(d.id);
+                  setNewStatus("");
+                  setAdminResponse(d.adminResponse || "");
+                }}
+                className={`w-full text-left p-4 rounded-lg border transition-all ${
+                  selectedId === d.id 
+                    ? "bg-primary text-primary-foreground border-primary shadow-md" 
+                    : "bg-card border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <span className={`text-xs font-mono font-bold ${selectedId === d.id ? "text-primary-foreground/80" : "text-primary"}`}>
+                    {d.protocol}
+                  </span>
+                  <Badge variant={selectedId === d.id ? "secondary" : "outline"} className="text-[10px] px-1 py-0 h-4">
+                    {getStatusLabel(d.status)}
+                  </Badge>
+                </div>
+                <p className={`text-sm font-medium line-clamp-2 ${selectedId === d.id ? "" : "text-foreground"}`}>
+                  {d.content || "Sem descrição"}
+                </p>
+                <div className={`mt-3 text-xs flex justify-between ${selectedId === d.id ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                  <span>{format(new Date(d.createdAt), "dd/MM/yyyy")}</span>
+                  <span>{d.supportCount} apoios</span>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
       </div>
 
-      <div className="mb-6">
-        <Select
-          value={statusFilter || 'all'}
-          onValueChange={(v) => {
-            setStatusFilter(v === 'all' ? undefined : (v as DemandStatus));
-            setPage(1);
-          }}
-        >
-          <SelectTrigger className="w-full md:w-[250px]">
-            <SelectValue placeholder="Filtrar por status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os status</SelectItem>
-            {STATUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Detail View */}
+      <div className="flex-1 bg-background flex flex-col h-full overflow-hidden hidden md:flex">
+        {selectedDemand ? (
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-8 max-w-3xl mx-auto space-y-8 animate-in fade-in">
+              {/* Header Info */}
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-2xl font-bold font-mono text-primary">{selectedDemand.protocol}</h1>
+                  <Badge variant="outline">{selectedDemand.category}</Badge>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <span>Criada em {format(new Date(selectedDemand.createdAt), "dd/MM/yyyy 'às' HH:mm")}</span>
+                  <span>•</span>
+                  <span>{selectedDemand.isAnonymous ? "Autor Anônimo" : "Identificado"}</span>
+                </div>
+              </div>
 
-      {isLoading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {data?.data.map((demand) => (
-            <Card key={demand.id}>
-              <CardContent className="p-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-mono text-muted-foreground">{demand.protocol}</span>
-                      <StatusBadge status={demand.status} type="demand" />
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
-                        {demand.category}
-                      </span>
-                    </div>
-                    {demand.type === 'text' && demand.content && (
-                      <p className="text-sm text-foreground line-clamp-2">{demand.content}</p>
-                    )}
-                    {demand.targetUnit && (
-                      <p className="text-xs text-muted-foreground mt-1">Alvo: {demand.targetUnit}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {format(new Date(demand.createdAt), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
-                    </p>
-                    {demand.adminResponse && (
-                      <p className="text-xs text-primary mt-2 italic">
-                        Resposta: {demand.adminResponse}
-                      </p>
-                    )}
+              {/* Content */}
+              <div className="bg-card border rounded-lg p-6 shadow-sm">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Relato do Usuário</h3>
+                <p className="text-foreground whitespace-pre-wrap">{selectedDemand.content || "Sem conteúdo textual."}</p>
+                
+                {selectedDemand.targetUnit && (
+                  <div className="mt-4 pt-4 border-t">
+                    <span className="text-xs font-bold text-muted-foreground block mb-1">Unidade Referência</span>
+                    <span className="text-sm font-medium">{selectedDemand.targetUnit}</span>
                   </div>
+                )}
+              </div>
 
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">{demand.supportCount} apoios</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setEditingId(demand.id);
-                        setNewStatus(demand.status as DemandStatus);
-                        setAdminResponse(demand.adminResponse || '');
-                      }}
-                    >
-                      Gerenciar
-                    </Button>
+              {/* Action Area */}
+              <div className="bg-muted/30 border border-primary/20 rounded-lg p-6">
+                <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                  <ShieldAlert className="w-5 h-5 text-primary" /> Ação da Gestão
+                </h3>
+                
+                <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Status Atual</label>
+                    <div className="h-10 px-3 border rounded-md bg-background flex items-center text-sm font-bold opacity-70">
+                      {getStatusLabel(selectedDemand.status)}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Alterar para</label>
+                    <Select value={newStatus} onValueChange={(v) => setNewStatus(v as DemandStatus)}>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="Selecione..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="processing">Em Análise</SelectItem>
+                        <SelectItem value="completed">Resolvida</SelectItem>
+                        <SelectItem value="archived">Arquivar</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
-                {editingId === demand.id && (
-                  <div className="mt-4 pt-4 border-t space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Novo Status</Label>
-                        <Select value={newStatus} onValueChange={(v) => setNewStatus(v as DemandStatus)}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {STATUS_OPTIONS.map((opt) => (
-                              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Resposta da Administração</Label>
-                        <Textarea
-                          placeholder="Texto da resposta oficial..."
-                          value={adminResponse}
-                          onChange={(e) => setAdminResponse(e.target.value)}
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        onClick={() => handleUpdateStatus(demand.id)}
-                        disabled={updateStatus.isPending}
-                      >
-                        {updateStatus.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                        Salvar
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => setEditingId(null)}>
-                        Cancelar
-                      </Button>
-                    </div>
+                <div className="space-y-2 mb-6">
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">Resposta Pública Institucional</label>
+                    <Badge variant="outline" className="text-xs bg-yellow-100 text-yellow-800 border-yellow-200">Visível ao autor</Badge>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  <Textarea 
+                    value={adminResponse}
+                    onChange={(e) => setAdminResponse(e.target.value)}
+                    placeholder="Descreva as providências tomadas ou o motivo do arquivamento. Esta mensagem aparecerá no histórico do protocolo..."
+                    className="bg-background min-h-[120px]"
+                  />
+                </div>
 
-          {data?.data.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
-              Nenhuma demanda encontrada.
+                <div className="flex justify-end">
+                  <Button 
+                    onClick={handleUpdate}
+                    disabled={updateStatus.isPending || (!newStatus && adminResponse === selectedDemand.adminResponse)}
+                    className="bg-primary hover:bg-primary/90 min-w-[150px]"
+                  >
+                    {updateStatus.isPending ? "Salvando..." : "Salvar Alterações"}
+                  </Button>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-      )}
-
-      {data && data.totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 mt-8">
-          <Button variant="outline" disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
-            Anterior
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Página {page} de {data.totalPages}
-          </span>
-          <Button variant="outline" disabled={page === data.totalPages} onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}>
-            Próxima
-          </Button>
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 text-center">
+            <ShieldAlert className="w-16 h-16 mb-4 opacity-20" />
+            <p className="text-lg">Selecione uma demanda na lista ao lado para visualizar os detalhes e gerenciar o status.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
