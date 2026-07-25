@@ -58,3 +58,15 @@ timeoutMs = 20000
 
 [nix]
 channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+DIRECT_URL = "postgresql://postgres.jdfrjdbhgogmlxbydbbi:4uHiX5bS9DLkqL42@aws-0-sa-east-1.pooler.supabase.com:5432/postgres"
+NODE_ENV = "development"
+SUPABASE_JWKS_URL = "https://jdfrjdbhgogmlxbydbbi.supabase.co/auth/v1/.well-known/jwks.json"
+SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZnJqZGJoZ29nbWx4YnlkYmJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NzY1NjcsImV4cCI6MjEwMDI1MjU2N30.jZAIKfC-AZSyqrUlOT_IpsclbjfAhv4EgiEDcNMSshI"
+SUPABASE_SECRET_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZnJqZGJoZ29nbWx4YnlkYmJpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NDY3NjU2NywiZXhwIjoyMTAwMjUyNTY3fQ.GwMpFKrBPfyvPEbW4-nbo4syJEnbay0Voo-iLawE2Sc"
+SUPABASE_URL = "https://jdfrjdbhgogmlxbydbbi.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZnJqZGJoZ29nbWx4YnlkYmJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NzY1NjcsImV4cCI6MjEwMDI1MjU2N30.jZAIKfC-AZSyqrUlOT_IpsclbjfAhv4EgiEDcNMSshI"
+VITE_SUPABASE_URL = "https://jdfrjdbhgogmlxbydbbi.supabase.co"
