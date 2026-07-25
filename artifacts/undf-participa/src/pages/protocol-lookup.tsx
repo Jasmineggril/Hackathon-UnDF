@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { useGetDemandByProtocol } from '@workspace/api-client-react';
+import { useGetDemandByProtocol, useToggleDemandSupport } from '@workspace/api-client-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { StatusBadge } from '@/components/StatusBadge';
-import { Search, Loader2, AlertCircle, FileText, CalendarDays, MapPin } from 'lucide-react';
+import { Search, Loader2, AlertCircle, FileText, CalendarDays, MapPin, History, ThumbsUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAuth } from '@workspace/auth-web';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
+
+interface StatusHistoryEntry {
+  id: number;
+  previousStatus: string | null;
+  newStatus: string;
+  adminResponse: string | null;
+  createdAt: string;
+}
+
+const STATUS_LABELS: Record<string, string> = {
+  received: 'Recebida',
+  processing: 'Em Análise',
+  completed: 'Concluída',
+  archived: 'Arquivada',
+};
 
 export default function ProtocolLookup() {
   const [location, setLocation] = useLocation();
@@ -17,12 +35,48 @@ export default function ProtocolLookup() {
   const [protocol, setProtocol] = useState(protocolFromUrl);
   const [searchProtocol, setSearchProtocol] = useState(protocolFromUrl);
 
-  const { data: demand, isLoading, isError, error } = useGetDemandByProtocol(searchProtocol, {
+  const { data: demand, isLoading, isError } = useGetDemandByProtocol(searchProtocol, {
     query: {
       enabled: searchProtocol.length > 5,
-      retry: false
+      retry: false,
+      queryKey: ['/api/demands/protocol', searchProtocol],
     }
   });
+
+  const [history, setHistory] = useState<StatusHistoryEntry[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const { isAuthenticated, login } = useAuth();
+  const toggleSupport = useToggleDemandSupport();
+  const queryClient = useQueryClient();
+
+  const handleSupport = () => {
+    if (!isAuthenticated) {
+      toast('Autenticação necessária', {
+        description: 'Você precisa entrar para apoiar uma demanda.',
+        action: { label: 'Entrar', onClick: login },
+      });
+      return;
+    }
+    toggleSupport.mutate(
+      { id: demand!.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['/api/demands/protocol', searchProtocol] });
+          toast('Apoio atualizado', { description: 'O registro foi atualizado.' });
+        },
+      },
+    );
+  };
+
+  useEffect(() => {
+    if (!demand?.id) return;
+    setHistoryLoading(true);
+    fetch(`/api/demands/${demand.id}/history`, { credentials: 'include' })
+      .then((r) => r.json())
+      .then((data) => setHistory(Array.isArray(data) ? data : []))
+      .catch(() => setHistory([]))
+      .finally(() => setHistoryLoading(false));
+  }, [demand?.id]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,6 +193,10 @@ export default function ProtocolLookup() {
                   <p className="text-sm leading-relaxed whitespace-pre-wrap bg-muted/30 p-4 rounded-md border">
                     {demand.content}
                   </p>
+                ) : demand.type === 'audio' && demand.mediaUrl ? (
+                  <div className="bg-muted/30 p-4 rounded-md border">
+                    <audio src={demand.mediaUrl} controls className="w-full h-10" />
+                  </div>
                 ) : (
                   <p className="text-sm text-muted-foreground italic bg-muted/30 p-4 rounded-md border">
                     Demanda registrada através de mídia ({demand.type}).
@@ -155,6 +213,80 @@ export default function ProtocolLookup() {
                     <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
                       {demand.adminResponse}
                     </p>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between border-t pt-4">
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <ThumbsUp className="w-4 h-4 text-primary" />
+                  <span>{demand.supportCount} pessoa{demand.supportCount !== 1 ? 's' : ''} afetada{demand.supportCount !== 1 ? 's' : ''}</span>
+                </div>
+                <Button
+                  variant={demand.userSupported ? "default" : "outline"}
+                  size="sm"
+                  onClick={handleSupport}
+                  disabled={toggleSupport.isPending}
+                >
+                  {demand.userSupported ? 'Apoiado ✓' : 'Também sou afetado'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Histórico de Status */}
+          <Card>
+            <CardHeader className="border-b bg-muted/20">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <History className="w-5 h-5 text-muted-foreground" />
+                Histórico de Status
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6">
+              {historyLoading ? (
+                <div className="flex justify-center py-6">
+                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                </div>
+              ) : history.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Nenhuma mudança de status registrada ainda.
+                </p>
+              ) : (
+                <div className="relative">
+                  <div className="absolute left-[18px] top-0 bottom-0 w-0.5 bg-border" />
+                  <div className="space-y-6">
+                    {history.map((entry, i) => (
+                      <div key={entry.id} className="relative flex gap-4">
+                        <div className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                          i === history.length - 1
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground'
+                        }`}>
+                          {i + 1}
+                        </div>
+                        <div className="flex-1 min-w-0 pt-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {entry.previousStatus && (
+                              <span className="text-xs text-muted-foreground">
+                                {STATUS_LABELS[entry.previousStatus] ?? entry.previousStatus}
+                              </span>
+                            )}
+                            {entry.previousStatus && (
+                              <span className="text-xs text-muted-foreground">→</span>
+                            )}
+                            <StatusBadge status={entry.newStatus} type="demand" />
+                          </div>
+                          {entry.adminResponse && (
+                            <p className="text-sm text-foreground mt-2 bg-muted/30 p-3 rounded border">
+                              {entry.adminResponse}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {format(new Date(entry.createdAt), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

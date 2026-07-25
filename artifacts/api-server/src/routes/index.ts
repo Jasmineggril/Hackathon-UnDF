@@ -1,14 +1,6 @@
 /**
  * @module routes/index
  * @description Roteador central da API do Voz UnDF.
- *
- * Organização das rotas por domínio:
- * - /health — liveness probe para orquestração de containers
- * - /auth/*, /login, /callback, /logout — autenticação OIDC via Replit Auth
- * - /demands/* — gestão de demandas e sugestões da comunidade
- * - /proposals/* — propostas formais com ciclo de vida independente
- * - /transparency/* — dados agregados do portal de transparência (público)
- * - /admin/* — painel administrativo (requer role=admin, verificado nas rotas)
  */
 
 import { Router, type IRouter } from "express";

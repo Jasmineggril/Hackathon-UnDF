@@ -6,49 +6,41 @@
  *
  * Esta API é o contrato entre o frontend React e o backend Express.
  * Todas as rotas sob /api/demands e /api/proposals que mutam estado
- * requerem autenticação via sessão (cookie httpOnly). Rotas de leitura
- * pública não requerem autenticação, mas dados sensíveis são omitidos
- * automaticamente pelo backend para demandas anônimas.
+ * requerem autenticação via JWT Bearer token (Supabase Auth).
+ * Rotas de leitura pública não requerem autenticação, mas dados sensíveis
+ * são omitidos automaticamente pelo backend para demandas anônimas.
+ *
+ * Identidade: Voz UnDF
+ * Subtítulo: Plataforma Inteligente de Participação e Gestão Colaborativa
+ * Slogan: Sua voz participa. A Universidade transforma.
  *
  * OpenAPI spec version: 1.0.0
  */
+export type UserProfileRole = typeof UserProfileRole[keyof typeof UserProfileRole];
+
+
+export const UserProfileRole = {
+  estudante: 'estudante',
+  docente: 'docente',
+  servidor: 'servidor',
+  gestor: 'gestor',
+  administrador: 'administrador',
+} as const;
+
 export interface AuthUser {
   id: string;
   /** @nullable */
   email: string | null;
   /** @nullable */
-  firstName: string | null;
+  fullName: string | null;
   /** @nullable */
-  lastName: string | null;
-  /** @nullable */
-  profileImageUrl: string | null;
+  avatarUrl: string | null;
+  role: UserProfileRole;
 }
 
 export interface AuthUserEnvelope {
   user: AuthUser | null;
 }
-
-export interface MobileTokenExchangeRequest {
-  /** @minLength 1 */
-  code: string;
-  /** @minLength 1 */
-  code_verifier: string;
-  /** @minLength 1 */
-  redirect_uri: string;
-  /** @minLength 1 */
-  state: string;
-  /** @minLength 1 */
-  nonce?: string;
-}
-
-export interface MobileTokenExchangeSuccess {
-  token: string;
-}
-
-export const LogoutSuccessValue = {
-  success: true,
-} as const;
-export type LogoutSuccess = typeof LogoutSuccessValue;
 
 export interface ErrorEnvelope {
   error: string;
@@ -119,22 +111,11 @@ export const ProposalStatus = {
   implemented: 'implemented',
 } as const;
 
-export type UserProfileRole = typeof UserProfileRole[keyof typeof UserProfileRole];
-
-
-export const UserProfileRole = {
-  student: 'student',
-  faculty: 'faculty',
-  staff: 'staff',
-  admin: 'admin',
-} as const;
-
 export interface UserProfile {
   id: string;
   email?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  profileImageUrl?: string | null;
+  fullName?: string | null;
+  avatarUrl?: string | null;
   role: UserProfileRole;
 }
 
@@ -257,24 +238,20 @@ export interface MonthlyCount {
   label: string;
 }
 
+export interface StatusHistoryEntry {
+  id: number;
+  demandId: number;
+  previousStatus?: string | null;
+  newStatus: string;
+  adminResponse?: string | null;
+  changedBy?: string | null;
+  createdAt: string;
+}
+
 /**
- * Opaque session token — `Bearer <sid>`.
+ * Bearer token JWT (Supabase access_token).
  */
-export type AuthorizationSessionHeaderParameter = string;
-
-export type BeginBrowserLoginParams = {
-returnTo?: string;
-};
-
-export type HandleBrowserLoginCallbackParams = {
-code?: string;
-state?: string;
-iss?: string;
-};
-
-export type LogoutBrowserSessionParams = {
-returnTo?: string;
-};
+export type AuthorizationBearerHeaderParameter = string;
 
 export type ListDemandsParams = {
 category?: DemandCategory;
@@ -306,6 +283,9 @@ category?: DemandCategory;
 status?: ProposalStatus;
 page?: number;
 limit?: number;
+/**
+ * Campo de ordenação
+ */
 sort?: ListProposalsSort;
 };
 

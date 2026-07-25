@@ -4,13 +4,17 @@ info:
   title: Api
   version: 1.0.0
   description: |
-    UnDF Participa — API de Gestão Participativa da Universidade do Distrito Federal.
+    Voz UnDF — API de Gestão Participativa da Universidade do Distrito Federal.
 
     Esta API é o contrato entre o frontend React e o backend Express.
     Todas as rotas sob /api/demands e /api/proposals que mutam estado
-    requerem autenticação via sessão (cookie httpOnly). Rotas de leitura
-    pública não requerem autenticação, mas dados sensíveis são omitidos
-    automaticamente pelo backend para demandas anônimas.
+    requerem autenticação via JWT Bearer token (Supabase Auth).
+    Rotas de leitura pública não requerem autenticação, mas dados sensíveis
+    são omitidos automaticamente pelo backend para demandas anônimas.
+
+    Identidade: Voz UnDF
+    Subtítulo: Plataforma Inteligente de Participação e Gestão Colaborativa
+    Slogan: Sua voz participa. A Universidade transforma.
 
 servers:
   - url: /api
@@ -20,9 +24,7 @@ tags:
   - name: health
     description: Health and liveness
   - name: Auth
-    description: Browser and mobile authentication endpoints.
-  - name: auth
-    description: Autenticação e perfil do usuário
+    description: Autenticação e perfil do usuário (Supabase Auth JWT)
   - name: demands
     description: Demandas, sugestões e solicitações da comunidade acadêmica
   - name: proposals
@@ -52,8 +54,7 @@ paths:
       operationId: getCurrentAuthUser
       summary: Get the currently authenticated user
       parameters:
-        - $ref: '#/components/parameters/AuthorizationSessionHeader'
-        - $ref: '#/components/parameters/SessionCookie'
+        - $ref: '#/components/parameters/AuthorizationBearerHeader'
       responses:
         '200':
           description: Auth status resolved successfully.
@@ -61,105 +62,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthUserEnvelope'
-  /login:
-    get:
-      tags: [Auth]
-      operationId: beginBrowserLogin
-      summary: Start the browser OIDC login flow
-      parameters:
-        - name: returnTo
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '302':
-          description: Redirect to the OIDC authorization endpoint.
-  /callback:
-    get:
-      tags: [Auth]
-      operationId: handleBrowserLoginCallback
-      summary: Complete the browser OIDC login flow
-      parameters:
-        - name: code
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: state
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: iss
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '302':
-          description: Redirect to the returnTo path on success or /api/login on failure.
-  /logout:
-    get:
-      tags: [Auth]
-      operationId: logoutBrowserSession
-      summary: Clear the session and begin OIDC logout
-      parameters:
-        - $ref: '#/components/parameters/AuthorizationSessionHeader'
-        - $ref: '#/components/parameters/SessionCookie'
-        - name: returnTo
-          in: query
-          required: false
-          schema:
-            type: string
-            default: /
-      responses:
-        '302':
-          description: Redirect to the OIDC provider logout URL.
-  /mobile-auth/token-exchange:
-    post:
-      tags: [Auth]
-      operationId: exchangeMobileAuthorizationCode
-      summary: Exchange a mobile OIDC code for a session token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MobileTokenExchangeRequest'
-      responses:
-        '200':
-          description: Session created successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MobileTokenExchangeSuccess'
-        '400':
-          description: Missing or invalid required fields.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorEnvelope'
-        '500':
-          description: Token exchange failed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorEnvelope'
-  /mobile-auth/logout:
-    post:
-      tags: [Auth]
-      operationId: logoutMobileSession
-      summary: Delete a mobile session token
-      parameters:
-        - $ref: '#/components/parameters/AuthorizationSessionHeader'
-      responses:
-        '200':
-          description: Logout processed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LogoutSuccess'
 
   # ---------- Demands ----------
 
@@ -293,6 +195,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /demands/{id}/history:
+    get:
+      operationId: getDemandStatusHistory
+      tags: [demands]
+      summary: Histórico de mudanças de status de uma demanda
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de entradas de histórico
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StatusHistoryEntry"
+
   # ---------- Proposals ----------
 
   /proposals:
@@ -321,6 +244,7 @@ paths:
             default: 20
         - name: sort
           in: query
+          description: Campo de ordenação
           schema:
             type: string
             enum: [createdAt, supportCount]
@@ -532,35 +456,28 @@ paths:
 
 components:
   parameters:
-    AuthorizationSessionHeader:
+    AuthorizationBearerHeader:
       name: Authorization
       in: header
       required: false
-      description: Opaque session token — `Bearer <sid>`.
-      schema:
-        type: string
-    SessionCookie:
-      name: sid
-      in: cookie
-      required: false
-      description: Browser session cookie.
+      description: "Bearer token JWT (Supabase access_token)."
       schema:
         type: string
   schemas:
     AuthUser:
       type: object
-      required: [id, email, firstName, lastName, profileImageUrl]
+      required: [id, email, fullName, avatarUrl, role]
       properties:
         id:
           type: string
         email:
           type: [string, 'null']
-        firstName:
+        fullName:
           type: [string, 'null']
-        lastName:
+        avatarUrl:
           type: [string, 'null']
-        profileImageUrl:
-          type: [string, 'null']
+        role:
+          $ref: '#/components/schemas/UserProfileRole'
     AuthUserEnvelope:
       type: object
       required: [user]
@@ -569,38 +486,6 @@ components:
           oneOf:
             - $ref: '#/components/schemas/AuthUser'
             - type: 'null'
-    MobileTokenExchangeRequest:
-      type: object
-      required: [code, code_verifier, redirect_uri, state]
-      properties:
-        code:
-          type: string
-          minLength: 1
-        code_verifier:
-          type: string
-          minLength: 1
-        redirect_uri:
-          type: string
-          minLength: 1
-        state:
-          type: string
-          minLength: 1
-        nonce:
-          type: string
-          minLength: 1
-    MobileTokenExchangeSuccess:
-      type: object
-      required: [token]
-      properties:
-        token:
-          type: string
-    LogoutSuccess:
-      type: object
-      required: [success]
-      properties:
-        success:
-          type: boolean
-          const: true
     ErrorEnvelope:
       type: object
       required: [error]
@@ -667,6 +552,10 @@ components:
       type: string
       enum: [open, under_review, approved, rejected, implemented]
 
+    UserProfileRole:
+      type: string
+      enum: [estudante, docente, servidor, gestor, administrador]
+
     # ---------- Auth ----------
 
     UserProfile:
@@ -677,18 +566,14 @@ components:
         email:
           type: string
           nullable: true
-        firstName:
+        fullName:
           type: string
           nullable: true
-        lastName:
-          type: string
-          nullable: true
-        profileImageUrl:
+        avatarUrl:
           type: string
           nullable: true
         role:
-          type: string
-          enum: [student, faculty, staff, admin]
+          $ref: '#/components/schemas/UserProfileRole'
       required: [id, role]
 
     # ---------- Demands ----------
@@ -955,3 +840,28 @@ components:
           type: string
           description: "Nome abreviado do mês em pt-BR"
       required: [month, count, label]
+
+    # ---------- Status History ----------
+
+    StatusHistoryEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        demandId:
+          type: integer
+        previousStatus:
+          type: string
+          nullable: true
+        newStatus:
+          type: string
+        adminResponse:
+          type: string
+          nullable: true
+        changedBy:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, demandId, newStatus, createdAt]

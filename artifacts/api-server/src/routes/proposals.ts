@@ -1,13 +1,6 @@
 /**
  * @module routes/proposals
  * @description Rotas de Propostas Formais da comunidade acadêmica UnDF.
- *
- * Propostas diferem de demandas em que representam iniciativas positivas
- * e soluções sugeridas, com ciclo de vida mais formal (revisão → aprovação
- * → implementação). O campo `adminDecision` registra a resposta oficial.
- *
- * Ordenação padrão por supportCount (relevância coletiva), diferente
- * das demandas que ordenam por createdAt (cronológico).
  */
 
 import { Router, type IRouter, type Request, type Response } from "express";
@@ -18,9 +11,6 @@ import { eq, desc, and, sql, count } from "drizzle-orm";
 
 const router: IRouter = Router();
 
-// ---------------------------------------------------------------------------
-// GET /proposals — Listagem pública com filtros
-// ---------------------------------------------------------------------------
 router.get("/proposals", async (req: Request, res: Response) => {
   const parsed = ListProposalsQueryParams.safeParse(req.query);
   if (!parsed.success) {
@@ -33,7 +23,7 @@ router.get("/proposals", async (req: Request, res: Response) => {
 
   const conditions = [
     ...(status ? [eq(proposals.status, status)] : []),
-    ...(category ? [eq(proposals.category, category as typeof proposals.category)] : []),
+    ...(category ? [eq(proposals.category, category as "Infraestrutura" | "Ensino e Pesquisa" | "Assistência Estudantil" | "Administração" | "Tecnologia" | "Acessibilidade" | "Cultura e Esporte" | "Sugestão de Melhoria")] : []),
   ];
 
   const orderBy = sort === "createdAt"
@@ -41,20 +31,10 @@ router.get("/proposals", async (req: Request, res: Response) => {
     : desc(proposals.supportCount);
 
   const [rows, [{ total }]] = await Promise.all([
-    db
-      .select()
-      .from(proposals)
-      .where(and(...conditions))
-      .orderBy(orderBy)
-      .limit(limit)
-      .offset(offset),
-    db
-      .select({ total: count() })
-      .from(proposals)
-      .where(and(...conditions)),
+    db.select().from(proposals).where(and(...conditions)).orderBy(orderBy).limit(limit).offset(offset),
+    db.select({ total: count() }).from(proposals).where(and(...conditions)),
   ]);
 
-  // Remove userId das respostas públicas (privacidade por padrão)
   const sanitized = rows.map(({ userId, ...p }) => p);
 
   res.json({
@@ -66,9 +46,6 @@ router.get("/proposals", async (req: Request, res: Response) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// POST /proposals — Criar proposta (requer autenticação)
-// ---------------------------------------------------------------------------
 router.post("/proposals", async (req: Request, res: Response) => {
   if (!req.isAuthenticated()) {
     res.status(401).json({ message: "Autenticação necessária para submeter uma proposta." });
@@ -98,16 +75,13 @@ router.post("/proposals", async (req: Request, res: Response) => {
   res.status(201).json(sanitized);
 });
 
-// ---------------------------------------------------------------------------
-// POST /proposals/:id/support — Toggle apoio (requer autenticação)
-// ---------------------------------------------------------------------------
 router.post("/proposals/:id/support", async (req: Request, res: Response) => {
   if (!req.isAuthenticated()) {
     res.status(401).json({ message: "Autenticação necessária para apoiar uma proposta." });
     return;
   }
 
-  const id = parseInt(req.params.id, 10);
+  const id = parseInt(String(req.params.id), 10);
   if (isNaN(id)) {
     res.status(400).json({ message: "ID inválido." });
     return;
@@ -126,25 +100,15 @@ router.post("/proposals/:id/support", async (req: Request, res: Response) => {
   const [existing] = await db
     .select()
     .from(proposalSupports)
-    .where(
-      and(
-        eq(proposalSupports.proposalId, id),
-        eq(proposalSupports.userId, req.user.id),
-      ),
-    );
+    .where(and(eq(proposalSupports.proposalId, id), eq(proposalSupports.userId, req.user.id)));
 
   let supported: boolean;
   let newCount: number;
 
   if (existing) {
-    await db
-      .delete(proposalSupports)
-      .where(
-        and(
-          eq(proposalSupports.proposalId, id),
-          eq(proposalSupports.userId, req.user.id),
-        ),
-      );
+    await db.delete(proposalSupports).where(
+      and(eq(proposalSupports.proposalId, id), eq(proposalSupports.userId, req.user.id)),
+    );
     const [updated] = await db
       .update(proposals)
       .set({ supportCount: sql`GREATEST(${proposals.supportCount} - 1, 0)`, updatedAt: new Date() })

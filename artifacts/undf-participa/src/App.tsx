@@ -6,7 +6,6 @@ import { Route, Switch, Router as WouterRouter } from 'wouter';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
-// Pages (we will create these)
 import Home from '@/pages/home';
 import Demands from '@/pages/demands';
 import NewDemand from '@/pages/new-demand';
@@ -17,6 +16,7 @@ import Transparency from '@/pages/transparency';
 import Ods16 from '@/pages/ods16';
 import Admin from '@/pages/admin';
 import About from '@/pages/about';
+import Login from '@/pages/login';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
@@ -37,6 +37,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/login" component={Login} />
       <Route path="/demandas" component={Demands} />
       <Route path="/demandas/nova" component={NewDemand} />
       <Route path="/protocolo" component={ProtocolLookup} />

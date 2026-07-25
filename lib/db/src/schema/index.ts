@@ -3,19 +3,17 @@
  * @description Schema centralizado do banco de dados da plataforma Voz UnDF.
  *
  * Arquitetura de dados:
- * - `users` / `sessions`: gerenciados pelo Replit Auth (OIDC). Não remover.
- * - `demands`: entidade central — registros de demandas, sugestões e propostas da comunidade acadêmica.
- * - `demand_supports`: relação M:N entre usuários e demandas (funcionalidade "Também sou afetado").
- * - `proposals`: propostas formais submetidas pela comunidade, com ciclo de vida independente.
- * - `proposal_supports`: apoios a propostas (similar a demand_supports).
- *
- * Decisão arquitetural: separar demandas (problemas relatados) de propostas (soluções sugeridas)
- * para manter responsabilidades claras e permitir fluxos de gestão distintos no painel administrativo.
+ * - `users`: perfis vinculados ao Supabase Auth (authUserId = sub do JWT).
+ * - `demands`: entidade central — registros de demandas, sugestões e propostas.
+ * - `demand_supports`: relação M:N entre usuários e demandas ("Também sou afetado").
+ * - `proposals`: propostas formais com ciclo de vida independente.
+ * - `proposal_supports`: apoios a propostas.
+ * - `demand_status_history`: trilha de auditoria de mudanças de status.
  *
  * Segurança:
- * - Todos os IDs de usuário são UUIDs (resistentes a enumeração).
- * - O campo `isAnonymous` determina o nível de exposição dos dados do autor em queries públicas.
- * - Dados de geolocalização são opcionais e nunca expostos anonimamente.
+ * - IDs de autenticação são UUIDs gerenciados pelo Supabase Auth.
+ * - `isAnonymous` controla exposição de dados do autor em queries públicas.
+ * - Roles são definidas no backend e carregadas do banco, nunca enviadas pelo frontend.
  */
 
 import {
@@ -29,35 +27,41 @@ import {
   index,
   jsonb,
   primaryKey,
-  uuid,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
 // ---------------------------------------------------------------------------
-// Auth tables — obrigatórias para o Replit Auth. Não remover nem renomear.
+// Roles da plataforma — nomenclatura em português
 // ---------------------------------------------------------------------------
 
-export const sessions = pgTable(
-  "sessions",
-  {
-    sid: varchar("sid").primaryKey(),
-    sess: jsonb("sess").notNull(),
-    expire: timestamp("expire").notNull(),
-  },
-  (t) => [index("IDX_session_expire").on(t.expire)],
-);
+export const USER_ROLES = [
+  "estudante",
+  "docente",
+  "servidor",
+  "gestor",
+  "administrador",
+] as const;
+
+export type UserRole = (typeof USER_ROLES)[number];
+
+// ---------------------------------------------------------------------------
+// Users — perfis vinculados ao Supabase Auth
+// ---------------------------------------------------------------------------
 
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  /** ID do perfil local (UUID). Pode ser diferente do authUserId. */
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`)
+    .$defaultFn(() => crypto.randomUUID()),
+  /** ID do usuário no Supabase Auth (claim sub do JWT). */
+  authUserId: varchar("auth_user_id").unique().notNull(),
   email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
-  /** Papel do usuário na plataforma. 'admin' tem acesso ao painel de gestão. */
-  role: text("role", { enum: ["student", "faculty", "staff", "admin"] })
-    .default("student")
+  fullName: varchar("full_name"),
+  avatarUrl: varchar("avatar_url"),
+  /** Papel do usuário na plataforma. carregado do banco, nunca confiado do frontend. */
+  role: text("role", { enum: USER_ROLES })
+    .default("estudante")
     .notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -70,10 +74,6 @@ export type User = typeof users.$inferSelect;
 // Demands — Núcleo do sistema de gestão participativa
 // ---------------------------------------------------------------------------
 
-/**
- * Categorias alinhadas ao contexto universitário da UnDF.
- * As categorias abaixo refletem a estrutura organizacional acadêmica e as necessidades da comunidade universitária.
- */
 export const DEMAND_CATEGORIES = [
   "Infraestrutura",
   "Ensino e Pesquisa",
@@ -92,36 +92,21 @@ export const demands = pgTable(
   "demands",
   {
     id: serial("id").primaryKey(),
-    /** Protocolo único gerado no servidor: YYYYMMDD-XXXX. Imutável após criação. */
     protocol: varchar("protocol", { length: 20 }).notNull().unique(),
     type: text("type", { enum: DEMAND_TYPES }).notNull(),
     category: text("category", { enum: DEMAND_CATEGORIES })
       .default("Sugestão de Melhoria")
       .notNull(),
     content: text("content"),
-    /** URL do arquivo de mídia (áudio, imagem, vídeo). Armazenado externamente. */
     mediaUrl: text("media_url"),
-    /**
-     * Geolocalização opcional — apenas capturada com consentimento explícito do usuário.
-     * Não exposta publicamente quando isAnonymous = true (regra de privacidade por padrão).
-     */
     latitude: text("latitude"),
     longitude: text("longitude"),
     address: text("address"),
-    /**
-     * Quando true, o userId não é exposto em endpoints públicos.
-     * A anonimidade é preservada mesmo no painel administrativo
-     * (apenas o protocolo e o conteúdo ficam visíveis para gestores).
-     */
     isAnonymous: boolean("is_anonymous").default(false).notNull(),
-    /** Referência ao autor. NULL permitido para demandas anônimas sem autenticação. */
     userId: varchar("user_id").references(() => users.id),
-    /** Setor ou unidade acadêmica alvo da demanda. Ex: "Coordenação de Engenharia" */
     targetUnit: text("target_unit"),
     status: text("status", { enum: DEMAND_STATUSES }).default("received").notNull(),
-    /** Resposta oficial da equipe gestora. Visível ao autor via consulta de protocolo. */
     adminResponse: text("admin_response"),
-    /** Contagem desnormalizada de apoios para performance em queries de listagem. */
     supportCount: integer("support_count").default(0).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -152,13 +137,6 @@ export type InsertDemand = z.infer<typeof insertDemandSchema>;
 // Demand Supports — "Também sou afetado"
 // ---------------------------------------------------------------------------
 
-/**
- * Funcionalidade de apoio a demandas existentes.
- * Permite que múltiplos membros da comunidade sinalizem que compartilham
- * o mesmo problema, aumentando a priorização pela gestão.
- *
- * Restrição de unicidade composta (demandId + userId) garante idempotência.
- */
 export const demandSupports = pgTable(
   "demand_supports",
   {
@@ -178,6 +156,31 @@ export const demandSupports = pgTable(
 );
 
 export type DemandSupport = typeof demandSupports.$inferSelect;
+
+// ---------------------------------------------------------------------------
+// Demand Status History — trilha de auditoria
+// ---------------------------------------------------------------------------
+
+export const demandStatusHistory = pgTable(
+  "demand_status_history",
+  {
+    id: serial("id").primaryKey(),
+    demandId: integer("demand_id")
+      .notNull()
+      .references(() => demands.id, { onDelete: "cascade" }),
+    previousStatus: text("previous_status", { enum: DEMAND_STATUSES }),
+    newStatus: text("new_status", { enum: DEMAND_STATUSES }).notNull(),
+    adminResponse: text("admin_response"),
+    changedBy: varchar("changed_by").references(() => users.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_demand_status_history_demand").on(t.demandId),
+    index("idx_demand_status_history_created").on(t.createdAt),
+  ],
+);
+
+export type DemandStatusHistory = typeof demandStatusHistory.$inferSelect;
 
 // ---------------------------------------------------------------------------
 // Proposals — Propostas formais da comunidade
@@ -203,7 +206,6 @@ export const proposals = pgTable(
     status: text("status", { enum: PROPOSAL_STATUSES }).default("open").notNull(),
     userId: varchar("user_id").references(() => users.id),
     targetUnit: text("target_unit"),
-    /** Resposta/decisão oficial da gestão após revisão. */
     adminDecision: text("admin_decision"),
     supportCount: integer("support_count").default(0).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -252,10 +254,7 @@ export const proposalSupports = pgTable(
 export type ProposalSupport = typeof proposalSupports.$inferSelect;
 
 // ---------------------------------------------------------------------------
-// Aliases for Replit Auth template compatibility
-// The templates import `sessionsTable` and `usersTable` from @workspace/db.
-// Defined here to avoid a separate file — single source of truth.
+// Aliases para compatibilidade
 // ---------------------------------------------------------------------------
-export const sessionsTable = sessions;
-export const usersTable = users;
 
+export const usersTable = users;

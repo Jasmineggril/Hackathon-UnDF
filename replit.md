@@ -10,7 +10,7 @@ Plataforma Inteligente de Participação e Gestão Colaborativa da Universidade 
 - `pnpm run build` — typecheck + build de todos os pacotes
 - `pnpm --filter @workspace/api-spec run codegen` — regerar hooks e schemas Zod a partir do spec OpenAPI
 - `pnpm --filter @workspace/db run push` — aplicar mudanças no schema do banco (apenas dev)
-- Variáveis obrigatórias: `DATABASE_URL` (gerenciada automaticamente pelo Replit), `PORT`, `BASE_PATH`
+- Variáveis obrigatórias: `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `PORT`, `BASE_PATH`
 
 ## Stack
 
@@ -18,49 +18,49 @@ Plataforma Inteligente de Participação e Gestão Colaborativa da Universidade 
 - Frontend: React + Vite + Tailwind CSS + shadcn/ui + wouter (roteamento) + TanStack Query
 - API: Express 5
 - DB: PostgreSQL + Drizzle ORM
-- Auth: Replit Auth (OIDC)
+- Auth: Supabase Auth (JWT Bearer)
 - Validação: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (a partir do spec OpenAPI)
 - Build: esbuild (bundle CJS)
+- JWT validation: jose (JWKS ou userinfo fallback)
+
+## Auth Model
+
+- Frontend: `@supabase/supabase-js` client-side, `AuthProvider` + `useAuth` hook
+- Login/Cadastro/Logout: feitos pelo Supabase Auth no frontend
+- Token: `session.access_token` enviado como `Authorization: Bearer <token>`
+- Backend: valida JWT via JWKS (assimétrico) ou userinfo (HS256)
+- Backend: carrega perfil local (tabela `users`) com role
+- Roles: `estudante`, `docente`, `servidor`, `gestor`, `administrador`
+- Role padrão: `estudante` (criado automaticamente no primeiro login)
+- Não confiar em role enviado pelo frontend — sempre carregar do banco
 
 ## Where things live
 
-- `artifacts/undf-participa/src/pages/` — páginas da aplicação (Home, Demands, Proposals, Admin, Transparency, ODS16, About)
-- `artifacts/undf-participa/src/components/` — componentes reutilizáveis (AudioRecorder, DemandCard, ProposalCard, etc.)
-- `artifacts/api-server/src/routes/` — rotas da API (demands, proposals, transparency, auth, health)
-- `lib/db/src/schema/index.ts` — schema central do banco de dados (fonte da verdade)
-- `lib/api-spec/openapi.yaml` — contrato OpenAPI (gera hooks e schemas automaticamente)
+- `lib/auth-web/src/` — AuthProvider, useAuth, Supabase client (frontend)
+- `artifacts/undf-participa/src/pages/login.tsx` — página de login/cadastro
+- `artifacts/api-server/src/lib/auth.ts` — JWT validation + profile loading (backend)
+- `artifacts/api-server/src/middlewares/authMiddleware.ts` — auth + role middleware
+- `lib/db/src/schema/index.ts` — schema central do banco de dados
+- `lib/db/src/env.ts` — validação centralizada de variáveis de ambiente
 
-## Architecture decisions
+## Environment Variables
 
-- Demandas e propostas são entidades separadas com ciclos de vida distintos, para permitir fluxos de gestão diferentes no painel administrativo.
-- IDs de usuário são UUIDs (resistentes a enumeração).
-- `isAnonymous` controla o nível de exposição dos dados do autor em queries públicas.
-- Autenticação via Replit Auth (OIDC) — tabelas `users` e `sessions` não devem ser removidas.
-- PORT e BASE_PATH são obrigatórios no startup — o vite e o Express vão lançar erro se não estiverem definidos.
-
-## Product
-
-Plataforma de gestão participativa para a comunidade acadêmica da UnDF. Funcionalidades principais:
-- Registro de demandas (texto, imagem ou áudio) com geração de protocolo
-- Acompanhamento do status da demanda em linha do tempo
-- Função "Também sou afetado" (apoio coletivo)
-- Área de propostas institucionais com apoios
-- Painel público de transparência com indicadores e gráficos
-- Painel administrativo protegido para gestores
-- Página ODS 16 e página Sobre o projeto
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- `DATABASE_URL` — PostgreSQL (pooler, porta 6543)
+- `DIRECT_URL` — PostgreSQL (direto, porta 5432, para migrações)
+- `SUPABASE_URL` — URL do projeto Supabase
+- `SUPABASE_PUBLISHABLE_KEY` — Anon key (pode ser usada no frontend)
+- `SUPABASE_SECRET_KEY` — Service role key (APENAS backend)
+- `SUPABASE_JWKS_URL` — JWKS endpoint (opcional, fallback via userinfo)
+- `VITE_SUPABASE_URL` — Exposto ao frontend
+- `VITE_SUPABASE_PUBLISHABLE_KEY` — Exposto ao frontend
+- `SESSION_SECRET` — Secret para sessões (opcional)
+- `PORT` — Porta do servidor
+- `NODE_ENV` — development/production
 
 ## Gotchas
 
-- PORT e BASE_PATH devem ser passados explicitamente ao iniciar os serviços (não há fallback — o app lança erro).
-- O banco de dados é gerenciado pelo Replit; `DATABASE_URL` não deve ser definida manualmente.
-- Antes de modificar o schema do banco, analisar o schema atual em `lib/db/src/schema/index.ts` e usar `pnpm --filter @workspace/db run push` para aplicar mudanças.
-- Os workflows foram configurados manualmente (os artefatos existiam no filesystem mas não estavam registrados na plataforma Replit).
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- PORT e BASE_PATH devem ser passados explicitamente ao iniciar os serviços.
+- O banco de dados usa Supabase; `DATABASE_URL` deve apontar para o pooler.
+- `SUPABASE_SECRET_KEY` nunca deve aparecer no frontend ou em logs.
+- Antes de modificar o schema, analisar `lib/db/src/schema/index.ts` e usar `pnpm --filter @workspace/db run push`.

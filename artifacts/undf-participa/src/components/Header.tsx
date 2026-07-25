@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { useAuth } from '@workspace/replit-auth-web';
+import { useAuth } from '@workspace/auth-web';
 import { Button } from '@/components/ui/button';
 import { Menu, UserCircle } from 'lucide-react';
 import {
@@ -32,7 +32,7 @@ export function Header() {
       <Link href="/sobre" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
         Sobre
       </Link>
-      {user?.role === 'admin' && (
+      {isAuthenticated && (user?.role === 'gestor' || user?.role === 'administrador') && (
         <Link href="/admin" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
           Admin
         </Link>
@@ -46,7 +46,7 @@ export function Header() {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinelinejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
               </svg>
             </div>
@@ -64,7 +64,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="flex items-center gap-2">
                     <UserCircle className="w-5 h-5" />
-                    <span>{user?.firstName || user?.email || 'Usuário'}</span>
+                    <span>{user?.fullName || user?.email || 'Usuário'}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -92,7 +92,7 @@ export function Header() {
             <SheetContent side="right" className="flex flex-col gap-6">
               <Link href="/" className="flex items-center gap-2 mt-4">
                 <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinelinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                   </svg>
                 </div>
@@ -106,7 +106,7 @@ export function Header() {
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2 text-sm font-medium px-2 mb-2">
                       <UserCircle className="w-5 h-5" />
-                      <span>{user?.firstName || user?.email || 'Usuário'}</span>
+                      <span>{user?.fullName || user?.email || 'Usuário'}</span>
                     </div>
                     <Button onClick={logout} variant="destructive" className="w-full">
                       Sair

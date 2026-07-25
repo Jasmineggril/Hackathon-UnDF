@@ -6,9 +6,13 @@
  *
  * Esta API é o contrato entre o frontend React e o backend Express.
  * Todas as rotas sob /api/demands e /api/proposals que mutam estado
- * requerem autenticação via sessão (cookie httpOnly). Rotas de leitura
- * pública não requerem autenticação, mas dados sensíveis são omitidos
- * automaticamente pelo backend para demandas anônimas.
+ * requerem autenticação via JWT Bearer token (Supabase Auth).
+ * Rotas de leitura pública não requerem autenticação, mas dados sensíveis
+ * são omitidos automaticamente pelo backend para demandas anônimas.
+ *
+ * Identidade: Voz UnDF
+ * Subtítulo: Plataforma Inteligente de Participação e Gestão Colaborativa
+ * Slogan: Sua voz participa. A Universidade transforma.
  *
  * OpenAPI spec version: 1.0.0
  */
@@ -27,90 +31,17 @@ export const HealthCheckResponse = zod.object({
  * @summary Get the currently authenticated user
  */
 export const GetCurrentAuthUserHeader = zod.object({
-  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
+  "Authorization": zod.string().optional().describe('Bearer token JWT (Supabase access_token).')
 })
 
 export const GetCurrentAuthUserResponse = zod.object({
   "user": zod.union([zod.object({
   "id": zod.string(),
   "email": zod.string().nullable(),
-  "firstName": zod.string().nullable(),
-  "lastName": zod.string().nullable(),
-  "profileImageUrl": zod.string().nullable()
+  "fullName": zod.string().nullable(),
+  "avatarUrl": zod.string().nullable(),
+  "role": zod.enum(['estudante', 'docente', 'servidor', 'gestor', 'administrador'])
 }),zod.null()])
-})
-
-
-/**
- * @summary Start the browser OIDC login flow
- */
-export const BeginBrowserLoginQueryParams = zod.object({
-  "returnTo": zod.coerce.string().optional()
-})
-
-export const BeginBrowserLoginResponse = zod.void()
-
-
-/**
- * @summary Complete the browser OIDC login flow
- */
-export const HandleBrowserLoginCallbackQueryParams = zod.object({
-  "code": zod.coerce.string().optional(),
-  "state": zod.coerce.string().optional(),
-  "iss": zod.coerce.string().optional()
-})
-
-export const HandleBrowserLoginCallbackResponse = zod.void()
-
-
-/**
- * @summary Clear the session and begin OIDC logout
- */
-export const logoutBrowserSessionQueryReturnToDefault = `/`;
-
-export const LogoutBrowserSessionQueryParams = zod.object({
-  "returnTo": zod.coerce.string().default(logoutBrowserSessionQueryReturnToDefault)
-})
-
-export const LogoutBrowserSessionHeader = zod.object({
-  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
-})
-
-export const LogoutBrowserSessionResponse = zod.void()
-
-
-/**
- * @summary Exchange a mobile OIDC code for a session token
- */
-
-
-
-
-
-
-
-export const ExchangeMobileAuthorizationCodeBody = zod.object({
-  "code": zod.string().min(1),
-  "code_verifier": zod.string().min(1),
-  "redirect_uri": zod.string().min(1),
-  "state": zod.string().min(1),
-  "nonce": zod.string().min(1).optional()
-})
-
-export const ExchangeMobileAuthorizationCodeResponse = zod.object({
-  "token": zod.string()
-})
-
-
-/**
- * @summary Delete a mobile session token
- */
-export const LogoutMobileSessionHeader = zod.object({
-  "Authorization": zod.string().optional().describe('Opaque session token — `Bearer <sid>`.')
-})
-
-export const LogoutMobileSessionResponse = zod.object({
-  "success": zod.boolean()
 })
 
 
@@ -236,6 +167,25 @@ export const ToggleDemandSupportResponse = zod.object({
 
 
 /**
+ * @summary Histórico de mudanças de status de uma demanda
+ */
+export const GetDemandStatusHistoryParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetDemandStatusHistoryResponseItem = zod.object({
+  "id": zod.number(),
+  "demandId": zod.number(),
+  "previousStatus": zod.string().nullish(),
+  "newStatus": zod.string(),
+  "adminResponse": zod.string().nullish(),
+  "changedBy": zod.string().nullish(),
+  "createdAt": zod.coerce.date()
+})
+export const GetDemandStatusHistoryResponse = zod.array(GetDemandStatusHistoryResponseItem)
+
+
+/**
  * @summary Lista propostas da comunidade com filtros
  */
 export const listProposalsQueryPageDefault = 1;
@@ -247,7 +197,7 @@ export const ListProposalsQueryParams = zod.object({
   "status": zod.enum(['open', 'under_review', 'approved', 'rejected', 'implemented']).optional(),
   "page": zod.coerce.number().default(listProposalsQueryPageDefault),
   "limit": zod.coerce.number().default(listProposalsQueryLimitDefault),
-  "sort": zod.enum(['createdAt', 'supportCount']).default(listProposalsQuerySortDefault)
+  "sort": zod.enum(['createdAt', 'supportCount']).default(listProposalsQuerySortDefault).describe('Campo de ordenação')
 })
 
 export const ListProposalsResponse = zod.object({

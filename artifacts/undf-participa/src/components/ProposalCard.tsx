@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ThumbsUp, CalendarDays, MapPin } from 'lucide-react';
 import { Proposal, useToggleProposalSupport } from '@workspace/api-client-react';
 import { StatusBadge } from './StatusBadge';
-import { useAuth } from '@workspace/replit-auth-web';
+import { useAuth } from '@workspace/auth-web';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';

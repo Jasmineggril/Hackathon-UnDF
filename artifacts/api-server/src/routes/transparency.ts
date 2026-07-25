@@ -126,7 +126,7 @@ router.get("/transparency/monthly-trend", async (_req: Request, res: Response) =
   // Nomes de meses em português para o frontend
   const PT_MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-  const data = (rows as { month: string; count: number }[]).map((r) => {
+  const data = (rows.rows as unknown as { month: string; count: number }[]).map((r) => {
     const monthIndex = parseInt(r.month.split("-")[1], 10) - 1;
     return {
       month: r.month,

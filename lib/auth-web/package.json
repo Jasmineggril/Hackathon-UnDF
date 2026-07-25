@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/replit-auth-web",
+  "name": "@workspace/auth-web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@workspace/api-client-react": "workspace:*"
+    "@supabase/supabase-js": "^2.53.0"
   },
   "devDependencies": {
     "@types/react": "catalog:",
