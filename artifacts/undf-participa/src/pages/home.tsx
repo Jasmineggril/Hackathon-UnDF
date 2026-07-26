@@ -1,12 +1,9 @@
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { 
-  ArrowRight, Users, Eye, Megaphone, Target, FileText, 
-  Search, MessageSquare, BarChart3, Fingerprint, ShieldCheck
-} from "lucide-react";
+import { ArrowRight, Users, Eye, Megaphone, Target, BarChart3, ShieldCheck } from "lucide-react";
 import { useGetTransparencyStats } from "@workspace/api-client-react";
+import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785079924059.png";
 
 export default function Home() {
   const { data: stats, isLoading } = useGetTransparencyStats();
@@ -17,188 +14,288 @@ export default function Home() {
     { title: "Propostas Formais", desc: "Transforme boas ideias em projetos oficiais avaliados pela gestão universitária.", icon: Megaphone },
     { title: "Transparência Total", desc: "Acompanhe cada etapa do processo e saiba exatamente onde está a sua demanda.", icon: Target },
     { title: "Gestão por Dados", desc: "Painéis e relatórios abertos que guiam as decisões dos gestores da UnDF.", icon: BarChart3 },
-    { title: "Inclusão e Segurança", desc: "Possibilidade de anonimato para garantir liberdade de expressão responsável.", icon: ShieldCheck },
-  ];
-
-  const steps = [
-    { title: "Registre", desc: "Crie uma demanda ou proposta", icon: FileText },
-    { title: "Acompanhe", desc: "Siga o status via protocolo", icon: Search },
-    { title: "Participe", desc: "Apoie demandas da comunidade", icon: MessageSquare },
-    { title: "Transforme", desc: "Veja as melhorias na universidade", icon: Fingerprint },
+    { title: "Inclusão e Segurança", desc: "Anonimato disponível para garantir liberdade de expressão responsável.", icon: ShieldCheck },
   ];
 
   return (
-    <div className="flex flex-col w-full">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground py-24 md:py-32">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
-        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-bold tracking-tight max-w-4xl mb-6"
-          >
-            Sua voz ajuda a construir a UnDF.
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mb-10 text-balance"
-          >
-            Uma plataforma inteligente de participação e gestão colaborativa. 
-            Estudantes, professores e servidores transformando a universidade juntos.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-          >
-            <Link href="/demandas/nova" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-                Registrar Demanda <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/demandas" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="w-full border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
-                Explorar Demandas
-              </Button>
-            </Link>
-            <Link href="/protocolo" className="w-full sm:w-auto">
-              <Button size="lg" variant="ghost" className="w-full text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10">
-                Acompanhar Protocolo
-              </Button>
-            </Link>
-          </motion.div>
+    <div className="flex flex-col w-full bg-[#F2F0EB]">
+
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="min-h-[92vh] flex flex-col justify-between px-6 md:px-12 pt-12 pb-0 border-b border-[#1B3469]/15">
+        {/* top row: label + year */}
+        <div className="flex justify-between items-start text-xs tracking-widest text-[#1B3469]/50 uppercase mb-8 md:mb-0">
+          <span>Participação · Transparência · Gestão</span>
+          <span>UnDF — 2025</span>
+        </div>
+
+        {/* main grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-0 flex-1 items-center py-10 md:py-0">
+          {/* left: giant headline */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="md:col-span-7 flex flex-col justify-center"
           >
-            <Link href="/sobre" className="text-sm underline underline-offset-4 opacity-80 hover:opacity-100 transition-opacity">
-              Conhecer o Voz UnDF
-            </Link>
+            <h1
+              className="text-[clamp(3.5rem,10vw,9rem)] font-bold leading-[0.9] tracking-tight text-[#1B3469] select-none"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              sua<br />
+              voz<br />
+              <span className="text-[#5B9A6E]">constrói</span><br />
+              a UnDF.
+            </h1>
+          </motion.div>
+
+          {/* right: logo + desc + cta */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="md:col-span-5 flex flex-col gap-8 md:pl-12 md:border-l border-[#1B3469]/15 py-6 md:py-0"
+          >
+            <img
+              src={logoPath}
+              alt="Voz UnDF"
+              className="w-36 md:w-44 h-auto object-contain"
+            />
+            <p className="text-base md:text-lg text-[#1B3469]/70 leading-relaxed max-w-xs">
+              Uma plataforma inteligente de participação e gestão colaborativa.
+              Estudantes, professores e servidores transformando a universidade juntos.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link href="/demandas/nova">
+                <Button
+                  size="lg"
+                  className="w-full bg-[#1B3469] hover:bg-[#1B3469]/90 text-white font-semibold rounded-none px-8 justify-between"
+                >
+                  Registrar Demanda <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <div className="flex gap-3">
+                <Link href="/demandas" className="flex-1">
+                  <Button
+                    size="default"
+                    variant="outline"
+                    className="w-full border-[#1B3469]/30 text-[#1B3469] hover:bg-[#1B3469]/5 rounded-none"
+                  >
+                    Explorar
+                  </Button>
+                </Link>
+                <Link href="/protocolo" className="flex-1">
+                  <Button
+                    size="default"
+                    variant="outline"
+                    className="w-full border-[#1B3469]/30 text-[#1B3469] hover:bg-[#1B3469]/5 rounded-none"
+                  >
+                    Protocolo
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* Live Stats Bar */}
-      <section className="bg-card border-b py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-border">
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-primary">
-                {isLoading ? "—" : stats?.totalDemands ?? "—"}
+        {/* bottom bar with stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 border-t border-[#1B3469]/15 py-6 mt-6">
+          {[
+            { value: isLoading ? "—" : String(stats?.totalDemands ?? "—"), label: "demandas recebidas" },
+            { value: isLoading ? "—" : String(stats?.demandsResolved ?? "—"), label: "demandas resolvidas" },
+            { value: isLoading ? "—" : String(stats?.totalProposals ?? "—"), label: "propostas ativas" },
+            { value: isLoading ? "—" : String(stats?.totalParticipants ?? "—"), label: "participantes" },
+          ].map((s, i) => (
+            <div key={i} className={`flex flex-col px-4 ${i > 0 ? "border-l border-[#1B3469]/10" : ""}`}>
+              <span
+                className="text-4xl md:text-5xl font-bold text-[#1B3469] tabular-nums"
+                style={{ fontFamily: "'Syne', sans-serif" }}
+              >
+                {s.value}
               </span>
-              <span className="text-sm text-muted-foreground font-medium mt-1">Demandas Recebidas</span>
+              <span className="text-xs uppercase tracking-widest text-[#1B3469]/50 mt-1">{s.label}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-secondary">
-                {isLoading ? "—" : stats?.demandsResolved ?? "—"}
-              </span>
-              <span className="text-sm text-muted-foreground font-medium mt-1">Demandas Resolvidas</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-primary">
-                {isLoading ? "—" : stats?.totalProposals ?? "—"}
-              </span>
-              <span className="text-sm text-muted-foreground font-medium mt-1">Propostas Ativas</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-bold text-foreground">
-                {isLoading ? "—" : stats?.totalParticipants ?? "—"}
-              </span>
-              <span className="text-sm text-muted-foreground font-medium mt-1">Participantes</span>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Como Funciona */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Como funciona</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Um processo simples, transparente e focado em resultados.
+      {/* ── COMO FUNCIONA ────────────────────────────────── */}
+      <section className="px-6 md:px-12 py-20 md:py-28 border-b border-[#1B3469]/15">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-0">
+          {/* big heading */}
+          <div className="md:col-span-5">
+            <span className="text-xs tracking-widest uppercase text-[#5B9A6E] font-semibold">01</span>
+            <h2
+              className="text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-[#1B3469] mt-4"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              como<br />
+              funciona.
+            </h2>
+            <p className="mt-6 text-[#1B3469]/60 max-w-xs text-sm leading-relaxed">
+              Um processo simples, transparente e focado em resultados reais para a comunidade UnDF.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
-            {/* Connecting line for md and up */}
-            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-0.5 bg-border -z-10" />
-            
-            {steps.map((step, i) => (
-              <div key={i} className="flex flex-col items-center text-center">
-                <div className="w-24 h-24 rounded-full bg-card border-4 border-background shadow-sm flex items-center justify-center mb-6 relative">
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-bold text-sm">
-                    {i + 1}
-                  </span>
-                  <step.icon className="w-10 h-10 text-primary" />
+
+          {/* steps */}
+          <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#1B3469]/10">
+            {[
+              { num: "01", title: "Registre", desc: "Crie uma demanda ou proposta com detalhes e evidências." },
+              { num: "02", title: "Acompanhe", desc: "Siga o status em tempo real via número de protocolo." },
+              { num: "03", title: "Participe", desc: "Apoie demandas da comunidade para dar força coletiva." },
+              { num: "04", title: "Transforme", desc: "Veja as melhorias acontecendo na universidade." },
+            ].map((step) => (
+              <div key={step.num} className="bg-[#F2F0EB] p-8 flex flex-col gap-4 group hover:bg-[#1B3469] transition-colors duration-300">
+                <span
+                  className="text-5xl font-bold text-[#1B3469]/10 group-hover:text-white/10 transition-colors"
+                  style={{ fontFamily: "'Syne', sans-serif" }}
+                >
+                  {step.num}
+                </span>
+                <div>
+                  <h3
+                    className="text-xl font-bold text-[#1B3469] group-hover:text-white transition-colors"
+                    style={{ fontFamily: "'Syne', sans-serif" }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-[#1B3469]/60 group-hover:text-white/70 transition-colors mt-2 leading-relaxed">
+                    {step.desc}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-2">{step.title}</h3>
-                <p className="text-sm text-muted-foreground">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Diferenciais */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Por que o Voz UnDF é diferente?</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Não somos apenas uma caixa de sugestões. Somos um ecossistema de gestão participativa.
-            </p>
+      {/* ── DIFERENCIAIS ─────────────────────────────────── */}
+      <section className="px-6 md:px-12 py-20 md:py-28 border-b border-[#1B3469]/15">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
+            <span className="text-xs tracking-widest uppercase text-[#5B9A6E] font-semibold">02</span>
+            <h2
+              className="text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-[#1B3469] mt-4"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              por que<br />
+              somos<br />
+              diferentes.
+            </h2>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feat, i) => (
-              <Card key={i} className="border-border bg-card hover:border-primary/20 transition-colors">
-                <CardContent className="p-6 flex flex-col items-start text-left">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                    <feat.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground mb-2">{feat.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{feat.desc}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <p className="text-[#1B3469]/60 max-w-xs text-sm leading-relaxed md:text-right">
+            Não somos uma caixa de sugestões. Somos um ecossistema completo de gestão participativa universitária.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1B3469]/10">
+          {features.map((feat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              className="bg-[#F2F0EB] p-8 flex flex-col gap-4 group hover:bg-[#1B3469] transition-colors duration-300 cursor-default"
+            >
+              <div className="w-10 h-10 border border-[#1B3469]/20 group-hover:border-white/20 flex items-center justify-center transition-colors">
+                <feat.icon className="w-5 h-5 text-[#5B9A6E] group-hover:text-[#7EC49A] transition-colors" />
+              </div>
+              <h3 className="font-bold text-[#1B3469] group-hover:text-white transition-colors" style={{ fontFamily: "'Syne', sans-serif" }}>
+                {feat.title}
+              </h3>
+              <p className="text-sm text-[#1B3469]/60 group-hover:text-white/70 transition-colors leading-relaxed">
+                {feat.desc}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* ODS Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-1/2">
-            <h2 className="text-3xl font-bold mb-4">Compromisso com os ODS</h2>
-            <p className="text-primary-foreground/80 mb-6 text-lg">
-              A plataforma Voz UnDF é uma iniciativa direta para o alcance do <strong>ODS 16 - Paz, Justiça e Instituições Eficazes</strong> da Agenda 2030 da ONU.
+      {/* ── ODS 16 ───────────────────────────────────────── */}
+      <section className="bg-[#1B3469] px-6 md:px-12 py-20 md:py-28">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-7">
+            <span className="text-xs tracking-widest uppercase text-[#5B9A6E] font-semibold">03</span>
+            <h2
+              className="text-[clamp(3rem,7vw,7rem)] font-bold leading-[0.9] tracking-tight text-white mt-4"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              ods<br />
+              <span className="text-[#5B9A6E]">16.</span>
+            </h2>
+            <p className="text-white/60 mt-6 text-base max-w-md leading-relaxed">
+              O Voz UnDF é uma iniciativa direta para o alcance do <strong className="text-white">ODS 16 — Paz, Justiça e Instituições Eficazes</strong> da Agenda 2030 da ONU.
             </p>
-            <p className="text-primary-foreground/70 mb-8">
-              Além do ODS 16, a plataforma também impulsiona os objetivos 4 (Educação de Qualidade), 5 (Igualdade de Gênero), 9 (Inovação e Infraestrutura), 10 (Redução das Desigualdades) e 17 (Parcerias).
+            <p className="text-white/40 mt-4 text-sm max-w-md leading-relaxed">
+              Além do ODS 16, a plataforma impulsiona os ODS 4 (Educação de Qualidade), 5 (Igualdade de Gênero), 9 (Inovação), 10 (Redução das Desigualdades) e 17 (Parcerias).
             </p>
-            <Link href="/ods16">
-              <Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
-                Saiba mais sobre nosso impacto
+            <Link href="/ods16" className="inline-block mt-8">
+              <Button
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10 rounded-none px-8"
+              >
+                Saiba mais sobre nosso impacto <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
-          <div className="md:w-1/2 grid grid-cols-3 gap-4">
-            <div className="col-span-3 bg-secondary rounded-lg p-6 flex items-center justify-center text-center aspect-[2/1]">
-              <span className="text-2xl font-bold text-secondary-foreground uppercase tracking-wider">ODS 16<br/>Paz, Justiça e Instituições Eficazes</span>
+
+          <div className="md:col-span-5 grid grid-cols-3 gap-px bg-white/10">
+            <div className="col-span-3 bg-[#5B9A6E] p-8 flex items-center justify-center text-center aspect-[3/1]">
+              <span className="text-white font-bold text-lg uppercase tracking-widest" style={{ fontFamily: "'Syne', sans-serif" }}>
+                ODS 16<br />
+                <span className="text-sm font-normal opacity-80 normal-case tracking-normal">Paz, Justiça e Instituições Eficazes</span>
+              </span>
             </div>
             {['ODS 4', 'ODS 5', 'ODS 9', 'ODS 10', 'ODS 17'].map((ods, i) => (
-              <div key={i} className="bg-primary-foreground/10 rounded-lg p-4 flex items-center justify-center aspect-square text-center font-semibold">
+              <div
+                key={i}
+                className="bg-white/5 hover:bg-white/10 transition-colors p-4 flex items-center justify-center aspect-square text-center font-bold text-white/70 text-sm"
+                style={{ fontFamily: "'Syne', sans-serif" }}
+              >
                 {ods}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA FINAL ────────────────────────────────────── */}
+      <section className="px-6 md:px-12 py-20 md:py-28 border-t border-[#1B3469]/15">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+          <div>
+            <span className="text-xs tracking-widest uppercase text-[#5B9A6E] font-semibold">participe.</span>
+            <h2
+              className="text-[clamp(2.5rem,5vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#1B3469] mt-4"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              entre<br />
+              em<br />
+              contato.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-4 md:items-end">
+            <p className="text-[#1B3469]/60 text-sm max-w-xs md:text-right leading-relaxed">
+              Faça parte da comunidade que está construindo a UnDF do futuro. Sua participação importa.
+            </p>
+            <div className="flex gap-3">
+              <Link href="/login">
+                <Button
+                  size="lg"
+                  className="bg-[#1B3469] hover:bg-[#1B3469]/90 text-white rounded-none px-8"
+                >
+                  Criar conta
+                </Button>
+              </Link>
+              <Link href="/sobre">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-[#1B3469]/30 text-[#1B3469] hover:bg-[#1B3469]/5 rounded-none"
+                >
+                  Sobre o projeto
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

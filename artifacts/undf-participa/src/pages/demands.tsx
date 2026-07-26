@@ -2,18 +2,20 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { 
-  Filter, Search, Clock, ThumbsUp, Building2, MapPin, Loader2, ArrowRight
-} from "lucide-react";
+import { Filter, Clock, ThumbsUp, Building2, MapPin, Loader2, ArrowRight, Plus } from "lucide-react";
 import { useListDemands, useToggleDemandSupport, getListDemandsQueryKey } from "@workspace/api-client-react";
-import { DemandCategory, DemandStatus, DemandType, ListDemandsSort } from "@workspace/api-client-react";
+import { DemandStatus, ListDemandsSort } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@workspace/auth-web";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
+const STATUS_CONFIG: Record<DemandStatus, { label: string; dot: string }> = {
+  received:   { label: "Recebida",   dot: "bg-blue-500" },
+  processing: { label: "Em Análise", dot: "bg-amber-500" },
+  completed:  { label: "Resolvida",  dot: "bg-[#5B9A6E]" },
+  archived:   { label: "Arquivada",  dot: "bg-foreground/30" },
+};
 
 export default function Demands() {
   const queryClient = useQueryClient();
@@ -22,177 +24,163 @@ export default function Demands() {
   const [sort, setSort] = useState<ListDemandsSort>("createdAt");
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useListDemands({
-    page,
-    limit: 12,
-    status,
-    sort,
-  });
-
+  const { data, isLoading } = useListDemands({ page, limit: 12, status, sort });
   const toggleSupport = useToggleDemandSupport();
 
   const handleSupport = async (id: number) => {
-    if (!isAuthenticated) {
-      window.location.href = "/login";
-      return;
-    }
+    if (!isAuthenticated) { window.location.href = "/login"; return; }
     await toggleSupport.mutateAsync({ id });
     queryClient.invalidateQueries({ queryKey: getListDemandsQueryKey() });
   };
 
-  const getStatusConfig = (s: DemandStatus) => {
-    switch(s) {
-      case 'received': return { label: "Recebida", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" };
-      case 'processing': return { label: "Em Análise", color: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300" };
-      case 'completed': return { label: "Resolvida", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" };
-      case 'archived': return { label: "Arquivada", color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300" };
-    }
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Demandas da Comunidade</h1>
-          <p className="text-muted-foreground mt-1">Acompanhe as solicitações em andamento na UnDF.</p>
+    <div className="min-h-screen bg-background">
+
+      {/* Page header */}
+      <div className="px-6 md:px-12 pt-16 pb-12 border-b border-border">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div>
+            <span className="text-xs tracking-widest uppercase text-secondary font-semibold">comunidade</span>
+            <h1 className="text-[clamp(2.4rem,5vw,4.5rem)] font-bold leading-[0.95] tracking-tight text-foreground mt-3">
+              demandas.
+            </h1>
+            <p className="text-muted-foreground mt-4 max-w-sm text-sm leading-relaxed">
+              Acompanhe as solicitações em andamento na UnDF. Apoie o que também te afeta.
+            </p>
+          </div>
+          <Link href="/demandas/nova">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-6 py-5">
+              <Plus className="w-4 h-4" /> Registrar Demanda
+            </Button>
+          </Link>
         </div>
-        <Link href="/demandas/nova">
-          <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-            Registrar Nova Demanda
-          </Button>
-        </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-card border rounded-lg p-4 mb-8 flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 flex items-center gap-2">
-          <Filter className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Filtros:</span>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Select value={status || "all"} onValueChange={(v) => setStatus(v === "all" ? undefined : v as DemandStatus)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos os status</SelectItem>
-              <SelectItem value="received">Recebida</SelectItem>
-              <SelectItem value="processing">Em Análise</SelectItem>
-              <SelectItem value="completed">Resolvida</SelectItem>
-              <SelectItem value="archived">Arquivada</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={sort} onValueChange={(v) => setSort(v as ListDemandsSort)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Ordenar por" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="createdAt">Mais recentes</SelectItem>
-              <SelectItem value="supportCount">Mais apoiadas</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="px-6 md:px-12 py-5 border-b border-border flex flex-wrap items-center gap-4">
+        <span className="text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+          <Filter className="w-3 h-3" /> Filtrar
+        </span>
+        <Select value={status || "all"} onValueChange={(v) => { setStatus(v === "all" ? undefined : v as DemandStatus); setPage(1); }}>
+          <SelectTrigger className="w-44 border-border bg-transparent text-sm">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os status</SelectItem>
+            <SelectItem value="received">Recebida</SelectItem>
+            <SelectItem value="processing">Em Análise</SelectItem>
+            <SelectItem value="completed">Resolvida</SelectItem>
+            <SelectItem value="archived">Arquivada</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={sort} onValueChange={(v) => { setSort(v as ListDemandsSort); setPage(1); }}>
+          <SelectTrigger className="w-44 border-border bg-transparent text-sm">
+            <SelectValue placeholder="Ordenar por" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="createdAt">Mais recentes</SelectItem>
+            <SelectItem value="supportCount">Mais apoiadas</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      ) : data?.data.length === 0 ? (
-        <div className="text-center py-20 bg-card border rounded-lg border-dashed">
-          <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground">Nenhuma demanda encontrada</h3>
-          <p className="text-muted-foreground mt-1 mb-4">Tente ajustar os filtros ou seja o primeiro a registrar algo.</p>
-          <Button variant="outline" onClick={() => { setStatus(undefined); setSort("createdAt"); }}>
-            Limpar filtros
-          </Button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data?.data.map((demand) => {
-            const statusConfig = getStatusConfig(demand.status);
-            return (
-              <Card key={demand.id} className="flex flex-col border-border bg-card shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-5 flex-1">
-                  <div className="flex justify-between items-start mb-3">
-                    <Badge variant="secondary" className="font-normal">
+      {/* Content */}
+      <div className="px-6 md:px-12 py-10">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-32">
+            <Loader2 className="w-8 h-8 animate-spin text-primary/40" />
+          </div>
+        ) : data?.data.length === 0 ? (
+          <div className="py-32 text-center border border-dashed border-border">
+            <p className="text-muted-foreground text-sm mb-4">Nenhuma demanda encontrada.</p>
+            <Button variant="outline" onClick={() => { setStatus(undefined); setSort("createdAt"); }}>
+              Limpar filtros
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
+            {data?.data.map((demand) => {
+              const sc = STATUS_CONFIG[demand.status];
+              const supported = (demand as any).userSupported;
+              return (
+                <div
+                  key={demand.id}
+                  className="bg-background flex flex-col p-7 group hover:bg-primary transition-colors duration-300"
+                >
+                  {/* top meta */}
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-xs uppercase tracking-widest text-muted-foreground group-hover:text-white/50 transition-colors font-medium">
                       {demand.category}
-                    </Badge>
-                    <Badge className={`${statusConfig.color} hover:${statusConfig.color} border-transparent`}>
-                      {statusConfig.label}
-                    </Badge>
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground group-hover:text-white/50 transition-colors">
+                      <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                      {sc.label}
+                    </span>
                   </div>
-                  
-                  <h3 className="font-bold text-lg mb-2 text-foreground line-clamp-2">
-                    {demand.content?.substring(0, 100) || "Demanda sem descrição textual"}
-                    {demand.content && demand.content.length > 100 ? "..." : ""}
-                  </h3>
-                  
-                  <div className="space-y-2 mt-4 text-sm text-muted-foreground">
+
+                  {/* content */}
+                  <p className="text-sm font-semibold text-foreground group-hover:text-white transition-colors leading-relaxed line-clamp-3 flex-1 mb-5">
+                    {demand.content?.substring(0, 120) || "Demanda sem descrição textual"}
+                    {demand.content && demand.content.length > 120 ? "…" : ""}
+                  </p>
+
+                  {/* metadata */}
+                  <div className="space-y-1.5 mb-6 text-xs text-muted-foreground group-hover:text-white/50 transition-colors">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <span>{format(new Date(demand.createdAt), "dd 'de' MMM, yyyy", { locale: ptBR })}</span>
+                      <Clock className="w-3.5 h-3.5 shrink-0" />
+                      {format(new Date(demand.createdAt), "dd 'de' MMM, yyyy", { locale: ptBR })}
                     </div>
                     {demand.targetUnit && (
                       <div className="flex items-center gap-2">
-                        <Building2 className="w-4 h-4 shrink-0" />
+                        <Building2 className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate">{demand.targetUnit}</span>
                       </div>
                     )}
                     {demand.address && (
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate">{demand.address}</span>
                       </div>
                     )}
                   </div>
-                </CardContent>
-                <CardFooter className="p-5 pt-0 mt-auto border-t flex items-center justify-between gap-4">
-                  <Button 
-                    variant={(demand as any).userSupported ? "secondary" : "outline"}
-                    size="sm"
-                    className="flex-1 shrink-0 whitespace-nowrap"
+
+                  {/* support button */}
+                  <button
                     onClick={() => handleSupport(demand.id)}
                     disabled={toggleSupport.isPending}
-                    data-testid={`button-support-${demand.id}`}
+                    className={`flex items-center justify-between w-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                      supported
+                        ? "border-secondary bg-secondary/10 text-secondary group-hover:border-white/30 group-hover:bg-white/10 group-hover:text-white"
+                        : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary group-hover:border-white/30 group-hover:text-white"
+                    }`}
                   >
-                    <ThumbsUp className={`w-4 h-4 mr-2 ${(demand as any).userSupported ? "fill-current" : ""}`} />
-                    <span className="hidden sm:inline">Também sou afetado</span>
-                    <span className="sm:hidden">Apoiar</span>
-                    <Badge variant="secondary" className="ml-2 bg-background/50">
-                      {demand.supportCount}
-                    </Badge>
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
-      )}
+                    <span className="flex items-center gap-2">
+                      <ThumbsUp className={`w-3.5 h-3.5 ${supported ? "fill-current" : ""}`} />
+                      Também sou afetado
+                    </span>
+                    <span className="tabular-nums">{demand.supportCount}</span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-      {/* Pagination */}
-      {data && data.totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-12">
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => setPage(p => p - 1)}
-          >
-            Anterior
-          </Button>
-          <span className="flex items-center px-4 text-sm font-medium">
-            Página {page} de {data.totalPages}
-          </span>
-          <Button
-            variant="outline"
-            disabled={page === data.totalPages}
-            onClick={() => setPage(p => p + 1)}
-          >
-            Próxima
-          </Button>
-        </div>
-      )}
+        {/* Pagination */}
+        {data && data.totalPages > 1 && (
+          <div className="flex items-center justify-between mt-12 pt-8 border-t border-border">
+            <Button variant="outline" disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+              ← Anterior
+            </Button>
+            <span className="text-sm text-muted-foreground tabular-nums">
+              {page} / {data.totalPages}
+            </span>
+            <Button variant="outline" disabled={page === data.totalPages} onClick={() => setPage(p => p + 1)}>
+              Próxima →
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

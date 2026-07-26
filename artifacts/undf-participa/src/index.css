@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap');
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -71,36 +71,42 @@
 }
 
 @layer base {
+  h1, h2, h3, h4 {
+    font-family: 'Syne', sans-serif;
+  }
+}
+
+@layer base {
   :root {
-    --background: 0 0% 99%;
-    --foreground: 220 54% 15%;
+    --background: 45 20% 94%;
+    --foreground: 220 60% 26%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 54% 15%;
+    --card: 45 25% 97%;
+    --card-foreground: 220 60% 26%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 54% 15%;
+    --popover: 45 25% 97%;
+    --popover-foreground: 220 60% 26%;
 
-    --primary: 220 54% 25%;
+    --primary: 220 60% 26%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 147 35% 45%;
+    --secondary: 145 28% 48%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 45 15% 88%;
+    --muted-foreground: 220 20% 48%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 220 54% 25%;
+    --accent: 45 15% 88%;
+    --accent-foreground: 220 60% 26%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 220 54% 25%;
+    --border: 220 18% 84%;
+    --input: 220 18% 84%;
+    --ring: 220 60% 26%;
 
-    --radius: 0.5rem;
+    --radius: 0px;
   }
 
   .dark {
