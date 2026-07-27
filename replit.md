@@ -1,35 +1,53 @@
-# UNDF Participa (Voz UnDF)
+# Voz UnDF
 
-A civic participation platform for the University of Brasília community, built as a pnpm monorepo.
+Plataforma de participação cidadã da Universidade de Brasília do Distrito Federal (UnDF). Permite que cidadãos registrem demandas, votem em propostas e acompanhem transparência pública.
 
 ## Stack
 
-- **Frontend** (`artifacts/undf-participa`): React + Vite, TailwindCSS, shadcn/ui, Supabase Auth, Wouter routing
-- **Backend** (`artifacts/api-server`): Express.js, Drizzle ORM, Supabase/PostgreSQL
-- **Shared libs** (`lib/`): `api-client-react` (React Query hooks), `api-spec` (OpenAPI + codegen), `db` (Drizzle schema)
+- **Frontend** (`artifacts/undf-participa`): React 19 + Vite + TailwindCSS + Shadcn UI + Wouter + TanStack Query
+- **Backend** (`artifacts/api-server`): Express 5 + Drizzle ORM + Supabase (auth + Postgres)
+- **Libs compartilhadas**:
+  - `lib/db` — schema Drizzle e conexão com banco
+  - `lib/api-zod` — tipos e validações Zod gerados do OpenAPI
+  - `lib/api-client-react` — hooks React Query gerados do OpenAPI
+  - `lib/auth-web` — cliente Supabase para o frontend
+  - `lib/api-spec` — spec OpenAPI e config orval (codegen)
 
-## Running the project
+## Como rodar
 
-Both services start via their configured workflows:
+Ambos os serviços rodam automaticamente via workflows do Replit:
 
-- **Frontend** — `artifacts/undf-participa: web` → `PORT=21016 BASE_PATH=/ pnpm --filter @workspace/undf-participa run dev`
-- **API Server** — `artifacts/api-server: API Server` → `PORT=8080 pnpm --filter @workspace/api-server run dev`
+| Serviço | Workflow | URL local |
+|---------|----------|-----------|
+| Frontend | `artifacts/undf-participa: web` | `http://localhost:21016/` |
+| API | `artifacts/api-server: API Server` | `http://localhost:8080/api/` |
 
-## Required environment variables
+Para instalar dependências manualmente:
+```bash
+pnpm install
+```
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | Supabase PostgreSQL pooler URL (port 6543) |
-| `DIRECT_URL` | Supabase direct connection URL (port 5432, used by drizzle-kit) |
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_PUBLISHABLE_KEY` | Supabase anon key |
-| `SUPABASE_SECRET_KEY` | Supabase service role key |
-| `SUPABASE_JWKS_URL` | Supabase JWKS endpoint for JWT verification |
-| `VITE_SUPABASE_URL` | Supabase URL exposed to the frontend |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key exposed to the frontend |
-| `SESSION_SECRET` | Secret for session signing |
+## Variáveis de ambiente necessárias
+
+Configuradas como Replit Secrets:
+
+| Variável | Descrição |
+|----------|-----------|
+| `SUPABASE_URL` | URL do projeto Supabase |
+| `SUPABASE_PUBLISHABLE_KEY` | Chave anon/pública do Supabase |
+| `SUPABASE_SECRET_KEY` | Chave service_role (apenas backend) |
+| `DIRECT_URL` | String de conexão direta Postgres |
+| `VITE_SUPABASE_URL` | URL Supabase para o build do frontend |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave anon para o build do frontend |
+
+## Health check da API
+
+```
+GET /api/healthz
+```
+
+Retorna `{"status":"ok","auth":"configured","database":"connected"}` quando tudo está funcionando.
 
 ## User preferences
 
-- Keep the existing monorepo structure (pnpm workspaces)
-- Portuguese-language project; preserve Portuguese in code comments and UI copy
+- Projeto em português (pt-BR); manter idioma do código e comentários consistente com o existente.
