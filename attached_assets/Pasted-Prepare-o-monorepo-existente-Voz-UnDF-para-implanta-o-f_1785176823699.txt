@@ -1,0 +1,288 @@
+Prepare o monorepo existente Voz UnDF para implantação full-stack na Vercel.
+
+Não crie outro projeto e não remova funcionalidades.
+
+Antes de alterar qualquer arquivo, confirme que esta é a versão mais recente e que contém:
+
+- protocolo VUNDF-YYYYMMDD-XXXX;
+- bucket media privado;
+- endpoint autenticado de URL assinada;
+- 15 categorias;
+- 8 status;
+- rotas administrativas de propostas;
+- testes mais recentes.
+
+Caso esses recursos não estejam presentes, interrompa e informe que o código está desatualizado.
+
+OBJETIVO
+
+Publicar:
+
+- frontend React/Vite como aplicação estática;
+- backend Express como Vercel Functions;
+- frontend e API no mesmo domínio;
+- rotas SPA funcionando após atualizar a página;
+- conexão com Supabase Auth, PostgreSQL e Storage.
+
+1. VITE CONFIG
+
+Atualize:
+
+artifacts/undf-participa/vite.config.ts
+
+Requisitos:
+
+- PORT não pode ser obrigatório durante o build;
+- usar valor padrão apenas no servidor local;
+- BASE_PATH deve ter padrão "/";
+- remover plugins do Replit;
+- remover aliases para attached_assets;
+- manter React, Tailwind e aliases válidos;
+- manter output em artifacts/undf-participa/dist/public.
+
+Exemplo conceitual:
+
+const port = Number(process.env.PORT ?? 5173);
+const basePath = process.env.BASE_PATH ?? "/";
+
+Não usar top-level await desnecessário.
+
+2. API VERCEL
+
+O Express existente não deve executar app.listen() dentro de uma Vercel Function.
+
+Preservar:
+
+artifacts/api-server/src/app.ts
+
+Ele já deve exportar a instância Express.
+
+Criar uma entrada serverless na raiz:
+
+api/[...path].ts
+
+Essa entrada deve:
+
+- importar o app Express;
+- exportá-lo como default;
+- não iniciar porta;
+- não chamar app.listen();
+- usar runtime Node.js;
+- preservar o caminho completo /api/*.
+
+Criar também suporte a /api, caso necessário.
+
+O arquivo normal:
+
+artifacts/api-server/src/index.ts
+
+deve continuar funcionando para desenvolvimento local, mas não deve ser usado diretamente pela Vercel Function.
+
+3. HEALTH CHECK
+
+Confirmar que a seguinte rota funciona em produção:
+
+GET /api/healthz
+
+Ela deve verificar a API e a conexão com o banco sem expor credenciais.
+
+4. FRONTEND E API
+
+As chamadas do frontend devem continuar usando caminhos relativos:
+
+/api/...
+
+Não definir URL localhost em produção.
+
+Caso o frontend use setBaseUrl(), configurar:
+
+- desenvolvimento: URL configurável;
+- produção no mesmo domínio: base URL vazia.
+
+Não colocar domínio fixo da Vercel no código.
+
+5. SPA ROUTING
+
+Criar vercel.json na raiz.
+
+Configurar:
+
+- instalação com pnpm;
+- build apenas das dependências necessárias;
+- output do frontend;
+- fallback SPA para index.html;
+- preservar /api/* antes do fallback;
+- não redirecionar chamadas da API para o frontend.
+
+Configuração esperada conceitualmente:
+
+- installCommand: pnpm install --frozen-lockfile
+- buildCommand: pnpm run typecheck && pnpm --filter @workspace/undf-participa run build
+- outputDirectory: artifacts/undf-participa/dist/public
+
+Garantir que:
+
+- /perfil abra diretamente;
+- /demandas abra diretamente;
+- /propostas abra diretamente;
+- /consultar-protocolo abra diretamente;
+- /api/* continue sendo função, e não index.html.
+
+6. PNPM
+
+Adicionar ao package.json raiz um packageManager explícito compatível com o lockfile, por exemplo:
+
+"packageManager": "pnpm@<versão compatível>"
+
+Não modificar o lockfile usando npm ou yarn.
+
+Manter pnpm-workspace.yaml válido.
+
+Remover entradas restantes exclusivamente relacionadas ao Replit, desde que não sejam usadas pela aplicação.
+
+7. VARIÁVEIS DE AMBIENTE
+
+Documentar estas variáveis para a Vercel:
+
+Backend, nunca expostas ao navegador:
+
+DATABASE_URL
+DIRECT_URL
+SUPABASE_URL
+SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SECRET_KEY
+SUPABASE_JWKS_URL
+NODE_ENV
+
+Frontend, incorporadas no build:
+
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
+
+Opcional:
+
+VITE_DEMO_MODE
+
+Regras:
+
+- nunca usar SUPABASE_SECRET_KEY no frontend;
+- nunca criar variável VITE_SUPABASE_SECRET_KEY;
+- não versionar .env;
+- não imprimir valores nos logs;
+- usar DATABASE_URL com pooler adequado para runtime serverless;
+- DIRECT_URL somente para migration ou tarefas administrativas.
+
+8. CORS
+
+Como frontend e API estarão no mesmo domínio:
+
+- preferir requisições same-origin;
+- revisar cors({ origin: true });
+- restringir origens em produção;
+- permitir localhost apenas em desenvolvimento;
+- aceitar VERCEL_URL e domínio oficial configurado;
+- não usar wildcard com credenciais.
+
+9. SUPABASE AUTH
+
+Documentar os URLs que precisam ser autorizados no Supabase:
+
+- domínio de produção da Vercel;
+- URLs de callback necessárias;
+- localhost para desenvolvimento.
+
+Não alterar o fluxo de Bearer JWT.
+
+Confirmar:
+
+- signup;
+- login;
+- restauração de sessão;
+- logout;
+- /api/auth/user;
+- rotas protegidas;
+- roles.
+
+10. SERVERLESS
+
+Revisar o backend para ambiente serverless:
+
+- não depender de processo permanente;
+- não usar estado em memória para autorização crítica;
+- cache de perfil deve ter TTL curto ou invalidação correta;
+- reutilizar pool de banco em escopo global;
+- limitar número de conexões;
+- não executar migrations durante cada requisição;
+- não salvar arquivos no filesystem local;
+- manter anexos no Supabase Storage.
+
+11. ARQUIVOS DE CONFIGURAÇÃO
+
+Criar ou revisar:
+
+vercel.json
+api/[...path].ts
+.env.example
+README-VERCEL.md
+
+O README-VERCEL.md deve explicar:
+
+- como importar pelo GitHub;
+- Root Directory;
+- Build Command;
+- Output Directory;
+- variáveis;
+- migration manual;
+- configuração do Supabase Auth;
+- teste de health;
+- rollback;
+- domínio personalizado.
+
+12. TESTES
+
+Executar:
+
+pnpm install
+pnpm run typecheck
+pnpm run test
+pnpm run build
+
+Se não existir script global de test, executar Vitest no pacote correto.
+
+Também testar localmente com Vercel CLI, quando disponível:
+
+vercel dev
+vercel build
+
+Validar:
+
+GET /api/healthz
+GET /api/auth/user
+login
+cadastro
+criação de demanda
+protocolo
+apoio
+proposta
+áudio privado
+painel gestor
+rotas SPA atualizadas diretamente
+
+13. ENTREGA
+
+Ao terminar, informar:
+
+- arquivos criados;
+- arquivos modificados;
+- configuração final;
+- variáveis necessárias;
+- comandos executados;
+- resultado do typecheck;
+- resultado dos testes;
+- resultado do build;
+- limitações;
+- passos manuais no Vercel;
+- passos manuais no Supabase.
+
+Não declarar o deploy pronto sem testar.
+Não expor nenhuma credencial.
