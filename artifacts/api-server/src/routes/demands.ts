@@ -31,7 +31,7 @@ const router: IRouter = Router();
 function generateProtocol(): string {
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   const suffix = Math.floor(1000 + Math.random() * 9000).toString();
-  return `${dateStr}-${suffix}`;
+  return `VUNDF-${dateStr}-${suffix}`;
 }
 
 function sanitizeForPublic(demand: typeof demands.$inferSelect & { userSupported?: boolean }) {

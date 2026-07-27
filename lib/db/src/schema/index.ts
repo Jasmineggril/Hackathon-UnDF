@@ -83,16 +83,32 @@ export const DEMAND_CATEGORIES = [
   "Acessibilidade",
   "Cultura e Esporte",
   "Sugestão de Melhoria",
+  "Saúde e Bem-estar",
+  "Segurança",
+  "Sustentabilidade",
+  "Mobilidade",
+  "Comunicação Institucional",
+  "Recursos Humanos",
+  "Biblioteca e Acervo",
 ] as const;
 
-export const DEMAND_STATUSES = ["received", "processing", "completed", "archived"] as const;
+export const DEMAND_STATUSES = [
+  "received",
+  "in_analysis",
+  "processing",
+  "awaiting_info",
+  "completed",
+  "rejected",
+  "archived",
+  "escalated",
+] as const;
 export const DEMAND_TYPES = ["text", "audio", "image", "video"] as const;
 
 export const demands = pgTable(
   "demands",
   {
     id: serial("id").primaryKey(),
-    protocol: varchar("protocol", { length: 20 }).notNull().unique(),
+    protocol: varchar("protocol", { length: 25 }).notNull().unique(),
     type: text("type", { enum: DEMAND_TYPES }).notNull(),
     category: text("category", { enum: DEMAND_CATEGORIES })
       .default("Sugestão de Melhoria")

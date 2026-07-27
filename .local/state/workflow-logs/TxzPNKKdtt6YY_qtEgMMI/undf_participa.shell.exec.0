@@ -1,0 +1,1122 @@
+
+> @workspace/undf-participa@0.0.0 dev /home/runner/workspace/artifacts/undf-participa
+> vite --config vite.config.ts --host 0.0.0.0
+
+[replit-cartographer] Loaded @theme tokens from /home/runner/workspace/artifacts/undf-participa/src/index.css
+
+  [32m[1mVITE[22m v7.3.6[39m  [2mready in [0m[1m880[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m21016[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.0.2:[1m21016[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:51:10 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:51:15 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:51:15 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/components/AccessibilityPanel" from "src/App.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/App.tsx[39m:8:31
+[33m  7  |  import { Header } from "@/components/Header";
+  8  |  import { Footer } from "@/components/Footer";
+  9  |  import AccessibilityPanel from "@/components/AccessibilityPanel";
+     |                                  ^
+  10 |  import VLibrasWidget from "@/components/VLibrasWidget";
+  11 |  import CookieBanner from "@/components/CookieBanner";[39m
+      at TransformPluginContext._formatLog (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29079:43)
+      at TransformPluginContext.error (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29076:14)
+      at normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27199:18)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:51:28 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Header.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:51:34 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Footer.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:52:00 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/login.tsx, /src/index.css[22m
+[2m5:52:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-hook-form, @hookform/resolvers/zod, zod[32m[39m
+[2m5:52:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:52:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/not-found.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:52:25 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/home.tsx, /src/index.css[22m
+[2m5:52:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mframer-motion[32m[39m
+[2m5:52:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[RUNTIME_ERROR]{"type":"runtime-error","timestamp":1785001948952,"name":"Error","message":"Cannot read properties of null (reading 'useContext')","stack":"\n\n\n\n\n\n\n\n\n"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:52:32 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/about.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:52:45 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ods16.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:01 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/demands.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:24 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/new-demand.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:24 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+[2m5:53:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@radix-ui/react-progress, @radix-ui/react-switch[32m[39m
+[2m5:53:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m5:53:27 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:28 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:40 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/proposals.tsx, /src/index.css[22m
+[2m5:53:40 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:53:42 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:15 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/new-proposal.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:16 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/protocol-lookup.tsx, /src/index.css[22m
+[2m5:54:16 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+[2m5:54:16 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:17 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:17 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 6)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:28 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/admin.tsx, /src/index.css[22m
+[2m5:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+[2m5:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:29 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:54:29 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 6)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:15 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/transparency.tsx, /src/index.css[22m
+[2m5:55:17 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+[2m5:55:17 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+[2m5:55:18 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mrecharts[32m[39m
+[2m5:55:18 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m5:55:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+[2m5:55:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:21 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-demand.tsx[39m:8:43
+[33m  9  |  import { CheckCircle2, ChevronRight, FileText, Image as ImageIcon, MapPin, Mic, Video } from "lucide-react";
+  10 |  import { useCreateDemand } from "@workspace/api-client-react";
+  11 |  import { DemandCategory, DemandType } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                              ^
+  12 |  import { useAuth } from "@workspace/auth-web";
+  13 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:21 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Missing "./src/generated/api.schemas" specifier in "@workspace/api-client-react" package[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/home/runner/workspace/artifacts/undf-participa/src/pages/new-proposal.tsx[39m:7:31
+[33m  7  |  import { z } from "zod";
+  8  |  import { useCreateProposal } from "@workspace/api-client-react";
+  9  |  import { DemandCategory } from "@workspace/api-client-react/src/generated/api.schemas";
+     |                                  ^
+  10 |  import { useAuth } from "@workspace/auth-web";
+  11 |  import { Button } from "@/components/ui/button";[39m
+      at e (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6667:8)
+      at n (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6679:14)
+      at o (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6707:10)
+      at resolveExportsOrImports (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32907:45)
+      at resolveDeepImport (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32921:22)
+      at tryNodeResolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32796:70)
+      at ResolveIdContext.handler (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:32635:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async EnvironmentPluginContainer.resolveId (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28797:19)
+      at async TransformPluginContext.resolve (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:29009:13)
+      at async normalizeUrl (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27191:22)
+      at async file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27257:32
+      at async Promise.all (index 6)
+      at async TransformPluginContext.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:27225:4)
+      at async EnvironmentPluginContainer.transform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:28877:14)
+      at async loadAndTransform (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:22746:26)
+      at async viteTransformMiddleware (file:///home/runner/workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:24622:20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/demands.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/new-demand.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/proposals.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/new-proposal.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/protocol-lookup.tsx, /src/index.css[22m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[1;1H[0J[2m5:55:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/admin.tsx, /src/index.css[22m
+Killed
