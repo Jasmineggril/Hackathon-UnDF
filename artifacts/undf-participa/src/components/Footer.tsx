@@ -61,11 +61,16 @@ export function Footer() {
               Legal
             </h4>
             <ul className="space-y-2.5">
-              {["Privacidade", "Termos de Uso", "Acessibilidade", "Cookies", "Governança"].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-[#1B3469]/50 hover:text-[#1B3469] transition-colors">
-                    {item}
-                  </a>
+              {[
+                { label: "Privacidade", href: "/privacidade" },
+                { label: "Termos de Uso", href: "/termos" },
+                { label: "Acessibilidade", href: "/acessibilidade" },
+                { label: "Governança", href: "/governanca" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-sm text-[#1B3469]/50 hover:text-[#1B3469] transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

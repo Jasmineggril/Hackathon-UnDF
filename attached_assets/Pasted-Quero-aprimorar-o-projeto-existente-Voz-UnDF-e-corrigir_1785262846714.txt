@@ -1,0 +1,1708 @@
+Quero aprimorar o projeto existente “Voz UnDF” e corrigir funcionalidades que ainda estão ausentes ou incompletas.
+
+Não crie um projeto novo.
+
+Não remova funcionalidades já existentes.
+
+Preserve:
+
+- React;
+- TypeScript;
+- Vite;
+- Tailwind;
+- Express;
+- PostgreSQL;
+- Drizzle ORM;
+- Supabase Auth;
+- APIs atuais;
+- autenticação por Bearer token;
+- roles;
+- demandas;
+- propostas;
+- apoios;
+- protocolo;
+- painel administrativo;
+- transparência;
+- testes existentes.
+
+Antes de alterar qualquer arquivo:
+
+1. analise a estrutura atual;
+2. identifique o que já está implementado;
+3. reutilize componentes existentes;
+4. evite duplicar páginas, rotas ou componentes;
+5. não altere banco, autenticação ou APIs sem necessidade;
+6. não declare como funcional algo que não tenha sido testado.
+
+==================================================
+IDENTIDADE DO PRODUTO
+==================================================
+
+Nome:
+
+Voz UnDF
+
+Título completo:
+
+Voz UnDF — Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+
+Sua voz participa. A Universidade transforma.
+
+Mensagem principal:
+
+O Voz UnDF transforma manifestações individuais em prioridades coletivas, aproxima a comunidade acadêmica da gestão e permite acompanhar, com transparência, como a Universidade responde.
+
+==================================================
+OBJETIVO DA SOLUÇÃO
+==================================================
+
+O Voz UnDF é uma plataforma digital voltada à participação da comunidade acadêmica na gestão universitária.
+
+A solução permite que estudantes, docentes, servidores e gestores:
+
+- registrem demandas;
+- enviem solicitações;
+- apresentem sugestões;
+- criem propostas;
+- enviem texto, imagem, documento ou áudio;
+- recebam protocolo;
+- acompanhem o andamento;
+- apoiem demandas coletivas;
+- apoiem propostas;
+- visualizem respostas institucionais;
+- acompanhem indicadores;
+- participem da melhoria da Universidade.
+
+O sistema deve transformar manifestações dispersas em informações organizadas, transparentes e úteis para a gestão.
+
+==================================================
+PROBLEMA INSTITUCIONAL
+==================================================
+
+Apresentar no site uma explicação clara do problema:
+
+Atualmente, demandas, sugestões e propostas da comunidade acadêmica podem ficar dispersas em e-mails, formulários, mensagens e diferentes setores da Universidade.
+
+Essa fragmentação:
+
+- dificulta o acompanhamento;
+- gera duplicidade;
+- reduz a transparência;
+- dificulta a definição de prioridades;
+- faz o estudante não saber qual setor procurar;
+- impede a visualização da resposta institucional;
+- prejudica o planejamento da gestão.
+
+O Voz UnDF centraliza esse processo e cria uma ponte permanente entre a comunidade acadêmica e a gestão.
+
+==================================================
+PÚBLICO BENEFICIÁRIO
+==================================================
+
+Explicar que a plataforma beneficia:
+
+- estudantes;
+- docentes;
+- servidores;
+- coordenações;
+- pró-reitorias;
+- setores administrativos;
+- gestores;
+- comunidade acadêmica em geral.
+
+Benefícios para usuários:
+
+- canal simples;
+- registro acessível;
+- protocolo;
+- acompanhamento;
+- resposta;
+- participação coletiva;
+- transparência.
+
+Benefícios para gestores:
+
+- demandas organizadas;
+- filtros;
+- indicadores;
+- histórico;
+- identificação de recorrências;
+- prioridades coletivas;
+- encaminhamento;
+- prestação de contas.
+
+==================================================
+LOGIN DE DEMONSTRAÇÃO
+==================================================
+
+Criar uma experiência de demonstração para avaliadores do Hackathon.
+
+Na página de login, manter:
+
+Título:
+
+Entrar na plataforma
+
+Descrição:
+
+Use suas credenciais institucionais.
+
+Campos:
+
+- E-mail institucional;
+- Senha;
+- Esqueceu a senha?;
+- Entrar;
+- Não tem conta? Criar conta ou solicitar acesso.
+
+Adicionar também um botão:
+
+Entrar como usuário de demonstração
+
+Descrição:
+
+Explore as principais funcionalidades do Voz UnDF utilizando uma conta preparada para demonstração.
+
+Não hardcode senha real no frontend.
+
+Não salvar senha em arquivo versionado.
+
+Não expor credenciais administrativas.
+
+Não usar service role no navegador.
+
+Não criar bypass de autenticação.
+
+Implementar o modo de demonstração por variável de ambiente:
+
+VITE_DEMO_MODE=true
+DEMO_MODE=true
+
+Usar variáveis privadas no backend:
+
+DEMO_USER_EMAIL
+DEMO_USER_PASSWORD
+
+A conta demo deve possuir role:
+
+estudante
+
+Nunca usar role gestor ou administrador para acesso público de demonstração.
+
+Caso já exista uma conta de teste cadastrada no Supabase, usar essa conta somente por meio de um fluxo seguro.
+
+Não exibir o valor real da senha no código-fonte.
+
+Na interface, é possível mostrar:
+
+Conta de demonstração disponível
+
+e um botão:
+
+Entrar automaticamente
+
+Caso o login automático não seja seguro ou não esteja implementado, exibir apenas orientações para o administrador configurar a conta.
+
+Criar selo visível após login:
+
+Ambiente de demonstração
+
+A conta demo deve conter apenas dados fictícios.
+
+==================================================
+CADASTRO
+==================================================
+
+Criar ou revisar uma página de cadastro funcional.
+
+Campos:
+
+- nome completo;
+- e-mail institucional;
+- senha;
+- confirmação de senha;
+- vínculo com a UnDF;
+- aceite dos Termos de Uso;
+- aceite da Política de Privacidade.
+
+Vínculos permitidos:
+
+- estudante;
+- docente;
+- servidor.
+
+Não permitir cadastro público como:
+
+- gestor;
+- administrador.
+
+Role padrão:
+
+estudante
+
+Adicionar:
+
+- mostrar ou ocultar senha;
+- requisitos da senha;
+- validação;
+- mensagens claras;
+- loading;
+- confirmação de e-mail;
+- tratamento de e-mail já cadastrado;
+- retorno para a página de login.
+
+==================================================
+PÁGINA DO USUÁRIO
+==================================================
+
+Criar ou aperfeiçoar uma página correspondente à conta autenticada.
+
+Rota sugerida:
+
+/meu-painel
+
+ou:
+
+/perfil
+
+A página deve conter:
+
+- nome;
+- avatar;
+- e-mail;
+- vínculo;
+- role;
+- data de cadastro;
+- botão editar perfil;
+- botão sair.
+
+Criar seções ou abas:
+
+1. Visão geral;
+2. Minhas demandas;
+3. Meus protocolos;
+4. Minhas propostas;
+5. Demandas apoiadas;
+6. Propostas apoiadas;
+7. Notificações;
+8. Preferências;
+9. Privacidade e segurança.
+
+Não permitir que o usuário altere a própria role.
+
+==================================================
+VISÃO GERAL DO USUÁRIO
+==================================================
+
+Mostrar dados reais:
+
+- quantidade de demandas;
+- demandas em andamento;
+- demandas respondidas;
+- propostas criadas;
+- demandas apoiadas;
+- propostas apoiadas;
+- protocolo mais recente;
+- última atualização.
+
+Adicionar atalhos:
+
+- Registrar demanda;
+- Criar proposta;
+- Consultar protocolo;
+- Explorar demandas;
+- Explorar propostas;
+- Ver transparência.
+
+Não usar números inventados.
+
+==================================================
+TOUR GUIADO FUNCIONAL
+==================================================
+
+Implementar um tour guiado real e funcional.
+
+O tour deve aparecer:
+
+- depois do primeiro login;
+- apenas quando a aplicação estiver carregada;
+- uma única vez por usuário ou navegador;
+- com opção de ser reaberto posteriormente.
+
+Adicionar opções:
+
+- Próximo;
+- Voltar;
+- Pular tour;
+- Finalizar;
+- Não mostrar novamente;
+- Ver tour novamente.
+
+Salvar somente a preferência de conclusão no localStorage.
+
+Não salvar dados pessoais no localStorage.
+
+O tour deve destacar elementos reais da página.
+
+Não criar uma página estática fingindo ser um tour.
+
+Não exibir uma etapa quando o elemento correspondente não existir.
+
+Etapas do tour:
+
+1. Boas-vindas
+
+Texto:
+
+Bem-vindo ao Voz UnDF. Aqui você pode registrar demandas, apresentar propostas e acompanhar como a Universidade responde.
+
+2. Meu painel
+
+Texto:
+
+Neste painel você encontra suas demandas, propostas, apoios, protocolos e atualizações.
+
+3. Registrar demanda
+
+Texto:
+
+Use esta opção para registrar um problema, solicitação, sugestão, elogio, denúncia ou consulta institucional.
+
+4. Protocolo
+
+Texto:
+
+Após o envio, cada demanda recebe um protocolo único que permite acompanhar o andamento.
+
+5. Também sou afetado
+
+Texto:
+
+Quando uma demanda também afetar você, utilize esta função para fortalecer a prioridade coletiva.
+
+6. Propostas
+
+Texto:
+
+Apresente ideias de melhoria para a Universidade e acompanhe a avaliação da gestão.
+
+7. Apoiar proposta
+
+Texto:
+
+Apoie propostas relevantes para demonstrar interesse coletivo.
+
+8. Transparência
+
+Texto:
+
+Acompanhe indicadores públicos, categorias recorrentes e resultados da participação.
+
+9. Acessibilidade
+
+Texto:
+
+Utilize Libras, contraste, modo de foco, tamanho de texto e outros recursos de acessibilidade.
+
+10. Ajuda
+
+Texto:
+
+A Central de Ajuda explica como usar cada funcionalidade da plataforma.
+
+Requisitos do tour:
+
+- navegação por teclado;
+- foco visível;
+- Escape para fechar;
+- foco controlado;
+- ARIA;
+- indicador de progresso;
+- responsivo;
+- compatível com redução de movimento;
+- não cobrir completamente o conteúdo;
+- não depender apenas de cor.
+
+==================================================
+LIBRAS
+==================================================
+
+Adicionar uma única integração oficial do VLibras.
+
+Criar botão flutuante:
+
+Libras
+
+Tooltip:
+
+Traduzir conteúdo para Libras com VLibras.
+
+Regras:
+
+- apenas uma instância;
+- impedir duplicação em hot reload;
+- carregar o script oficial;
+- funcionar no celular;
+- permitir fechar;
+- não cobrir outros botões;
+- não bloquear a interface;
+- tratar erro de carregamento;
+- possuir navegação por teclado.
+
+Adicionar texto:
+
+O VLibras é um recurso complementar de acessibilidade e não substitui a construção acessível da plataforma.
+
+O recurso deve aparecer globalmente, inclusive em:
+
+- login;
+- cadastro;
+- página inicial;
+- demandas;
+- propostas;
+- consulta de protocolo;
+- painel do usuário;
+- páginas institucionais.
+
+==================================================
+PAINEL DE ACESSIBILIDADE
+==================================================
+
+Criar ou revisar um painel global de acessibilidade.
+
+Botão:
+
+Acessibilidade
+
+Opções:
+
+- aumentar texto;
+- reduzir texto;
+- restaurar texto;
+- alto contraste;
+- escala de cinza;
+- destacar links;
+- fonte mais legível;
+- maior espaçamento;
+- cursor ampliado;
+- reduzir animações;
+- modo de foco;
+- modo de leitura;
+- restaurar preferências.
+
+Modo de foco:
+
+- reduzir distrações;
+- ocultar elementos decorativos;
+- remover animações;
+- aumentar espaçamento;
+- limitar largura de leitura;
+- destacar conteúdo principal;
+- simplificar navegação.
+
+Modo de leitura:
+
+- largura confortável;
+- contraste suave;
+- espaçamento ampliado;
+- parágrafos legíveis;
+- hierarquia visual clara.
+
+Não afirmar que o recurso trata TDAH.
+
+Apresentar como acessibilidade cognitiva e redução de distrações.
+
+Requisitos:
+
+- teclado;
+- leitor de tela;
+- foco visível;
+- ARIA;
+- Escape;
+- foco controlado;
+- responsividade;
+- prefers-reduced-motion;
+- persistência apenas de preferências visuais.
+
+==================================================
+POR QUE SOMOS DIFERENTES
+==================================================
+
+Melhorar a seção:
+
+Por que somos diferentes?
+
+Subtítulo:
+
+Não somos uma caixa de sugestões. Somos um ecossistema de gestão participativa universitária.
+
+Cada item deve ter uma explicação mais completa e um botão ou link funcional.
+
+1. Demandas coletivas
+
+Texto:
+
+Uma demanda deixa de ser apenas individual quando outras pessoas indicam que também são afetadas. Isso reduz registros duplicados, fortalece a manifestação e ajuda a gestão a reconhecer prioridades coletivas.
+
+Ação:
+
+Explorar demandas
+
+Ao clicar, abrir a página real de demandas.
+
+2. Participação acessível
+
+Texto:
+
+A plataforma permite participação por texto, imagem, documento ou áudio e oferece recursos como VLibras, navegação por teclado, leitores de tela, contraste, modo de leitura e modo de foco.
+
+Ação:
+
+Conhecer a acessibilidade
+
+Ao clicar, abrir a página de acessibilidade.
+
+3. Propostas formais
+
+Texto:
+
+Boas ideias podem ser registradas como propostas, receber apoio da comunidade, ser avaliadas pela gestão e acompanhadas até sua implementação ou resposta final.
+
+Ação:
+
+Explorar propostas
+
+Ao clicar, abrir a página real de propostas.
+
+4. Transparência total
+
+Texto:
+
+Cada demanda recebe protocolo, status, linha do tempo e resposta institucional. A comunidade consegue acompanhar o andamento e visualizar indicadores públicos sem exposição de dados pessoais.
+
+Ação:
+
+Ver transparência
+
+Ao clicar, abrir a página real de transparência.
+
+5. Gestão por dados
+
+Texto:
+
+Demandas, categorias, apoios e prazos são organizados em indicadores que ajudam a gestão a identificar recorrências, setores mais acionados e prioridades reais.
+
+Ação:
+
+Conhecer os indicadores
+
+Ao clicar, abrir a seção correspondente da transparência.
+
+6. Inclusão e segurança
+
+Texto:
+
+A plataforma combina acessibilidade, privacidade, controle de acesso, arquivos protegidos, URLs assinadas, auditoria e boas práticas de LGPD para ampliar a participação com segurança.
+
+Ação:
+
+Ver privacidade e segurança
+
+Ao clicar, abrir a Política de Privacidade.
+
+Todos os botões devem funcionar de verdade.
+
+Não utilizar links com href="#".
+
+Não deixar botões sem ação.
+
+==================================================
+DEMANDAS
+==================================================
+
+A página de demandas deve funcionar como uma plataforma de participação, semelhante ao conceito do Escuta DF, mas adaptada à UnDF.
+
+Cada demanda pública deve mostrar:
+
+- título;
+- resumo;
+- tipo;
+- categoria;
+- unidade;
+- status;
+- data;
+- quantidade de pessoas afetadas;
+- botão Ver detalhes;
+- botão Também sou afetado.
+
+Filtros:
+
+- mais recentes;
+- mais apoiadas;
+- recebidas;
+- em triagem;
+- encaminhadas;
+- em análise;
+- em execução;
+- respondidas;
+- concluídas;
+- arquivadas;
+- categoria;
+- unidade.
+
+==================================================
+TAMBÉM SOU AFETADO
+==================================================
+
+Fazer o recurso funcionar de verdade.
+
+Regras:
+
+- exigir usuário autenticado;
+- um apoio por usuário;
+- permitir retirar apoio;
+- bloquear apoio duplicado;
+- autor não apoia a própria demanda;
+- demanda privada não recebe apoio;
+- demanda arquivada não recebe apoio;
+- persistir no banco;
+- atualizar contador;
+- tratar erro;
+- fazer rollback em falha.
+
+Explicar ao usuário:
+
+Ao marcar “Também sou afetado”, você informa que essa situação também impacta você. Isso ajuda a gestão a identificar problemas coletivos e definir prioridades.
+
+O apoio não deve tornar pública a identidade do usuário.
+
+==================================================
+PROPOSTAS
+==================================================
+
+Criar ou aperfeiçoar a página de propostas.
+
+Cada proposta deve mostrar:
+
+- título;
+- resumo;
+- categoria;
+- justificativa;
+- público beneficiado;
+- impacto esperado;
+- autor ou anonimato;
+- status;
+- quantidade de apoios;
+- resposta institucional;
+- botão Ver proposta;
+- botão Apoiar proposta.
+
+Evitar usar a palavra “curtir”.
+
+Usar:
+
+Apoiar proposta
+
+Explicar:
+
+Apoiar uma proposta significa demonstrar interesse na ideia e ajudar a gestão a identificar iniciativas com maior apoio da comunidade.
+
+==================================================
+APOIO E ANONIMATO
+==================================================
+
+Fazer uma explicação clara.
+
+A proposta pode ser publicada:
+
+- com identificação;
+- de forma anônima publicamente, quando permitido.
+
+Entretanto, para apoiar uma proposta ou demanda, o usuário precisa estar autenticado.
+
+Motivo:
+
+O login evita apoios duplicados, fraudes e manipulação dos resultados.
+
+A identidade de quem apoiou não deve aparecer publicamente.
+
+Mostrar texto próximo ao botão:
+
+Seu apoio será contabilizado, mas sua identidade não será exibida publicamente.
+
+Caso o usuário não esteja autenticado, ao clicar:
+
+- abrir modal;
+- explicar a necessidade de login;
+- oferecer botão Entrar;
+- oferecer botão Criar conta.
+
+==================================================
+PROTOCOLO
+==================================================
+
+Fazer o sistema de protocolo funcionar completamente.
+
+Formato:
+
+VUNDF-AAAAMMDD-XXXX
+
+Exemplo:
+
+VUNDF-20260726-4821
+
+O protocolo deve:
+
+- ser gerado no backend;
+- ser único;
+- ser persistido no banco;
+- possuir restrição UNIQUE;
+- lidar com colisão;
+- ser retornado após a criação;
+- aparecer na confirmação;
+- aparecer no painel do usuário;
+- aparecer em Minhas demandas;
+- poder ser copiado;
+- poder ser consultado;
+- aparecer no comprovante.
+
+Não gerar protocolo apenas no frontend.
+
+==================================================
+PÁGINA DE CONSULTA DE PROTOCOLO
+==================================================
+
+Criar ou corrigir a página:
+
+/consultar-protocolo
+
+Título:
+
+Consulta de protocolo
+
+Texto:
+
+Digite o número do protocolo para acompanhar o andamento da sua manifestação.
+
+Campo:
+
+Protocolo
+
+Placeholder:
+
+VUNDF-AAAAMMDD-XXXX
+
+Exemplo:
+
+VUNDF-20260726-4821
+
+Botão:
+
+Consultar
+
+Validações:
+
+- remover espaços extras;
+- aceitar letras minúsculas;
+- converter para maiúsculas;
+- validar o formato;
+- mostrar loading;
+- tratar erro;
+- tratar protocolo inexistente;
+- tratar demanda privada;
+- não expor dados pessoais.
+
+Ao encontrar, mostrar:
+
+- protocolo;
+- título;
+- tipo;
+- categoria;
+- data;
+- status;
+- setor responsável;
+- prazo estimado;
+- última atualização;
+- resposta institucional;
+- linha do tempo pública.
+
+Não mostrar:
+
+- nome do autor em demanda anônima;
+- e-mail;
+- matrícula;
+- observação interna;
+- anexos privados;
+- áudio privado;
+- dados pessoais.
+
+Mensagem de protocolo inválido:
+
+O formato informado não é válido. Utilize o padrão VUNDF-AAAAMMDD-XXXX.
+
+Mensagem de protocolo não encontrado:
+
+Não encontramos uma manifestação com este protocolo. Confira o número e tente novamente.
+
+==================================================
+CONFIRMAÇÃO DO REGISTRO
+==================================================
+
+Depois de registrar uma demanda, mostrar uma tela de sucesso.
+
+Título:
+
+Demanda registrada com sucesso
+
+Texto:
+
+Sua manifestação foi recebida pelo Voz UnDF.
+
+Mostrar:
+
+- protocolo;
+- data;
+- status inicial;
+- categoria;
+- orientação de acompanhamento;
+- aviso sobre e-mail.
+
+Botões:
+
+- Copiar protocolo;
+- Acompanhar demanda;
+- Baixar comprovante;
+- Ir para Meu painel;
+- Registrar outra demanda.
+
+==================================================
+COMPROVANTE
+==================================================
+
+Criar comprovante imprimível.
+
+Conteúdo:
+
+- identidade Voz UnDF;
+- protocolo;
+- título;
+- categoria;
+- data;
+- status;
+- orientação para consulta;
+- aviso de privacidade.
+
+Não incluir:
+
+- senha;
+- token;
+- observações internas;
+- URL privada;
+- dados de terceiros.
+
+Caso PDF exija dependência pesada, criar primeiro uma versão HTML com CSS de impressão.
+
+==================================================
+E-MAIL DE CONFIRMAÇÃO
+==================================================
+
+Após registrar uma demanda, enviar confirmação por e-mail, caso exista infraestrutura de e-mail configurada.
+
+O e-mail deve conter:
+
+Assunto:
+
+Voz UnDF — Demanda registrada
+
+Conteúdo:
+
+- confirmação do registro;
+- protocolo;
+- título;
+- categoria;
+- data;
+- status inicial;
+- orientação de acompanhamento;
+- link para consultar;
+- aviso para não compartilhar informações sensíveis.
+
+Não incluir:
+
+- senha;
+- token;
+- observação interna;
+- anexos privados;
+- URL assinada;
+- dados sensíveis.
+
+Implementar o envio no backend.
+
+Não enviar e-mail diretamente pelo frontend.
+
+Usar um serviço de e-mail configurado por variável de ambiente.
+
+Exemplos possíveis:
+
+- Resend;
+- SendGrid;
+- SMTP institucional.
+
+Não hardcode chave de API.
+
+Variáveis possíveis:
+
+EMAIL_PROVIDER
+EMAIL_FROM
+RESEND_API_KEY
+
+Se o serviço de e-mail ainda não estiver configurado:
+
+- não fingir que o e-mail foi enviado;
+- mostrar mensagem neutra;
+- registrar a pendência;
+- manter o protocolo visível;
+- permitir copiar e baixar comprovante.
+
+==================================================
+MISSÃO, VISÃO E VALORES
+==================================================
+
+Criar ou melhorar a página:
+
+/sobre
+
+Título:
+
+Sobre o Voz UnDF
+
+Descrição:
+
+O Voz UnDF é uma plataforma de participação e gestão colaborativa criada para aproximar a comunidade acadêmica da gestão universitária, organizar demandas, ampliar a transparência e apoiar decisões baseadas em evidências.
+
+Missão:
+
+Fortalecer a participação da comunidade acadêmica por meio de um canal acessível, transparente e seguro, transformando demandas e propostas em informações úteis para a melhoria da Universidade.
+
+Visão:
+
+Ser uma referência em participação universitária digital, promovendo uma UnDF mais aberta, inclusiva, responsiva e conectada com as necessidades de sua comunidade.
+
+Valores:
+
+- participação;
+- transparência;
+- inclusão;
+- acessibilidade;
+- respeito;
+- colaboração;
+- segurança;
+- privacidade;
+- responsabilidade;
+- inovação.
+
+Adicionar também:
+
+- problema enfrentado;
+- público beneficiado;
+- tecnologias;
+- aderência ao tema;
+- contribuição para o ODS 16;
+- contexto do Hackathon.
+
+==================================================
+ADERÊNCIA AO HACKATHON
+==================================================
+
+Criar uma seção explicativa.
+
+Título:
+
+Gestão participativa na prática
+
+Texto:
+
+O Voz UnDF está diretamente alinhado ao tema “Soluções para Gestão Participativa” porque cria um canal permanente entre a comunidade acadêmica e a gestão universitária.
+
+A plataforma permite:
+
+- registrar manifestações;
+- apoiar demandas;
+- apresentar propostas;
+- acompanhar decisões;
+- visualizar respostas;
+- identificar prioridades coletivas;
+- acompanhar indicadores;
+- fortalecer a corresponsabilidade.
+
+Destacar a função:
+
+Também sou afetado
+
+Explicar que ela ajuda a gestão a tomar decisões baseadas em evidências.
+
+==================================================
+ODS 16
+==================================================
+
+Criar seção:
+
+ODS 16 — Paz, Justiça e Instituições Eficazes
+
+Texto:
+
+O Voz UnDF contribui para o ODS 16 ao fortalecer uma instituição mais transparente, inclusiva, responsável e participativa.
+
+A plataforma:
+
+- amplia o acesso à informação;
+- organiza canais de participação;
+- permite acompanhar respostas;
+- promove prestação de contas;
+- registra histórico;
+- gera indicadores;
+- incentiva decisões inclusivas;
+- fortalece a confiança entre comunidade e gestão.
+
+Dar destaque principal ao ODS 16.
+
+ODS complementares podem ser apresentados com menor destaque:
+
+- ODS 4;
+- ODS 5;
+- ODS 9;
+- ODS 10;
+- ODS 17.
+
+==================================================
+GOVERNANÇA
+==================================================
+
+Criar ou melhorar a página:
+
+/governanca
+
+Não usar apenas uma definição genérica.
+
+Adaptar o conteúdo ao funcionamento do Voz UnDF.
+
+Título:
+
+Governança do Voz UnDF
+
+Introdução:
+
+Governança é o conjunto de regras, responsabilidades, práticas de liderança, controle e acompanhamento que orienta o funcionamento da plataforma.
+
+Explicar a diferença:
+
+Governança:
+
+- define diretrizes;
+- estabelece responsabilidades;
+- acompanha resultados;
+- protege direitos;
+- garante transparência;
+- monitora riscos.
+
+Gestão:
+
+- executa atividades;
+- recebe demandas;
+- encaminha;
+- responde;
+- atualiza status;
+- acompanha prazos.
+
+Criar seções:
+
+1. Objetivo da governança;
+2. Papéis e responsabilidades;
+3. Fluxo de atendimento;
+4. Critérios de priorização;
+5. Tratamento de demandas;
+6. Tratamento de propostas;
+7. Transparência;
+8. Auditoria;
+9. Privacidade;
+10. Segurança;
+11. Moderação;
+12. Prestação de contas.
+
+Papéis:
+
+Estudante:
+
+- registrar;
+- acompanhar;
+- apoiar;
+- propor;
+- respeitar regras.
+
+Docente e servidor:
+
+- registrar;
+- acompanhar;
+- apoiar;
+- propor;
+- colaborar.
+
+Gestor:
+
+- triar;
+- encaminhar;
+- definir prazo;
+- atualizar status;
+- responder;
+- analisar indicadores.
+
+Administrador:
+
+- gerenciar permissões;
+- configurar categorias;
+- auditar;
+- manter segurança;
+- administrar o sistema.
+
+Criar matriz visual de responsabilidades.
+
+==================================================
+TERMOS DE USO
+==================================================
+
+Criar ou revisar:
+
+/termos
+
+O texto deve ser simples e adaptado ao Voz UnDF.
+
+Explicar:
+
+- finalidade do serviço;
+- regras de uso;
+- cadastro;
+- responsabilidade pela conta;
+- proteção da senha;
+- condutas permitidas;
+- condutas proibidas;
+- moderação;
+- conteúdo enviado;
+- disponibilidade;
+- limitações;
+- privacidade;
+- atualização dos termos;
+- legislação aplicável.
+
+Regras de uso:
+
+- utilizar linguagem respeitosa;
+- não ameaçar;
+- não discriminar;
+- não publicar conteúdo ilegal;
+- não divulgar dados de terceiros;
+- não enviar documentos sensíveis;
+- não criar demandas falsas;
+- evitar duplicidade;
+- escolher categoria adequada.
+
+Cadastro:
+
+- usuário é responsável pela própria conta;
+- não deve compartilhar senha;
+- deve manter os dados atualizados;
+- não pode tentar acessar conta de terceiros.
+
+Diferença para Política de Privacidade:
+
+Termos de Uso definem as regras do serviço e o comportamento esperado.
+
+Política de Privacidade explica como os dados pessoais são coletados, utilizados, armazenados e protegidos.
+
+Não inventar foro, cidade, órgão jurídico ou dados institucionais.
+
+Quando uma definição oficial não estiver disponível, indicar revisão institucional pendente.
+
+==================================================
+ACESSIBILIDADE — PÁGINA INSTITUCIONAL
+==================================================
+
+Criar ou revisar:
+
+/acessibilidade
+
+Explicar que acessibilidade significa remover barreiras para garantir autonomia, segurança e participação.
+
+Apresentar:
+
+Acessibilidade digital:
+
+- leitores de tela;
+- navegação por teclado;
+- foco visível;
+- contraste;
+- zoom;
+- formulários acessíveis;
+- mensagens claras.
+
+Acessibilidade comunicacional:
+
+- Libras;
+- VLibras;
+- transcrição;
+- textos claros;
+- alternativas ao áudio.
+
+Acessibilidade cognitiva:
+
+- modo de foco;
+- modo de leitura;
+- redução de animações;
+- menor quantidade de distrações;
+- linguagem simples.
+
+Acessibilidade motora:
+
+- áreas clicáveis adequadas;
+- teclado;
+- foco;
+- tempo suficiente;
+- ausência de gestos obrigatórios.
+
+Referenciar de forma informativa:
+
+Lei Brasileira de Inclusão — Lei nº 13.146/2015.
+
+Não afirmar conformidade total sem realizar auditoria.
+
+Usar expressão:
+
+O Voz UnDF busca seguir boas práticas de acessibilidade digital.
+
+Adicionar canal para informar barreiras, sem inventar e-mail.
+
+==================================================
+PRIVACIDADE
+==================================================
+
+Criar ou revisar:
+
+/privacidade
+
+Explicar:
+
+Privacidade é o direito do usuário de compreender e controlar como suas informações pessoais são utilizadas.
+
+Adaptar o texto ao Voz UnDF.
+
+Explicar:
+
+- dados de cadastro;
+- perfil;
+- autenticação;
+- demandas;
+- propostas;
+- apoios;
+- protocolos;
+- anexos;
+- imagens;
+- documentos;
+- áudios;
+- logs;
+- preferências;
+- cookies;
+- anonimato;
+- denúncias;
+- retenção;
+- segurança;
+- compartilhamento;
+- direitos do titular.
+
+Explicar a LGPD:
+
+A Lei Geral de Proteção de Dados Pessoais assegura direitos como:
+
+- confirmação do tratamento;
+- acesso;
+- correção;
+- informação;
+- anonimização quando aplicável;
+- eliminação quando legalmente possível;
+- revogação do consentimento quando aplicável.
+
+Não prometer exclusão quando existir obrigação legal ou institucional de retenção.
+
+Não inventar controlador, encarregado, e-mail ou telefone.
+
+Quando os dados oficiais não estiverem disponíveis, usar:
+
+O canal institucional para exercício dos direitos do titular será definido pela UnDF antes da publicação oficial da plataforma.
+
+==================================================
+INTELIGÊNCIA ARTIFICIAL
+==================================================
+
+Caso existam recursos de inteligência artificial, apresentar como funcionalidade opcional ou futura.
+
+Possibilidades:
+
+- resumir manifestações;
+- sugerir categoria;
+- identificar demandas semelhantes;
+- apoiar encaminhamento;
+- auxiliar na organização.
+
+Regras:
+
+- não tomar decisão final automaticamente;
+- permitir revisão humana;
+- não enviar dados sensíveis sem base legal;
+- informar quando a IA for utilizada;
+- registrar limitações;
+- não apresentar IA fictícia como funcional.
+
+Caso ainda não esteja implementada, marcar:
+
+Funcionalidade planejada
+
+==================================================
+MASCOTE OU GUIA
+==================================================
+
+Criar um mascote original e discreto como guia do tour.
+
+Conceito:
+
+- universitário;
+- moderno;
+- amigável;
+- mochila;
+- tênis;
+- skate opcional;
+- elementos de voz e comunicação;
+- identidade azul e verde;
+- aparência não infantil.
+
+Nome provisório:
+
+Vozinho
+
+O nome pode ser ajustado caso já exista outro mascote ou marca semelhante.
+
+Usar o mascote apenas em:
+
+- boas-vindas;
+- tour;
+- central de ajuda;
+- estados vazios;
+- confirmação de protocolo.
+
+Não colocar o mascote em todas as páginas.
+
+Não usar som automático.
+
+Não usar animações excessivas.
+
+Respeitar redução de movimento.
+
+Permitir ocultar.
+
+Salvar preferência no localStorage.
+
+O mascote nunca deve ser a única forma de transmitir informação.
+
+Caso a arte definitiva não exista:
+
+- criar placeholder vetorial simples;
+- documentar que a ilustração definitiva está pendente;
+- não copiar personagem protegido.
+
+==================================================
+CENTRAL DE AJUDA
+==================================================
+
+Criar rota:
+
+/ajuda
+
+Adicionar conteúdos:
+
+- como criar conta;
+- como entrar;
+- como registrar demanda;
+- como gravar áudio;
+- como acompanhar protocolo;
+- como apoiar demanda;
+- como criar proposta;
+- como apoiar proposta;
+- como funciona o anonimato;
+- como funciona a transparência;
+- como usar Libras;
+- como usar acessibilidade;
+- como abrir o tour novamente.
+
+Criar perguntas frequentes.
+
+Adicionar botão:
+
+Iniciar tour guiado
+
+==================================================
+BOTÕES E NAVEGAÇÃO
+==================================================
+
+Revisar todos os botões da aplicação.
+
+Garantir que cada botão:
+
+- navegue para uma rota real;
+- abra modal funcional;
+- execute uma ação real;
+- tenha estado de loading;
+- trate erro;
+- seja acessível por teclado;
+- tenha texto compreensível.
+
+Não deixar:
+
+- href="#";
+- botão sem onClick;
+- botão decorativo;
+- ação que apenas exibe console.log;
+- rota inexistente;
+- modal vazio.
+
+Criar teste para identificar links internos quebrados quando possível.
+
+==================================================
+ESTADOS DA INTERFACE
+==================================================
+
+Adicionar:
+
+- loading;
+- skeleton;
+- estado vazio;
+- sucesso;
+- erro;
+- sessão expirada;
+- rede indisponível;
+- tentar novamente.
+
+Exemplos:
+
+Minhas demandas:
+
+Você ainda não registrou nenhuma demanda.
+
+Botão:
+
+Registrar primeira demanda
+
+Minhas propostas:
+
+Você ainda não apresentou nenhuma proposta.
+
+Botão:
+
+Criar primeira proposta
+
+Demandas apoiadas:
+
+Você ainda não apoiou nenhuma demanda.
+
+Botão:
+
+Explorar demandas
+
+==================================================
+RESPONSIVIDADE
+==================================================
+
+Testar:
+
+- 320px;
+- 375px;
+- 768px;
+- 1024px;
+- 1440px.
+
+Verificar:
+
+- login;
+- cadastro;
+- botão demo;
+- tour;
+- Libras;
+- acessibilidade;
+- demandas;
+- propostas;
+- protocolo;
+- painel do usuário;
+- páginas institucionais;
+- modais;
+- mascote;
+- rodapé.
+
+Não permitir rolagem horizontal.
+
+==================================================
+SEGURANÇA
+==================================================
+
+Não expor:
+
+- senha;
+- token;
+- service role;
+- secret key;
+- URL privada;
+- observação interna;
+- e-mail privado;
+- matrícula;
+- dados sensíveis.
+
+Conta demo:
+
+- não pode ser administrativa;
+- não pode alterar roles;
+- não pode acessar observações internas;
+- não pode acessar mídia de terceiros;
+- não pode excluir dados institucionais;
+- não pode criar bypass de autenticação.
+
+==================================================
+TESTES
+==================================================
+
+Adicionar testes para:
+
+1. login;
+2. cadastro;
+3. botão demo apenas quando habilitado;
+4. conta demo não administrativa;
+5. tour aparece no primeiro acesso;
+6. tour pode ser pulado;
+7. tour pode ser reaberto;
+8. tour fecha com Escape;
+9. VLibras não duplica;
+10. painel de acessibilidade abre;
+11. preferências são persistidas;
+12. página do usuário exige autenticação;
+13. usuário vê apenas seus dados;
+14. criação de demanda gera protocolo;
+15. protocolo possui formato correto;
+16. protocolo pode ser consultado;
+17. protocolo inválido;
+18. protocolo inexistente;
+19. protocolo privado não expõe dados;
+20. Também sou afetado funciona;
+21. apoio duplicado é bloqueado;
+22. apoio pode ser removido;
+23. proposta pode ser apoiada;
+24. identidade de apoiadores não aparece;
+25. missão, visão e valores aparecem;
+26. páginas de governança, termos, acessibilidade e privacidade carregam;
+27. botões da seção “Por que somos diferentes” funcionam;
+28. e-mail é enviado apenas quando o provedor está configurado;
+29. fallback funciona quando e-mail não está configurado;
+30. rotas protegidas continuam protegidas.
+
+Não usar snapshots grandes e frágeis.
+
+==================================================
+VALIDAÇÃO FINAL
+==================================================
+
+Executar:
+
+pnpm run typecheck
+pnpm run test
+pnpm run build
+
+Caso exista:
+
+bash scripts/test-auth.sh
+
+Testar manualmente:
+
+1. abrir login;
+2. entrar como demo;
+3. executar tour;
+4. abrir acessibilidade;
+5. abrir VLibras;
+6. abrir Meu painel;
+7. criar demanda;
+8. receber protocolo;
+9. copiar protocolo;
+10. baixar comprovante;
+11. consultar protocolo;
+12. apoiar demanda;
+13. criar proposta;
+14. apoiar proposta;
+15. visualizar transparência;
+16. abrir governança;
+17. abrir termos;
+18. abrir acessibilidade;
+19. abrir privacidade;
+20. sair;
+21. confirmar proteção das rotas.
+
+==================================================
+RELATÓRIO FINAL
+==================================================
+
+Ao concluir, informar:
+
+- funcionalidades implementadas;
+- funcionalidades já existentes e preservadas;
+- páginas criadas;
+- componentes criados;
+- arquivos modificados;
+- rotas adicionadas;
+- botões corrigidos;
+- funcionamento do login demo;
+- funcionamento do tour;
+- funcionamento do VLibras;
+- funcionamento da acessibilidade;
+- funcionamento do protocolo;
+- funcionamento do e-mail;
+- funcionamento dos apoios;
+- funcionamento das propostas;
+- missão, visão e valores;
+- governança;
+- Termos de Uso;
+- acessibilidade;
+- privacidade;
+- testes adicionados;
+- resultado do typecheck;
+- resultado dos testes;
+- resultado do build;
+- limitações;
+- configurações manuais pendentes.
+
+Não declarar uma funcionalidade pronta sem implementar e testar.
+
+Não preencher páginas com textos genéricos desconectados do Voz UnDF.
+
+Não avançar para funcionalidades fora deste escopo.
+Ajuste importante sobre a conta de teste
+
+Não recomendo colocar literalmente no código:
+
+aluno_teste_incivel@undf.edu.br
+123456
+
+Além do erro de escrita em “incível”, uma senha exposta no frontend pode ser extraída por qualquer pessoa. Use uma conta como:
+
+aluno_teste@undf.edu.br
+
+mas guarde a senha no ambiente privado do backend. Para a banca, o melhor é o botão “Entrar como usuário de demonstração”, sem mostrar a senha.
+
+Regra ideal para anonimato e apoio
+
+A solução mais coerente é:
+
+A demanda ou proposta pode aparecer publicamente como anônima, mas o apoio exige login para evitar fraude e duplicidade. A identidade de quem apoiou não é divulgada publicamente.
+
+Isso mantém participação, privacidade e confiabilidade ao mesmo tempo.

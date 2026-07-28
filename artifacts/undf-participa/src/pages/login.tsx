@@ -205,8 +205,8 @@ export default function Login() {
 
           <p className="mt-8 text-xs text-muted-foreground text-center">
             Não tem conta?{" "}
-            <a href="#" className="text-primary font-semibold hover:underline">
-              Solicite acesso
+            <a href="/cadastro" className="text-primary font-semibold hover:underline">
+              Criar conta
             </a>
           </p>
         </div>

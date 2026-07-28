@@ -25,6 +25,11 @@ import About from '@/pages/about';
 import Login from '@/pages/login';
 import MeuPainel from '@/pages/meu-painel';
 import Ajuda from '@/pages/ajuda';
+import Cadastro from '@/pages/cadastro';
+import Governanca from '@/pages/governanca';
+import Termos from '@/pages/termos';
+import Privacidade from '@/pages/privacidade';
+import Acessibilidade from '@/pages/acessibilidade';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient({
@@ -73,6 +78,11 @@ function Router() {
       <Route path="/sobre" component={About} />
       <Route path="/meu-painel" component={MeuPainel} />
       <Route path="/ajuda" component={Ajuda} />
+      <Route path="/cadastro" component={Cadastro} />
+      <Route path="/governanca" component={Governanca} />
+      <Route path="/termos" component={Termos} />
+      <Route path="/privacidade" component={Privacidade} />
+      <Route path="/acessibilidade" component={Acessibilidade} />
       <Route component={NotFound} />
     </Switch>
   );
