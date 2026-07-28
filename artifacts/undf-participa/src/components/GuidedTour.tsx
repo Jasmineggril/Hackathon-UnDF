@@ -95,6 +95,7 @@ export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
       const t = setTimeout(() => setIsOpen(true), 800);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [forceOpen]);
 
   const close = useCallback(

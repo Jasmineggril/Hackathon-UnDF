@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
 // Stub import.meta.env for tests
 Object.defineProperty(import.meta, "env", {

@@ -100,7 +100,7 @@ router.get("/user/demands", async (req: Request, res: Response) => {
 
   const conditions = [
     eq(demands.userId, userId),
-    ...(status && status !== "all" ? [eq(demands.status, status as typeof demands.status.dataType)] : []),
+    ...(status && status !== "all" ? [sql`${demands.status} = ${status}`] : []),
   ] as const;
 
   const [rows, [{ total }]] = await Promise.all([
@@ -140,7 +140,7 @@ router.get("/user/proposals", async (req: Request, res: Response) => {
 
   const conditions = [
     eq(proposals.userId, userId),
-    ...(status && status !== "all" ? [eq(proposals.status, status as typeof proposals.status.dataType)] : []),
+    ...(status && status !== "all" ? [sql`${proposals.status} = ${status}`] : []),
   ] as const;
 
   const [rows, [{ total }]] = await Promise.all([

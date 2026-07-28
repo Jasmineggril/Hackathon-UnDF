@@ -28,6 +28,7 @@ export default function Admin() {
     status: statusFilter
   }, {
     query: {
+      queryKey: getAdminListDemandsQueryKey({ page: 1, limit: 50, status: statusFilter }),
       enabled: isAuthenticated && (user?.role === 'gestor' || user?.role === 'administrador')
     }
   });

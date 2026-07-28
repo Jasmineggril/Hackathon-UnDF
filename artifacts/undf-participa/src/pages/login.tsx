@@ -19,7 +19,7 @@ const loginSchema = z.object({
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
 
 export default function Login() {
-  const { login, isAuthenticated } = useAuth();
+  const { signIn: login, isAuthenticated } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
