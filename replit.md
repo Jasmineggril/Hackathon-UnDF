@@ -1,35 +1,42 @@
 # UNDF Participa (Voz UnDF)
 
-A civic participation platform for the University of Brasília community, built as a pnpm monorepo.
+A civic participation platform for the Universidade de Brasília (UnDF) community — students, professors, and staff can register demands, submit proposals, track transparency, and engage with ODS 16 goals.
 
 ## Stack
 
-- **Frontend** (`artifacts/undf-participa`): React + Vite, TailwindCSS, shadcn/ui, Supabase Auth, Wouter routing
-- **Backend** (`artifacts/api-server`): Express.js, Drizzle ORM, Supabase/PostgreSQL
-- **Shared libs** (`lib/`): `api-client-react` (React Query hooks), `api-spec` (OpenAPI + codegen), `db` (Drizzle schema)
+- **Frontend**: React + Vite + Tailwind CSS + shadcn/ui (artifact: `undf-participa`)
+- **Backend**: Express 5 + Drizzle ORM (artifact: `api-server`)
+- **Auth & Database**: Supabase (PostgreSQL, Supabase Auth with JWT)
+- **Monorepo**: pnpm workspaces
 
 ## Running the project
 
-Both services start via their configured workflows:
+Both services start automatically via configured workflows:
 
-- **Frontend** — `artifacts/undf-participa: web` → `PORT=21016 BASE_PATH=/ pnpm --filter @workspace/undf-participa run dev`
-- **API Server** — `artifacts/api-server: API Server` → `PORT=8080 pnpm --filter @workspace/api-server run dev`
+| Workflow | Command | Port |
+|---|---|---|
+| `artifacts/undf-participa: web` | `pnpm --filter @workspace/undf-participa run dev` | 21016 |
+| `artifacts/api-server: API Server` | `pnpm --filter @workspace/api-server run dev` | 8080 |
 
-## Required environment variables
+To install dependencies: `pnpm install` from the workspace root.
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | Supabase PostgreSQL pooler URL (port 6543) |
-| `DIRECT_URL` | Supabase direct connection URL (port 5432, used by drizzle-kit) |
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_PUBLISHABLE_KEY` | Supabase anon key |
-| `SUPABASE_SECRET_KEY` | Supabase service role key |
-| `SUPABASE_JWKS_URL` | Supabase JWKS endpoint for JWT verification |
-| `VITE_SUPABASE_URL` | Supabase URL exposed to the frontend |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key exposed to the frontend |
-| `SESSION_SECRET` | Secret for session signing |
+## Environment variables
+
+All required env vars are already configured in the Replit environment:
+
+- `DATABASE_URL` / `DIRECT_URL` — Supabase PostgreSQL connection strings
+- `SUPABASE_URL` / `SUPABASE_PUBLISHABLE_KEY` / `SUPABASE_SECRET_KEY` — Supabase project credentials
+- `SUPABASE_JWKS_URL` — JWT verification endpoint
+- `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` — Frontend-exposed Supabase config
+
+## Key libraries
+
+- `lib/db` — Drizzle ORM schema and database client
+- `lib/api-zod` — Shared Zod schemas for API validation
+- `lib/api-spec` — OpenAPI spec + Orval codegen config
+- `lib/api-client-react` — Generated React Query hooks
+- `lib/auth-web` — Supabase auth context/hooks for the frontend
 
 ## User preferences
 
-- Keep the existing monorepo structure (pnpm workspaces)
-- Portuguese-language project; preserve Portuguese in code comments and UI copy
+<!-- Add preferences here as requested -->
