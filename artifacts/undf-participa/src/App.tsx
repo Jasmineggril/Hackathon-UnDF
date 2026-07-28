@@ -2,12 +2,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { useAuth } from '@workspace/auth-web';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import AccessibilityPanel from '@/components/AccessibilityPanel';
 import VLibrasWidget from '@/components/VLibrasWidget';
 import CookieBanner from '@/components/CookieBanner';
+import { DemoBanner } from '@/components/DemoBanner';
+import { GuidedTour } from '@/components/GuidedTour';
 
 import Home from '@/pages/home';
 import Demands from '@/pages/demands';
@@ -20,9 +23,20 @@ import Ods16 from '@/pages/ods16';
 import Admin from '@/pages/admin';
 import About from '@/pages/about';
 import Login from '@/pages/login';
+import MeuPainel from '@/pages/meu-painel';
+import Ajuda from '@/pages/ajuda';
 import NotFound from '@/pages/not-found';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30_000,
+    },
+  },
+});
+
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,6 +48,13 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
     </div>
   );
+}
+
+/** Tour only shows for authenticated users */
+function AuthenticatedTour() {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading || !isAuthenticated) return null;
+  return <GuidedTour />;
 }
 
 function Router() {
@@ -50,6 +71,8 @@ function Router() {
       <Route path="/ods16" component={Ods16} />
       <Route path="/admin" component={Admin} />
       <Route path="/sobre" component={About} />
+      <Route path="/meu-painel" component={MeuPainel} />
+      <Route path="/ajuda" component={Ajuda} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -60,12 +83,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          {DEMO_MODE && <DemoBanner visible />}
           <Layout>
             <Router />
           </Layout>
           <AccessibilityPanel />
           <VLibrasWidget />
           <CookieBanner />
+          <AuthenticatedTour />
         </WouterRouter>
         <Toaster position="top-right" richColors />
       </TooltipProvider>

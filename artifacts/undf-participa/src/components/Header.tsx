@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, X, User as UserIcon, LogOut, LayoutDashboard, HelpCircle } from "lucide-react";
 import { useAuth } from "@workspace/auth-web";
 import { Button } from "@/components/ui/button";
 import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785001200344.png";
@@ -33,6 +33,7 @@ export function Header() {
     { label: "Transparência", href: "/transparencia" },
     { label: "ODS 16", href: "/ods16" },
     { label: "Sobre", href: "/sobre" },
+    { label: "Ajuda", href: "/ajuda" },
   ];
 
   return (
@@ -56,7 +57,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6" aria-label="Navegação principal">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -81,30 +82,38 @@ export function Header() {
                   href="/admin"
                   className="text-sm font-medium text-[#5B9A6E] flex items-center gap-1.5 hover:text-[#4a8059] transition-colors"
                 >
-                  <LayoutDashboard className="w-4 h-4" />
+                  <LayoutDashboard className="w-4 h-4" aria-hidden="true" />
                   Painel da gestão
                 </Link>
               )}
               <div className="flex items-center gap-2 relative group cursor-pointer py-2">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 border border-[#1B3469]/20 flex items-center justify-center text-[#1B3469]">
-                    <UserIcon className="w-4 h-4" />
+                    <UserIcon className="w-4 h-4" aria-hidden="true" />
                   </div>
                   <span className="text-sm font-medium text-[#1B3469]">{user.fullName || user.email}</span>
                 </div>
-                <div className="absolute top-full right-0 mt-1 w-48 bg-[#F2F0EB] border border-[#1B3469]/10 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute top-full right-0 mt-1 w-52 bg-[#F2F0EB] border border-[#1B3469]/10 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="p-2 flex flex-col gap-1">
+                    <Link href="/meu-painel" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70 font-medium">
+                      Meu painel
+                    </Link>
                     <Link href="/demandas" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70">
                       Minhas demandas
                     </Link>
                     <Link href="/propostas" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70">
                       Minhas propostas
                     </Link>
+                    <Link href="/ajuda" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70 flex items-center gap-1.5">
+                      <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                      Central de ajuda
+                    </Link>
+                    <div className="border-t border-[#1B3469]/10 my-1" />
                     <button
                       onClick={logout}
                       className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-red-500 text-left flex items-center gap-2 w-full"
                     >
-                      <LogOut className="w-4 h-4" /> Sair
+                      <LogOut className="w-4 h-4" aria-hidden="true" /> Sair
                     </button>
                   </div>
                 </div>
@@ -126,7 +135,8 @@ export function Header() {
         <button
           className="md:hidden p-2 text-[#1B3469]"
           onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
+          aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isOpen}
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -134,8 +144,8 @@ export function Header() {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-[#F2F0EB] z-40 flex flex-col border-t border-[#1B3469]/10">
-          <nav className="flex flex-col px-6 py-6 gap-1">
+        <div className="md:hidden fixed inset-0 top-16 bg-[#F2F0EB] z-40 flex flex-col border-t border-[#1B3469]/10 overflow-y-auto">
+          <nav className="flex flex-col px-6 py-6 gap-1" aria-label="Navegação mobile">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -150,14 +160,17 @@ export function Header() {
               <>
                 {(user.role === "gestor" || user.role === "administrador") && (
                   <Link href="/admin" className="text-lg font-semibold py-3 border-b border-[#1B3469]/10 text-[#5B9A6E] flex items-center gap-2">
-                    <LayoutDashboard className="w-5 h-5" /> Painel da gestão
+                    <LayoutDashboard className="w-5 h-5" aria-hidden="true" /> Painel da gestão
                   </Link>
                 )}
+                <Link href="/meu-painel" className="text-lg font-semibold py-3 border-b border-[#1B3469]/10 text-[#1B3469] flex items-center gap-2">
+                  <UserIcon className="w-5 h-5" aria-hidden="true" /> Meu painel
+                </Link>
                 <button
                   onClick={logout}
                   className="text-lg font-semibold py-3 text-red-500 text-left flex items-center gap-2"
                 >
-                  <LogOut className="w-5 h-5" /> Sair
+                  <LogOut className="w-5 h-5" aria-hidden="true" /> Sair
                 </button>
               </>
             ) : (
