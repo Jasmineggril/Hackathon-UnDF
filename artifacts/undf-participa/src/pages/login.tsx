@@ -6,18 +6,24 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle } from "lucide-react";
-import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785001200344.png";
+import { AlertCircle, FlaskConical, Loader2 } from "lucide-react";
+import { supabase } from "@workspace/auth-web";
+import { demoLogin } from "@/hooks/use-user-data";
+import logoPath from "@assets/logo-voz-undf.png";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
+
 export default function Login() {
-  const { login, isAuthenticated } = useAuth();
+  const { signIn: login, isAuthenticated } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
+  const [demoEnabled, setDemoEnabled] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -28,16 +34,46 @@ export default function Login() {
     if (isAuthenticated) window.location.href = "/";
   }, [isAuthenticated]);
 
+  // Verificar se demo está ativo no backend
+  useEffect(() => {
+    if (!DEMO_MODE) return;
+    const BASE = import.meta.env.BASE_URL?.replace(/\/+$/, "") || "";
+    fetch(`${BASE}/api/demo/status`)
+      .then((r) => r.json())
+      .then((data: { enabled?: boolean }) => setDemoEnabled(!!data.enabled))
+      .catch(() => {});
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsSubmitting(true);
     setError(null);
     try {
       await login(values.email, values.password);
       window.location.href = "/";
-    } catch (err: any) {
-      setError(err.message || "Erro ao realizar login");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Erro ao realizar login");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDemoAccess = async () => {
+    setDemoLoading(true);
+    setError(null);
+    try {
+      const session = await demoLogin();
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      });
+      if (sessionError) throw new Error(sessionError.message);
+      window.location.href = "/";
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Não foi possível acessar a demonstração.",
+      );
+    } finally {
+      setDemoLoading(false);
     }
   };
 
@@ -47,7 +83,7 @@ export default function Login() {
       {/* Left panel — brand */}
       <div className="hidden md:flex flex-col justify-between bg-primary text-primary-foreground px-12 py-16">
         <div className="flex items-center gap-3">
-          <img src={logoPath} alt="Voz UnDF" className="h-9 w-auto object-contain brightness-0 invert opacity-90" />
+          <img src={logoPath} alt="Voz UnDF" className="h-9 w-auto object-contain rounded-md bg-white/10 p-0.5" />
           <span className="font-bold text-base opacity-90">Voz UnDF</span>
         </div>
 
@@ -129,9 +165,43 @@ export default function Login() {
               disabled={isSubmitting}
               data-testid="button-login"
             >
-              {isSubmitting ? "Autenticando…" : "Entrar"}
+              {isSubmitting ? (
+                <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Autenticando…</>
+              ) : (
+                "Entrar"
+              )}
             </Button>
           </form>
+
+          {/* Demo access — visível apenas quando habilitado */}
+          {DEMO_MODE && demoEnabled && (
+            <div className="mt-8 border border-amber-200 bg-amber-50 p-4" data-testid="demo-access-section">
+              <div className="flex items-start gap-3">
+                <FlaskConical className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="flex-1">
+                  <p className="font-semibold text-amber-900 text-sm mb-1">
+                    Explorar versão de demonstração
+                  </p>
+                  <p className="text-xs text-amber-700 mb-3 leading-relaxed">
+                    Acesse uma conta de demonstração para conhecer as principais funcionalidades do Voz UnDF. Os dados exibidos são fictícios.
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={handleDemoAccess}
+                    disabled={demoLoading}
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white text-sm py-4"
+                    data-testid="button-demo-access"
+                  >
+                    {demoLoading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Acessando…</>
+                    ) : (
+                      "Acessar demonstração"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <p className="mt-8 text-xs text-muted-foreground text-center">
             Não tem conta?{" "}

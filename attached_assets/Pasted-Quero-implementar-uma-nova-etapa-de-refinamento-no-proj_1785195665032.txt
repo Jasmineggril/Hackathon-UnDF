@@ -1,0 +1,884 @@
+Quero implementar uma nova etapa de refinamento no projeto existente “Voz UnDF”.
+
+Não crie um projeto novo.
+
+Preserve a arquitetura atual, o Supabase Auth, o banco PostgreSQL, o Drizzle ORM, as APIs, os testes, o sistema de roles, o painel administrativo, as demandas, as propostas, os apoios, o protocolo, a acessibilidade e todas as funcionalidades já implementadas.
+
+O objetivo desta etapa é melhorar a experiência de demonstração, a área do usuário, a apresentação institucional e a orientação de navegação, deixando o Voz UnDF com aparência e funcionamento de um MVP finalista.
+
+==================================================
+OBJETIVO GERAL
+==================================================
+
+Implementar:
+
+1. acesso de demonstração seguro;
+2. página completa do usuário;
+3. missão, visão e valores;
+4. tour guiado da plataforma;
+5. ajuda contextual;
+6. consulta de protocolo funcional;
+7. mascote institucional opcional;
+8. onboarding após o primeiro login;
+9. estado vazio e mensagens amigáveis;
+10. validação completa das novas funcionalidades.
+
+Não alterar o backend sem necessidade.
+
+Não remover funcionalidades existentes.
+
+Não usar credenciais reais ou administrativas no frontend.
+
+==================================================
+IDENTIDADE DO PRODUTO
+==================================================
+
+Nome:
+
+Voz UnDF
+
+Subtítulo:
+
+Plataforma Inteligente de Participação e Gestão Colaborativa
+
+Slogan:
+
+Sua voz participa. A Universidade transforma.
+
+Mensagem principal:
+
+O Voz UnDF transforma manifestações individuais em prioridades coletivas, aproxima a comunidade acadêmica da gestão e permite acompanhar, com transparência, como a Universidade responde.
+
+==================================================
+ACESSO DE DEMONSTRAÇÃO
+==================================================
+
+Criar uma forma segura de os avaliadores acessarem a plataforma durante a demonstração.
+
+Adicionar na página de login uma opção visual:
+
+“Explorar versão de demonstração”
+
+Descrição:
+
+“Acesse uma conta de demonstração para conhecer as principais funcionalidades do Voz UnDF.”
+
+Regras obrigatórias:
+
+- não exibir senha real no código;
+- não colocar credenciais em arquivos versionados;
+- não colocar senha no frontend;
+- não usar conta de administrador;
+- não usar conta com dados reais;
+- não permitir alteração de senha da conta de demonstração;
+- não permitir exclusão da conta;
+- não permitir acesso a dados privados;
+- não permitir ações administrativas sensíveis;
+- permitir desativar o modo de demonstração por variável de ambiente;
+- esconder o botão em produção, caso DEMO_MODE esteja desativado.
+
+Usar variável de ambiente:
+
+VITE_DEMO_MODE=true
+
+Caso seja necessário login automático, criar um endpoint backend específico para demonstração, protegido e habilitado apenas quando:
+
+DEMO_MODE=true
+
+Não criar bypass de autenticação.
+
+Não colocar service role ou secret key no frontend.
+
+A conta de demonstração deve ter role:
+
+estudante
+
+Ela pode conter dados fictícios, por exemplo:
+
+- algumas demandas;
+- uma proposta;
+- uma demanda apoiada;
+- um protocolo em andamento;
+- uma demanda respondida.
+
+Os dados de demonstração devem ser claramente identificados como fictícios.
+
+Adicionar um selo:
+
+“Ambiente de demonstração”
+
+==================================================
+PÁGINA DO USUÁRIO
+==================================================
+
+Criar ou aperfeiçoar a rota:
+
+/perfil
+
+ou:
+
+/meu-painel
+
+A página deve ser coerente com todo o sistema e funcionar com o usuário autenticado.
+
+Estrutura sugerida:
+
+Cabeçalho do perfil:
+
+- avatar;
+- nome completo;
+- e-mail;
+- vínculo com a UnDF;
+- role;
+- data de entrada;
+- botão editar perfil;
+- botão sair.
+
+Não permitir que o usuário altere a própria role.
+
+Adicionar cards ou abas:
+
+1. Visão geral
+2. Minhas demandas
+3. Minhas propostas
+4. Demandas apoiadas
+5. Protocolos
+6. Notificações
+7. Preferências
+8. Privacidade e segurança
+
+==================================================
+VISÃO GERAL DO USUÁRIO
+==================================================
+
+Mostrar:
+
+- total de demandas;
+- demandas em andamento;
+- demandas respondidas;
+- propostas criadas;
+- demandas apoiadas;
+- último protocolo;
+- última atualização;
+- atalhos principais.
+
+Atalhos:
+
+- Nova demanda;
+- Nova proposta;
+- Consultar protocolo;
+- Explorar demandas;
+- Ver transparência.
+
+Não inventar dados.
+
+Usar apenas dados reais da conta autenticada.
+
+==================================================
+MINHAS DEMANDAS
+==================================================
+
+Criar listagem com:
+
+- título;
+- protocolo;
+- categoria;
+- status;
+- data;
+- setor responsável;
+- última atualização;
+- botão Ver detalhes.
+
+Filtros:
+
+- todas;
+- recebidas;
+- em análise;
+- em execução;
+- respondidas;
+- concluídas;
+- arquivadas.
+
+Adicionar estados vazios amigáveis.
+
+Exemplo:
+
+“Você ainda não registrou nenhuma demanda.”
+
+Botão:
+
+“Registrar minha primeira demanda”
+
+==================================================
+MINHAS PROPOSTAS
+==================================================
+
+Mostrar:
+
+- título;
+- categoria;
+- status;
+- número de apoios;
+- data;
+- resposta institucional;
+- botão Ver proposta.
+
+Adicionar filtros:
+
+- em participação;
+- em avaliação;
+- planejadas;
+- implementadas;
+- não aprovadas.
+
+==================================================
+DEMANDAS APOIADAS
+==================================================
+
+Mostrar demandas nas quais o usuário marcou:
+
+“Também sou afetado”
+
+Cada item deve conter:
+
+- título;
+- categoria;
+- status;
+- número de apoios;
+- data;
+- botão Ver demanda;
+- botão Retirar apoio.
+
+Confirmar antes de retirar apoio.
+
+==================================================
+PROTOCOLOS DO USUÁRIO
+==================================================
+
+Criar uma área específica para protocolos.
+
+Mostrar:
+
+- protocolo;
+- título da demanda;
+- data;
+- status;
+- última atualização;
+- botão Copiar;
+- botão Acompanhar.
+
+Formato:
+
+VUNDF-YYYYMMDD-XXXX
+
+Exemplo:
+
+VUNDF-20260726-4821
+
+Não gerar protocolos no frontend.
+
+O protocolo deve vir do backend e estar persistido no banco.
+
+==================================================
+CONSULTA DE PROTOCOLO
+==================================================
+
+Garantir que a página de consulta funcione de ponta a ponta.
+
+Rota sugerida:
+
+/consultar-protocolo
+
+Campo:
+
+“Número do protocolo”
+
+Botão:
+
+“Consultar”
+
+Requisitos:
+
+- validar formato;
+- aceitar letras minúsculas ou maiúsculas;
+- remover espaços extras;
+- mostrar loading;
+- tratar protocolo inexistente;
+- tratar erro de rede;
+- não expor dados privados;
+- não mostrar e-mail, nome, matrícula ou anexos restritos;
+- ocultar autor quando a demanda for anônima;
+- permitir copiar o protocolo.
+
+Resultado:
+
+- título;
+- protocolo;
+- tipo;
+- categoria;
+- status;
+- data de registro;
+- setor responsável;
+- prazo estimado;
+- última atualização;
+- resposta institucional;
+- linha do tempo pública.
+
+Adicionar estados:
+
+- protocolo encontrado;
+- protocolo não encontrado;
+- protocolo inválido;
+- consulta indisponível;
+- demanda privada.
+
+Mensagem de erro:
+
+“Não encontramos uma manifestação com este protocolo. Confira o número e tente novamente.”
+
+==================================================
+GERAÇÃO DO PROTOCOLO
+==================================================
+
+Confirmar que:
+
+- o protocolo é gerado no backend;
+- o protocolo é único;
+- existe restrição UNIQUE no banco;
+- o protocolo é persistido;
+- a criação lida com colisão;
+- o protocolo é retornado após a criação;
+- o protocolo aparece na confirmação;
+- o protocolo aparece no painel do usuário;
+- o protocolo pode ser consultado;
+- o protocolo aparece no comprovante.
+
+Após o envio da demanda, mostrar uma tela de sucesso.
+
+Título:
+
+“Demanda registrada com sucesso”
+
+Mostrar:
+
+- protocolo;
+- data;
+- status inicial;
+- prazo estimado, caso exista;
+- botão Copiar protocolo;
+- botão Acompanhar demanda;
+- botão Baixar comprovante;
+- botão Voltar ao painel.
+
+Não gerar comprovante com dados sensíveis.
+
+==================================================
+COMPROVANTE
+==================================================
+
+Criar comprovante simples em HTML imprimível ou PDF, caso a infraestrutura atual permita.
+
+Conteúdo:
+
+- nome Voz UnDF;
+- protocolo;
+- título;
+- categoria;
+- data de registro;
+- status inicial;
+- orientação de acompanhamento;
+- aviso de privacidade.
+
+Não incluir:
+
+- senha;
+- token;
+- observação interna;
+- e-mail privado;
+- dados de terceiros;
+- URL privada de anexos.
+
+Caso PDF exija nova dependência pesada, priorizar uma página imprimível com CSS de impressão.
+
+==================================================
+MISSÃO, VISÃO E VALORES
+==================================================
+
+Criar uma seção institucional na página Sobre.
+
+Rota:
+
+/sobre
+
+Título:
+
+“Sobre o Voz UnDF”
+
+Texto introdutório:
+
+“O Voz UnDF é uma plataforma de participação e gestão colaborativa criada para aproximar a comunidade acadêmica da gestão universitária, organizar demandas, ampliar a transparência e apoiar decisões baseadas em evidências.”
+
+MISSÃO
+
+“Fortalecer a participação da comunidade acadêmica por meio de um canal acessível, transparente e seguro, transformando demandas e propostas em informações úteis para a melhoria da Universidade.”
+
+VISÃO
+
+“Ser uma referência em participação universitária digital, promovendo uma UnDF mais aberta, inclusiva, responsiva e conectada com as necessidades de sua comunidade.”
+
+VALORES
+
+- Participação;
+- Transparência;
+- Inclusão;
+- Acessibilidade;
+- Respeito;
+- Colaboração;
+- Segurança;
+- Privacidade;
+- Responsabilidade;
+- Inovação.
+
+Apresentar os valores de forma visual, mas sem excesso de cards.
+
+Adicionar também:
+
+- objetivo da plataforma;
+- público atendido;
+- problema resolvido;
+- relação com o ODS 16;
+- contexto do Hackathon Conecta UnDF.
+
+==================================================
+TOUR GUIADO
+==================================================
+
+Criar um tour guiado opcional para novos usuários.
+
+O tour deve aparecer:
+
+- apenas no primeiro acesso;
+- após login;
+- somente quando a página estiver carregada;
+- sem bloquear permanentemente a navegação.
+
+Adicionar opção:
+
+“Pular tour”
+
+Adicionar opção:
+
+“Não mostrar novamente”
+
+Adicionar opção no menu de ajuda:
+
+“Ver tour novamente”
+
+Salvar apenas a preferência de conclusão do tour no localStorage.
+
+Não armazenar dados pessoais.
+
+Etapas sugeridas:
+
+1. Boas-vindas
+
+“Bem-vindo ao Voz UnDF. Aqui você pode registrar demandas, apresentar propostas e acompanhar as respostas da Universidade.”
+
+2. Nova demanda
+
+“Use este botão para registrar um problema, solicitação, sugestão, elogio ou denúncia.”
+
+3. Propostas
+
+“Apresente ideias de melhoria e acompanhe propostas da comunidade.”
+
+4. Também sou afetado
+
+“Quando uma demanda também afetar você, use este recurso para ajudar a gestão a identificar prioridades coletivas.”
+
+5. Protocolo
+
+“Cada demanda recebe um protocolo único para acompanhamento.”
+
+6. Transparência
+
+“Acompanhe indicadores públicos e entenda como a Universidade está respondendo.”
+
+7. Acessibilidade
+
+“Use os recursos de Libras, contraste, leitura e modo de foco conforme sua necessidade.”
+
+8. Meu painel
+
+“Acompanhe suas demandas, propostas, apoios e protocolos em um só lugar.”
+
+Requisitos técnicos:
+
+- navegação por teclado;
+- foco visível;
+- Escape para fechar;
+- aria-live;
+- foco controlado;
+- responsivo;
+- não cobrir completamente o elemento destacado;
+- não depender apenas de cor;
+- não quebrar caso o elemento não exista;
+- permitir voltar e avançar;
+- mostrar progresso, por exemplo: 3 de 8.
+
+Evitar adicionar uma biblioteca pesada caso seja possível implementar com componentes já existentes.
+
+==================================================
+AJUDA CONTEXTUAL
+==================================================
+
+Adicionar pequenos botões de ajuda em áreas importantes.
+
+Exemplos:
+
+- anonimato;
+- visibilidade;
+- urgência;
+- apoio;
+- protocolo;
+- áudio;
+- observação interna;
+- status.
+
+Os textos devem ser curtos.
+
+Exemplo para anonimato:
+
+“Seu nome não será exibido publicamente. A equipe autorizada poderá acessar informações necessárias para o tratamento da manifestação, conforme as regras de privacidade.”
+
+Não usar tooltips para conteúdos longos.
+
+Para explicações maiores, usar popover ou modal acessível.
+
+==================================================
+CENTRAL DE AJUDA
+==================================================
+
+Criar rota:
+
+/ajuda
+
+Conteúdo:
+
+- Como criar uma conta;
+- Como entrar;
+- Como registrar uma demanda;
+- Como gravar áudio;
+- Como acompanhar um protocolo;
+- Como apoiar uma demanda;
+- Como criar uma proposta;
+- Como funciona o anonimato;
+- Como funciona a transparência;
+- Como usar o VLibras;
+- Como usar o modo de foco;
+- Como entrar em contato.
+
+Adicionar busca simples ou categorias, caso isso seja viável.
+
+Adicionar perguntas frequentes.
+
+==================================================
+MASCOTE OU PERSONAGEM-GUIA
+==================================================
+
+Criar um mascote original e discreto para apoiar o onboarding.
+
+O mascote deve:
+
+- combinar com a identidade do Voz UnDF;
+- ter visual universitário;
+- ser simpático;
+- ser moderno;
+- não parecer infantil;
+- não atrapalhar o uso;
+- não substituir textos acessíveis;
+- não aparecer em todas as telas;
+- ser opcional;
+- respeitar redução de movimento.
+
+Sugestão de conceito:
+
+Um personagem universitário chamado “Vozinho” ou outro nome original, usando mochila, tênis e skate, representando movimento, participação e juventude.
+
+Não copiar personagens existentes.
+
+Não usar marcas, mascotes ou personagens protegidos.
+
+O personagem pode aparecer em:
+
+- boas-vindas;
+- tour guiado;
+- estados vazios;
+- confirmação de demanda;
+- central de ajuda.
+
+Exemplos de falas:
+
+“Vamos registrar sua demanda?”
+
+“Seu protocolo foi criado. Guarde esse número para acompanhar o andamento.”
+
+“Essa situação também afeta você? Use o botão ‘Também sou afetado’.”
+
+“Você pode alterar os recursos de acessibilidade quando precisar.”
+
+Regras:
+
+- falas curtas;
+- linguagem simples;
+- sem animação excessiva;
+- sem som automático;
+- sem abrir pop-ups repetidamente;
+- permitir ocultar;
+- salvar a preferência de ocultar.
+
+Caso não exista um arquivo visual do mascote, criar primeiro um placeholder simples e documentar que a arte definitiva está pendente.
+
+Não usar imagem externa sem licença confirmada.
+
+==================================================
+NOTIFICAÇÕES
+==================================================
+
+Adicionar área de notificações no painel do usuário.
+
+Exemplos:
+
+- status da demanda alterado;
+- demanda respondida;
+- proposta recebeu atualização;
+- demanda apoiada foi concluída;
+- prazo atualizado.
+
+Caso o backend de notificações ainda não exista:
+
+- não inventar funcionamento;
+- criar apenas a estrutura visual;
+- usar dados existentes quando possível;
+- marcar claramente como “em desenvolvimento”;
+- não usar notificações falsas em produção.
+
+==================================================
+ESTADOS VAZIOS
+==================================================
+
+Criar estados vazios úteis e acolhedores.
+
+Exemplos:
+
+Minhas demandas:
+
+“Você ainda não registrou nenhuma demanda.”
+
+Minhas propostas:
+
+“Você ainda não apresentou nenhuma proposta.”
+
+Demandas apoiadas:
+
+“Você ainda não apoiou nenhuma demanda.”
+
+Notificações:
+
+“Nenhuma novidade por enquanto.”
+
+Cada estado vazio deve oferecer uma ação relevante.
+
+==================================================
+CARREGAMENTO E ERROS
+==================================================
+
+Adicionar:
+
+- skeletons ou loaders discretos;
+- mensagens de erro claras;
+- botão tentar novamente;
+- tratamento de sessão expirada;
+- tratamento de rede indisponível;
+- tratamento de resposta vazia.
+
+Não mostrar:
+
+- stack trace;
+- JSON bruto;
+- mensagem técnica;
+- token;
+- segredo;
+- URL interna.
+
+==================================================
+ACESSIBILIDADE
+==================================================
+
+Todos os novos componentes devem funcionar com:
+
+- teclado;
+- leitor de tela;
+- foco visível;
+- labels;
+- ARIA;
+- contraste adequado;
+- zoom de 200%;
+- redução de movimento;
+- modo de foco;
+- modo de leitura;
+- dispositivos móveis.
+
+O mascote não pode ser a única forma de transmitir uma informação.
+
+Toda ilustração deve ter texto alternativo adequado ou ser marcada como decorativa.
+
+==================================================
+RESPONSIVIDADE
+==================================================
+
+Testar:
+
+- 320px;
+- 375px;
+- 768px;
+- 1024px;
+- 1440px.
+
+Verificar:
+
+- página de login;
+- botão de demonstração;
+- painel do usuário;
+- abas;
+- consulta de protocolo;
+- tour;
+- modais;
+- popovers;
+- mascote;
+- central de ajuda;
+- tela de confirmação.
+
+Não permitir rolagem horizontal.
+
+==================================================
+SEGURANÇA DO MODO DE DEMONSTRAÇÃO
+==================================================
+
+O modo de demonstração não pode:
+
+- usar conta administrativa;
+- expor senha;
+- expor token;
+- expor dados reais;
+- permitir upload irrestrito;
+- permitir excluir dados institucionais;
+- alterar roles;
+- acessar observações internas;
+- acessar mídia de terceiros;
+- acessar rotas administrativas;
+- criar bypass de JWT.
+
+Criar uma forma de limpar ou restaurar os dados da conta demo, caso necessário.
+
+Não executar limpeza automática em produção.
+
+==================================================
+TESTES
+==================================================
+
+Adicionar testes para:
+
+1. botão de acesso de demonstração aparece apenas quando habilitado;
+2. conta de demonstração não possui role administrativa;
+3. página do usuário exige autenticação;
+4. usuário visualiza apenas os próprios dados;
+5. protocolo aparece após criação;
+6. consulta de protocolo válido;
+7. protocolo inexistente;
+8. protocolo inválido;
+9. protocolo privado não expõe dados;
+10. botão copiar protocolo;
+11. tour aparece no primeiro acesso;
+12. tour não aparece novamente após conclusão;
+13. tour pode ser reaberto;
+14. tour fecha com Escape;
+15. painel do usuário renderiza estados vazios;
+16. missão, visão e valores aparecem na página Sobre;
+17. mascote pode ser ocultado;
+18. preferência do mascote é persistida;
+19. componentes novos funcionam sem dados fictícios;
+20. rotas protegidas continuam protegidas.
+
+Não usar snapshots extensos e frágeis.
+
+==================================================
+VALIDAÇÃO MANUAL
+==================================================
+
+Testar o fluxo:
+
+1. abrir a página de login;
+2. entrar com conta de demonstração;
+3. concluir ou pular o tour;
+4. abrir Meu painel;
+5. registrar uma demanda;
+6. receber protocolo;
+7. copiar protocolo;
+8. consultar protocolo;
+9. visualizar linha do tempo;
+10. acessar Minhas demandas;
+11. acessar Minhas propostas;
+12. acessar Demandas apoiadas;
+13. abrir a Central de ajuda;
+14. reabrir o tour;
+15. testar acessibilidade;
+16. ocultar o mascote;
+17. sair;
+18. confirmar que páginas protegidas retornam ao login.
+
+==================================================
+VALIDAÇÃO TÉCNICA
+==================================================
+
+Executar:
+
+pnpm run typecheck
+pnpm run test
+pnpm run build
+
+Caso exista script de autenticação:
+
+bash scripts/test-auth.sh
+
+Não considerar concluído caso typecheck, testes ou build falhem.
+
+==================================================
+ENTREGA FINAL
+==================================================
+
+Ao finalizar, apresentar:
+
+- resumo do que foi implementado;
+- páginas criadas;
+- componentes criados;
+- arquivos alterados;
+- rotas adicionadas;
+- funcionamento do modo demo;
+- segurança do modo demo;
+- funcionamento da página do usuário;
+- funcionamento do protocolo;
+- tour implementado;
+- ajuda contextual;
+- missão, visão e valores;
+- mascote utilizado;
+- testes criados;
+- resultado do typecheck;
+- resultado dos testes;
+- resultado do build;
+- limitações;
+- passos manuais restantes.
+
+Não avance para outras funcionalidades fora deste escopo.
+
+Não declarar como funcional algo que não tenha sido testado.

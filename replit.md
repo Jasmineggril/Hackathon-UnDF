@@ -1,42 +1,54 @@
-# UNDF Participa (Voz UnDF)
+# Voz UnDF
 
-A civic participation platform for the Universidade de Brasília (UnDF) community — students, professors, and staff can register demands, submit proposals, track transparency, and engage with ODS 16 goals.
+Plataforma de participação cidadã da Universidade de Brasília do Distrito Federal (UnDF). Permite que cidadãos registrem demandas, votem em propostas e acompanhem transparência pública.
 
 ## Stack
 
-- **Frontend**: React + Vite + Tailwind CSS + shadcn/ui (artifact: `undf-participa`)
-- **Backend**: Express 5 + Drizzle ORM (artifact: `api-server`)
-- **Auth & Database**: Supabase (PostgreSQL, Supabase Auth with JWT)
-- **Monorepo**: pnpm workspaces
+- **Frontend** (`artifacts/undf-participa`): React 19 + Vite + TailwindCSS + Shadcn UI + Wouter + TanStack Query
+- **Backend** (`artifacts/api-server`): Express 5 + Drizzle ORM + Supabase (auth + Postgres)
+- **Libs compartilhadas**:
+  - `lib/db` — schema Drizzle e conexão com banco
+  - `lib/api-zod` — tipos e validações Zod gerados do OpenAPI
+  - `lib/api-client-react` — hooks React Query gerados do OpenAPI
+  - `lib/auth-web` — cliente Supabase para o frontend
+  - `lib/api-spec` — spec OpenAPI e config orval (codegen)
 
-## Running the project
+## Como rodar
 
-Both services start automatically via configured workflows:
+Ambos os serviços rodam automaticamente via workflows do Replit:
 
-| Workflow | Command | Port |
-|---|---|---|
-| `artifacts/undf-participa: web` | `pnpm --filter @workspace/undf-participa run dev` | 21016 |
-| `artifacts/api-server: API Server` | `pnpm --filter @workspace/api-server run dev` | 8080 |
+| Serviço | Workflow | URL local |
+|---------|----------|-----------|
+| Frontend | `artifacts/undf-participa: web` | `http://localhost:21016/` |
+| API | `artifacts/api-server: API Server` | `http://localhost:8080/api/` |
 
-To install dependencies: `pnpm install` from the workspace root.
+Para instalar dependências manualmente:
+```bash
+pnpm install
+```
 
-## Environment variables
+## Variáveis de ambiente necessárias
 
-All required env vars are already configured in the Replit environment:
+Configuradas como Replit Secrets:
 
-- `DATABASE_URL` / `DIRECT_URL` — Supabase PostgreSQL connection strings
-- `SUPABASE_URL` / `SUPABASE_PUBLISHABLE_KEY` / `SUPABASE_SECRET_KEY` — Supabase project credentials
-- `SUPABASE_JWKS_URL` — JWT verification endpoint
-- `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` — Frontend-exposed Supabase config
+| Variável | Descrição |
+|----------|-----------|
+| `SUPABASE_URL` | URL do projeto Supabase |
+| `SUPABASE_PUBLISHABLE_KEY` | Chave anon/pública do Supabase |
+| `SUPABASE_SECRET_KEY` | Chave service_role (apenas backend) |
+| `DIRECT_URL` | String de conexão direta Postgres |
+| `SUPABASE_JWKS_URL` | Endpoint JWKS para verificação de JWT |
+| `VITE_SUPABASE_URL` | URL Supabase para o build do frontend |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave anon para o build do frontend |
 
-## Key libraries
+## Health check da API
 
-- `lib/db` — Drizzle ORM schema and database client
-- `lib/api-zod` — Shared Zod schemas for API validation
-- `lib/api-spec` — OpenAPI spec + Orval codegen config
-- `lib/api-client-react` — Generated React Query hooks
-- `lib/auth-web` — Supabase auth context/hooks for the frontend
+```
+GET /api/healthz
+```
+
+Retorna `{"status":"ok","auth":"configured","database":"connected"}` quando tudo está funcionando.
 
 ## User preferences
 
-<!-- Add preferences here as requested -->
+- Projeto em português (pt-BR); manter idioma do código e comentários consistente com o existente.
