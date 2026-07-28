@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, FlaskConical, Loader2 } from "lucide-react";
 import { supabase } from "@workspace/auth-web";
 import { demoLogin } from "@/hooks/use-user-data";
-import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
+import logoPath from "@assets/logo-voz-undf.png";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),

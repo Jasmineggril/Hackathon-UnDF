@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Eye, Megaphone, Target, BarChart3, ShieldCheck } from "lucide-react";
 import { useGetTransparencyStats } from "@workspace/api-client-react";
-import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
+import logoPath from "@assets/logo-voz-undf.png";
 
 export default function Home() {
   const { data: stats, isLoading } = useGetTransparencyStats();

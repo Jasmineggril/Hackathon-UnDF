@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
+import logoPath from "@assets/logo-voz-undf.png";
 
 export function Footer() {
   return (
