@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785079924059.png";
+import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
 
 export function Footer() {
   return (
@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-[#1B3469]/10">
           <div className="md:col-span-5">
             <Link href="/" className="flex items-center gap-3 mb-5">
-              <img src={logoPath} alt="Voz UnDF" className="h-10 w-auto object-contain opacity-80 grayscale" />
+              <img src={logoPath} alt="Voz UnDF" className="h-10 w-auto object-contain opacity-90" />
               <span
                 className="font-bold text-base text-[#1B3469]"
                 style={{ fontFamily: "'Syne', sans-serif" }}

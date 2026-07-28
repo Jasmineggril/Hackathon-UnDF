@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, User as UserIcon, LogOut, LayoutDashboard, HelpCircle } from "lucide-react";
+import { Menu, X, User as UserIcon, LogOut, LayoutDashboard, HelpCircle, BookOpen } from "lucide-react";
 import { useAuth } from "@workspace/auth-web";
 import { Button } from "@/components/ui/button";
-import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785001200344.png";
+import { useTour } from "@/components/GuidedTour";
+import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
+  const { reopen: reopenTour } = useTour();
 
   useEffect(() => { setIsOpen(false); }, [location]);
 
@@ -108,6 +110,13 @@ export function Header() {
                       <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
                       Central de ajuda
                     </Link>
+                    <button
+                      onClick={reopenTour}
+                      className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70 text-left flex items-center gap-1.5 w-full"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+                      Ver tour da plataforma
+                    </button>
                     <div className="border-t border-[#1B3469]/10 my-1" />
                     <button
                       onClick={logout}

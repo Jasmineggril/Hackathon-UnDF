@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, FlaskConical, Loader2 } from "lucide-react";
 import { supabase } from "@workspace/auth-web";
 import { demoLogin } from "@/hooks/use-user-data";
-import logoPath from "@assets/Gemini_Generated_Image_lkejrrlkejrrlkej_1785001200344.png";
+import logoPath from "@assets/WhatsApp_Image_2026-07-27_at_21.33.29_1785198981474.jpeg";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -83,7 +83,7 @@ export default function Login() {
       {/* Left panel — brand */}
       <div className="hidden md:flex flex-col justify-between bg-primary text-primary-foreground px-12 py-16">
         <div className="flex items-center gap-3">
-          <img src={logoPath} alt="Voz UnDF" className="h-9 w-auto object-contain brightness-0 invert opacity-90" />
+          <img src={logoPath} alt="Voz UnDF" className="h-9 w-auto object-contain rounded-md bg-white/10 p-0.5" />
           <span className="font-bold text-base opacity-90">Voz UnDF</span>
         </div>
 
