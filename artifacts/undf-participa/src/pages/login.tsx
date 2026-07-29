@@ -17,6 +17,8 @@ const loginSchema = z.object({
 });
 
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
+const DEMO_EMAIL = "aluno_teste@undf.edu.br";
+const DEMO_PASSWORD = "123456";
 
 export default function Login() {
   const { signIn: login, isAuthenticated } = useAuth();
@@ -57,6 +59,11 @@ export default function Login() {
     }
   };
 
+  const handleFillDemoCredentials = () => {
+    form.setValue("email", DEMO_EMAIL, { shouldDirty: true, shouldTouch: true });
+    form.setValue("password", DEMO_PASSWORD, { shouldDirty: true, shouldTouch: true });
+  };
+
   const handleDemoAccess = async () => {
     setDemoLoading(true);
     setError(null);
@@ -67,12 +74,17 @@ export default function Login() {
         refresh_token: session.refresh_token,
       });
       if (sessionError) throw new Error(sessionError.message);
-    } catch {
-      // Auth falhou — ainda assim redireciona para a página de demo
-      // onde o usuário pode explorar a plataforma sem autenticação
+      localStorage.removeItem("voz-undf:tour-completed");
+      // sinaliza para a próxima página abrir o tour automaticamente
+      try {
+        localStorage.setItem("voz-undf:open-tour-next", "true");
+      } catch {}
+      window.location.href = "/meu-painel";
+      return;
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Falha ao entrar como demonstração");
     } finally {
       setDemoLoading(false);
-      window.location.href = "/demo";
     }
   };
 
@@ -175,30 +187,51 @@ export default function Login() {
           {/* Demo access — visível apenas quando habilitado */}
           {DEMO_MODE && demoEnabled && (
             <div className="mt-8 border border-amber-200 bg-amber-50 p-4" data-testid="demo-access-section">
-              <div className="flex items-start gap-3">
-                <FlaskConical className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
-                <div className="flex-1">
-                  <p className="font-semibold text-amber-900 text-sm mb-1">
-                    Explorar versão de demonstração
-                  </p>
-                  <p className="text-xs text-amber-700 mb-3 leading-relaxed">
-                    Acesse uma conta de demonstração para conhecer as principais funcionalidades do Voz UnDF. Os dados exibidos são fictícios.
-                  </p>
-                  <Button
-                    type="button"
-                    onClick={handleDemoAccess}
-                    disabled={demoLoading}
-                    className="w-full bg-amber-600 hover:bg-amber-700 text-white text-sm py-4"
-                    data-testid="button-demo-access"
-                  >
-                    {demoLoading ? (
-                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Acessando…</>
-                    ) : (
-                      "Acessar demonstração"
-                    )}
-                  </Button>
+              <div className="mb-4">
+                <p className="text-xs uppercase tracking-widest font-semibold text-amber-900">
+                  Acesso de demonstração
+                </p>
+                <p className="text-sm text-amber-900 mt-2">
+                  Use a conta abaixo para explorar as principais funcionalidades do Voz UnDF. Os dados exibidos são fictícios.
+                </p>
+              </div>
+
+              <div className="grid gap-2 rounded-md bg-white/80 p-4 text-sm text-amber-900 border border-amber-100">
+                <div>
+                  <span className="font-semibold">E-mail:</span> {DEMO_EMAIL}
+                </div>
+                <div>
+                  <span className="font-semibold">Senha:</span> {DEMO_PASSWORD}
                 </div>
               </div>
+
+              <div className="mt-4 grid gap-3">
+                <Button
+                  type="button"
+                  onClick={handleFillDemoCredentials}
+                  className="w-full border border-amber-600 bg-white text-amber-900 hover:bg-amber-50 py-4"
+                  data-testid="button-fill-demo-credentials"
+                >
+                  Preencher credenciais de demonstração
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleDemoAccess}
+                  disabled={demoLoading}
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white text-sm py-4"
+                  data-testid="button-login-demo"
+                >
+                  {demoLoading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Entrando…</>
+                  ) : (
+                    "Entrar como usuário de demonstração"
+                  )}
+                </Button>
+              </div>
+
+              <p className="mt-4 text-xs text-amber-700 leading-relaxed">
+                Esta conta de demonstração tem role <strong>estudante</strong>, dados fictícios e acesso limitado. Não é uma conta administrativa.
+              </p>
             </div>
           )}
 
