@@ -1,6 +1,8 @@
 import type { AuthUser } from '@workspace/api-zod';
 import { type NextFunction, type Request, type Response } from 'express';
 import { verifyToken, loadProfile, toAuthUser } from '../lib/auth';
+import { db, users } from '@workspace/db';
+import { eq } from 'drizzle-orm';
 
 declare global {
   namespace Express {
@@ -38,6 +40,24 @@ export async function authMiddleware(
   } as Request['isAuthenticated'];
 
   const authHeader = req.headers.authorization;
+  // Dev-only demo bypass: when DEMO_MODE=true and client sends `x-demo: 1`,
+  // load the demo local profile and treat request as authenticated.
+  // This is strictly a development convenience and only active when DEMO_MODE=true.
+  try {
+    if (process.env.DEMO_MODE === 'true' && String(req.headers['x-demo'] || '') === '1') {
+      const demoEmail = process.env.DEMO_USER_EMAIL;
+      if (demoEmail) {
+        const [row] = await db.select().from(users).where(eq(users.email, demoEmail));
+        if (row) {
+          req.user = toAuthUser(row as any);
+          next();
+          return;
+        }
+      }
+    }
+  } catch (e) {
+    // ignore errors and continue to normal flow
+  }
   if (!authHeader?.startsWith('Bearer ')) {
     next();
     return;
@@ -53,8 +73,10 @@ export async function authMiddleware(
     const verified = await verifyToken(token);
     const profile = await loadProfile(verified.sub, verified.email);
     req.user = toAuthUser(profile);
-  } catch {
-    // Token inválido — segue sem usuário
+  } catch (err) {
+    // Token inválido — segue sem usuário. Logamos para ajudar debugging em dev.
+    // Não expor o token nem dados sensíveis.
+    console.warn('[auth] token verification failed:', err && (err.stack || err.message || err));
   }
 
   next();

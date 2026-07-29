@@ -36,8 +36,8 @@ async function getOrCreateSupabaseUser(email: string, password: string) {
     throw new Error(`Falha ao consultar usuário Supabase: ${search.statusText}`);
   }
 
-  const data = await search.json();
-  const usersList = Array.isArray(data) ? data : data.users ?? [];
+  const data = await search.json().catch(() => ({} as any));
+  const usersList = Array.isArray(data) ? (data as any[]) : (data as any).users ?? [];
   const existing = usersList.find((user: any) => user.email === email);
   if (existing) {
     return existing;
@@ -87,10 +87,10 @@ async function upsertLocalUser(authUserId: string, email: string, fullName: stri
 async function seed() {
   console.log("Preparando dados de demonstração do Voz UnDF...");
 
-  const supabaseUser = await getOrCreateSupabaseUser(DEMO_EMAIL, DEMO_PASSWORD);
+  const supabaseUser = await getOrCreateSupabaseUser(DEMO_EMAIL!, DEMO_PASSWORD!);
   const localUser = await upsertLocalUser(
     supabaseUser.id,
-    DEMO_EMAIL,
+    DEMO_EMAIL!,
     DEMO_FULL_NAME,
   );
 
@@ -149,9 +149,9 @@ async function seed() {
       .onConflictDoNothing({ target: demands.protocol });
   };
 
-  const insertProposal = async (proposal: typeof DEMO_PROPOSALS[number]) => {
+  const insertProposal = async (proposal: typeof DEMO_PROPOSALS[number]): Promise<void> => {
     const [existing] = await db.select().from(proposals).where(eq(proposals.title, proposal.title));
-    if (existing) return existing;
+    if (existing) return;
     await db.insert(proposals).values(proposal);
   };
 
