@@ -1,4 +1,4 @@
-import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose';
+import { createRemoteJWKSet, jwtVerify, decodeProtectedHeader, type JWTPayload } from 'jose';
 import type { AuthUser } from '@workspace/api-zod';
 import { db, users } from '@workspace/db';
 import { eq } from 'drizzle-orm';
@@ -44,6 +44,10 @@ export interface VerifiedToken {
  * 2. Fall back to Supabase userinfo endpoint (for HS256 tokens).
  */
 export async function verifyToken(token: string): Promise<VerifiedToken> {
+  // Defensive: trim surrounding whitespace/newlines that sometimes appear when
+  // tokens are copied in shells or extracted from tooling.
+  token = String(token).trim();
+
   if (jwks) {
     try {
       const { payload } = await jwtVerify(token, jwks, {
@@ -57,9 +61,32 @@ export async function verifyToken(token: string): Promise<VerifiedToken> {
     } catch {
       // JWKS failed — log for debugging and fall through to userinfo
       try {
-        console.warn('[auth] JWKS verification failed for token');
+        console.warn('[auth] JWKS verification failed for token, will try alternative verification');
       } catch {}
     }
+  }
+  // If JWKS verification wasn't possible or failed, try HMAC verification for
+  // tokens signed with HS256 using the publishable/anon key (some Supabase
+  // projects still issue HS-signed tokens). We inspect the header first.
+  try {
+    const header = await decodeProtectedHeader(token);
+    const alg = header.alg || '';
+    if (alg.startsWith('HS') && supabaseAnonKey) {
+      try {
+        // jwtVerify accepts a Uint8Array for HMAC secrets
+        const key = new TextEncoder().encode(supabaseAnonKey);
+        const { payload } = await jwtVerify(token, key, { issuer: ISSUER });
+        return {
+          sub: payload.sub!,
+          email: payload.email as string | undefined,
+          payload,
+        };
+      } catch (e) {
+        console.warn('[auth] HS* verification failed, will fallback to userinfo', e && (e.stack || e.message || e));
+      }
+    }
+  } catch (e) {
+    // ignore header decode errors and continue to userinfo fallback
   }
 
   const resp = await fetch(`${supabaseUrl}/auth/v1/user`, {
