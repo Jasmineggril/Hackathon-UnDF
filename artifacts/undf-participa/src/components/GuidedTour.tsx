@@ -85,10 +85,18 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for programmatic open requests (from useTour hook or other components)
   useEffect(() => {
-    const handler = () => {
-      setOpen(true);
-    };
+    const handler = () => setOpen(true);
     window.addEventListener(TOUR_OPEN_EVENT, handler);
+
+    // If a previous page requested the tour to open (e.g. demo login), honor it once
+    try {
+      const requested = localStorage.getItem("voz-undf:open-tour-next");
+      if (requested === "true") {
+        localStorage.removeItem("voz-undf:open-tour-next");
+        setTimeout(() => setOpen(true), 300);
+      }
+    } catch {}
+
     return () => window.removeEventListener(TOUR_OPEN_EVENT, handler);
   }, []);
 

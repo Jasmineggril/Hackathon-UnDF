@@ -5,7 +5,7 @@
   "outputDirectory": "artifacts/undf-participa/dist/public",
   "functions": {
     "api/**/*.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs20.x"
     }
   },
   "routes": [

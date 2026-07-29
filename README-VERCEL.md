@@ -28,6 +28,11 @@ Este monorepo publica:
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 - `VITE_DEMO_MODE` (opcional)
 
+### Backend demo mode
+- `DEMO_MODE=true` habilita o endpoint de demo no backend.
+- `DEMO_USER_EMAIL` e `DEMO_USER_PASSWORD` configuram a conta demo segura.
+- `VITE_DEMO_MODE=true` habilita a interface de demo no frontend.
+
 ### Regras
 - `SUPABASE_SECRET_KEY` não deve ser exposto no frontend.
 - Nenhuma variável sem `VITE_` deve ser usada diretamente no código do navegador.
@@ -66,6 +71,8 @@ pnpm --filter @workspace/api-server run build
 - `pnpm dev --filter @workspace/undf-participa`
 - `pnpm --filter @workspace/api-server run dev`
 - `pnpm --filter @workspace/db run test:connection`
+- `DEMO_MODE=true pnpm --filter @workspace/db run seed:demo`
+  - Cria ou atualiza a conta demo `aluno_teste@undf.edu.br` com senha `123456` e registra dados fictícios de demonstração.
 
 ## Observações
 - `api/index.ts` e `api/[...path].ts` são entradas Vercel.

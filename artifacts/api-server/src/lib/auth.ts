@@ -55,7 +55,10 @@ export async function verifyToken(token: string): Promise<VerifiedToken> {
         payload,
       };
     } catch {
-      // JWKS failed — fall through to userinfo
+      // JWKS failed — log for debugging and fall through to userinfo
+      try {
+        console.warn('[auth] JWKS verification failed for token');
+      } catch {}
     }
   }
 
@@ -67,7 +70,11 @@ export async function verifyToken(token: string): Promise<VerifiedToken> {
   });
 
   if (!resp.ok) {
-    throw new Error('Invalid token');
+    let body = '';
+    try {
+      body = await resp.text();
+    } catch {}
+    throw new Error(`Invalid token (userinfo ${resp.status}): ${body}`);
   }
 
   const data = await resp.json() as { id: string; email?: string };
