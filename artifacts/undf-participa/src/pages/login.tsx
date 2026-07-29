@@ -67,13 +67,12 @@ export default function Login() {
         refresh_token: session.refresh_token,
       });
       if (sessionError) throw new Error(sessionError.message);
-      window.location.href = "/";
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "Não foi possível acessar a demonstração.",
-      );
+    } catch {
+      // Auth falhou — ainda assim redireciona para a página de demo
+      // onde o usuário pode explorar a plataforma sem autenticação
     } finally {
       setDemoLoading(false);
+      window.location.href = "/demo";
     }
   };
 

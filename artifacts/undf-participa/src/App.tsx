@@ -10,7 +10,7 @@ import AccessibilityPanel from '@/components/AccessibilityPanel';
 import VLibrasWidget from '@/components/VLibrasWidget';
 import CookieBanner from '@/components/CookieBanner';
 import { DemoBanner } from '@/components/DemoBanner';
-import { GuidedTour } from '@/components/GuidedTour';
+import { GuidedTour, TourProvider } from '@/components/GuidedTour';
 
 import Home from '@/pages/home';
 import Demands from '@/pages/demands';
@@ -30,6 +30,7 @@ import Governanca from '@/pages/governanca';
 import Termos from '@/pages/termos';
 import Privacidade from '@/pages/privacidade';
 import Acessibilidade from '@/pages/acessibilidade';
+import Demo from '@/pages/demo';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient({
@@ -83,6 +84,7 @@ function Router() {
       <Route path="/termos" component={Termos} />
       <Route path="/privacidade" component={Privacidade} />
       <Route path="/acessibilidade" component={Acessibilidade} />
+      <Route path="/demo" component={Demo} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -93,14 +95,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          {DEMO_MODE && <DemoBanner visible />}
-          <Layout>
-            <Router />
-          </Layout>
-          <AccessibilityPanel />
-          <VLibrasWidget />
-          <CookieBanner />
-          <AuthenticatedTour />
+          <TourProvider>
+            {DEMO_MODE && <DemoBanner visible />}
+            <Layout>
+              <Router />
+            </Layout>
+            <AccessibilityPanel />
+            <VLibrasWidget />
+            <CookieBanner />
+            <AuthenticatedTour />
+          </TourProvider>
         </WouterRouter>
         <Toaster position="top-right" richColors />
       </TooltipProvider>

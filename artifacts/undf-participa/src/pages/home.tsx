@@ -25,7 +25,7 @@ export default function Home() {
         {/* top row: label + year */}
         <div className="flex justify-between items-start text-xs tracking-widest text-[#1B3469]/50 uppercase mb-8 md:mb-0">
           <span>Participação · Transparência · Gestão</span>
-          <span>UnDF — 2025</span>
+          <span>UnDF — 2026</span>
         </div>
 
         {/* main grid */}

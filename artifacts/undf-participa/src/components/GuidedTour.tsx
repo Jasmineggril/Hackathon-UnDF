@@ -4,15 +4,16 @@
  * - Aparece apenas no primeiro acesso (após login)
  * - Salva preferência de conclusão no localStorage
  * - Acessível: teclado, aria-live, Escape para fechar, foco controlado
- * - Sem dependências externas além do que já existe no projeto
+ * - Pode ser reaberto via evento DOM sem reload de página
  */
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, createContext, useContext } from "react";
 import { X, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TOUR_STORAGE_KEY = "voz-undf:tour-completed";
+const TOUR_OPEN_EVENT = "voz-undf:open-tour";
 
 export interface TourStep {
   title: string;
@@ -71,54 +72,68 @@ const TOUR_STEPS: TourStep[] = [
   },
 ];
 
-interface GuidedTourProps {
-  /** Se verdadeiro, exibe o tour imediatamente (ignora localStorage) */
-  forceOpen?: boolean;
-  onClose?: () => void;
+// ── Context ──────────────────────────────────────────────────────────────────
+
+interface TourContextValue {
+  openTour: () => void;
 }
 
-export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
-  const [isOpen, setIsOpen] = useState(false);
+const TourContext = createContext<TourContextValue>({ openTour: () => {} });
+
+export function TourProvider({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+
+  // Listen for programmatic open requests (from useTour hook or other components)
+  useEffect(() => {
+    const handler = () => {
+      setOpen(true);
+    };
+    window.addEventListener(TOUR_OPEN_EVENT, handler);
+    return () => window.removeEventListener(TOUR_OPEN_EVENT, handler);
+  }, []);
+
+  return (
+    <TourContext.Provider value={{ openTour: () => setOpen(true) }}>
+      {children}
+      <TourDialog open={open} setOpen={setOpen} />
+    </TourContext.Provider>
+  );
+}
+
+export function useTourContext() {
+  return useContext(TourContext);
+}
+
+// ── Dialog ───────────────────────────────────────────────────────────────────
+
+function TourDialog({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+}) {
   const [step, setStep] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (forceOpen) {
-      setIsOpen(true);
-      setStep(0);
-      return;
-    }
-    const completed = localStorage.getItem(TOUR_STORAGE_KEY);
-    if (!completed) {
-      // Pequeno delay para garantir que a página carregou
-      const t = setTimeout(() => setIsOpen(true), 800);
-      return () => clearTimeout(t);
-    }
-    return undefined;
-  }, [forceOpen]);
-
-  const close = useCallback(
-    (markComplete = true) => {
-      if (markComplete) {
-        localStorage.setItem(TOUR_STORAGE_KEY, "true");
-      }
-      setIsOpen(false);
-      onClose?.();
-    },
-    [onClose],
-  );
 
   // Foco controlado — mover foco para o diálogo ao abrir
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
+      setStep(0);
       setTimeout(() => closeRef.current?.focus(), 50);
     }
-  }, [isOpen]);
+  }, [open]);
 
-  // Escape para fechar
+  const close = useCallback((markComplete = true) => {
+    if (markComplete) {
+      localStorage.setItem(TOUR_STORAGE_KEY, "true");
+    }
+    setOpen(false);
+  }, [setOpen]);
+
+  // Escape + arrow keys
   useEffect(() => {
-    if (!isOpen) return;
+    if (!open) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") close(false);
       if (e.key === "ArrowRight") setStep((s) => Math.min(s + 1, TOUR_STEPS.length - 1));
@@ -126,14 +141,14 @@ export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [isOpen, close]);
+  }, [open, close]);
 
   const current = TOUR_STEPS[step];
   const isLast = step === TOUR_STEPS.length - 1;
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -145,7 +160,6 @@ export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
           onClick={(e) => e.target === e.currentTarget && close(false)}
         >
           <motion.div
-            ref={dialogRef}
             initial={{ scale: 0.92, opacity: 0, y: 12 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 12 }}
@@ -269,18 +283,50 @@ export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
   );
 }
 
-/** Hook para abrir o tour programaticamente (ex: menu Ajuda) */
+// ── Legacy GuidedTour component (for AuthenticatedTour in App.tsx) ────────────
+
+interface GuidedTourProps {
+  forceOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
+  const { openTour } = useTourContext();
+
+  useEffect(() => {
+    if (forceOpen) {
+      openTour();
+      return;
+    }
+    const completed = localStorage.getItem(TOUR_STORAGE_KEY);
+    if (!completed) {
+      const t = setTimeout(() => openTour(), 800);
+      return () => clearTimeout(t);
+    }
+  }, [forceOpen, openTour]);
+
+  // Notify parent when tour closes — approximate via onClose on mount
+  useEffect(() => {
+    return () => onClose?.();
+  }, [onClose]);
+
+  return null;
+}
+
+// ── useTour hook ─────────────────────────────────────────────────────────────
+
 export function useTour() {
+  const { openTour } = useTourContext();
+
   const reopen = () => {
     localStorage.removeItem(TOUR_STORAGE_KEY);
-    window.location.reload();
+    openTour();
   };
 
   const reset = () => localStorage.removeItem(TOUR_STORAGE_KEY);
 
   const isCompleted = () =>
-    typeof window !== "undefined" &&
-    !!localStorage.getItem(TOUR_STORAGE_KEY);
+    typeof window !== "undefined" && !!localStorage.getItem(TOUR_STORAGE_KEY);
 
-  return { reopen, reset, isCompleted };
+  return { reopen, reset, isCompleted, openTour };
 }
