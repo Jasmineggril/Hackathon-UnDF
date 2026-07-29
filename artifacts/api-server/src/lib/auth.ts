@@ -82,7 +82,8 @@ export async function verifyToken(token: string): Promise<VerifiedToken> {
           payload,
         };
       } catch (e) {
-        console.warn('[auth] HS* verification failed, will fallback to userinfo', e && (e.stack || e.message || e));
+        const errorMsg = e instanceof Error ? e.message : String(e);
+        console.warn('[auth] HS* verification failed, will fallback to userinfo:', errorMsg);
       }
     }
   } catch (e) {

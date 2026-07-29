@@ -83,7 +83,8 @@ export async function authMiddleware(
   } catch (err) {
     // Token inválido — segue sem usuário. Logamos para ajudar debugging em dev.
     // Não expor o token nem dados sensíveis.
-    console.warn('[auth] token verification failed:', err && (err.stack || err.message || err));
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.warn('[auth] token verification failed:', errorMsg);
   }
 
   next();

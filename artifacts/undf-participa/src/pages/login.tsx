@@ -39,7 +39,11 @@ export default function Login() {
   // Verificar se demo está ativo no backend
   useEffect(() => {
     if (!DEMO_MODE) return;
-    const BASE = import.meta.env.BASE_URL?.replace(/\/+$/, "") || "";
+    // In development, the backend runs on port 8080. Use that host so the
+    // client can reach the demo endpoint during local dev/E2E tests. In
+    // production the routes are relative and handled by the deployment.
+    const devBackend = import.meta.env.DEV ? 'http://127.0.0.1:8080' : undefined;
+    const BASE = devBackend || import.meta.env.BASE_URL?.replace(/\/+$/, "") || "";
     fetch(`${BASE}/api/demo/status`)
       .then((r) => r.json())
       .then((data: { enabled?: boolean }) => setDemoEnabled(!!data.enabled))
