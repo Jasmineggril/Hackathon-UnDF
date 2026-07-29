@@ -37,8 +37,9 @@ async function main() {
     log('/api/demo/login ->', loginRes.status);
     if (!loginJson.access_token) throw new Error('demo login did not return access_token');
     // Verify protected route via dev-only demo header (x-demo: 1)
-    log('Checking protected route /api/user/stats with x-demo header...');
-    const statsRes = await fetch('http://127.0.0.1:8080/api/user/stats', { headers: { 'x-demo': '1' } });
+    log('Checking protected route /api/user/stats with dev bypass header...');
+    const demoHeader = env.DEMO_BYPASS_TOKEN ? { 'x-demo-token': env.DEMO_BYPASS_TOKEN } : { 'x-demo': '1' };
+    const statsRes = await fetch('http://127.0.0.1:8080/api/user/stats', { headers: demoHeader });
     const statsJson = await statsRes.json().catch(() => ({}));
     log('/api/user/stats ->', statsRes.status, JSON.stringify(statsJson));
     if (statsRes.status !== 200) throw new Error('/api/user/stats failed');

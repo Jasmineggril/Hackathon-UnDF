@@ -44,7 +44,14 @@ export async function authMiddleware(
   // load the demo local profile and treat request as authenticated.
   // This is strictly a development convenience and only active when DEMO_MODE=true.
   try {
-    if (process.env.DEMO_MODE === 'true' && String(req.headers['x-demo'] || '') === '1') {
+    // Dev-only demo bypass: enabled only when DEMO_MODE=true AND a
+    // DEMO_BYPASS_TOKEN is configured. The client must send the token in the
+    // `x-demo-token` header. This reduces accidental activation and is safer
+    // than a simple `x-demo: 1` header.
+    const demoMode = process.env.DEMO_MODE === 'true';
+    const bypassToken = process.env.DEMO_BYPASS_TOKEN;
+    const incomingToken = String(req.headers['x-demo-token'] || '').trim();
+    if (demoMode && bypassToken && incomingToken && incomingToken === bypassToken) {
       const demoEmail = process.env.DEMO_USER_EMAIL;
       if (demoEmail) {
         const [row] = await db.select().from(users).where(eq(users.email, demoEmail));
@@ -76,7 +83,8 @@ export async function authMiddleware(
   } catch (err) {
     // Token inválido — segue sem usuário. Logamos para ajudar debugging em dev.
     // Não expor o token nem dados sensíveis.
-    console.warn('[auth] token verification failed:', err && (err.stack || err.message || err));
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.warn('[auth] token verification failed:', errorMsg);
   }
 
   next();
