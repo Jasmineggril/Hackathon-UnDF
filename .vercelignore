@@ -1,0 +1,23 @@
+# Ignore dependencies and local build artifacts
+node_modules/
+.pnpm/
+.pnpm-store/
+
+# Ignore generated frontend and backend build output
+artifacts/api-server/dist/
+artifacts/undf-participa/dist/
+
+# Ignore non-production assets and local sandbox projects
+artifacts/mockup-sandbox/
+attached_assets/
+
+# Ignore local environment and editor files
+.env
+.env.*
+.replit
+.replitignore
+.vscode/
+.DS_Store
+
+# Ignore GitHub and other CI config that is not needed for deployment
+.github/

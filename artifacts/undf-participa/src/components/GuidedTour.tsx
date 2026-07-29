@@ -296,13 +296,14 @@ export function GuidedTour({ forceOpen = false, onClose }: GuidedTourProps) {
   useEffect(() => {
     if (forceOpen) {
       openTour();
-      return;
+      return undefined;
     }
     const completed = localStorage.getItem(TOUR_STORAGE_KEY);
     if (!completed) {
       const t = setTimeout(() => openTour(), 800);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [forceOpen, openTour]);
 
   // Notify parent when tour closes — approximate via onClose on mount
