@@ -8,20 +8,24 @@ router = "path"
 [[services]]
 name = "web"
 paths = [ "/api/" ]
-localPort = 22729
+localPort = 8080
 
 [services.development]
 run = "pnpm --filter @workspace/api-server run dev"
 
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/api-server", "run", "build" ]
-serve = "static"
-publicDir = "artifacts/api-server/dist/public"
 
-[[services.production.rewrites]]
-from = "/*"
-to = "/index.html"
+[services.production.run]
+args = ["node", "--enable-source-maps", "artifacts/api-server/dist/index.mjs"]
+
+[services.production.run.env]
+PORT = "8080"
+NODE_ENV = "production"
+
+[services.production.health.startup]
+path = "/api/healthz"
 
 [services.env]
-PORT = "22729"
+PORT = "8080"
 BASE_PATH = "/api/"
