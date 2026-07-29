@@ -1,0 +1,59 @@
+name: Smoke Demo (PR)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  smoke:
+    name: Smoke demo checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.32.1 --activate
+
+      - name: Install dependencies
+        run: pnpm -w -s install
+
+      - name: Prepare env (skip if secrets missing)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          DEMO_USER_EMAIL: ${{ secrets.DEMO_USER_EMAIL }}
+          DEMO_USER_PASSWORD: ${{ secrets.DEMO_USER_PASSWORD }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ] || [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "Missing Supabase secrets — skipping smoke checks"
+            exit 0
+          fi
+          mkdir -p artifacts/api-server
+          cat > artifacts/api-server/.env <<EOF
+DATABASE_URL=""
+DIRECT_URL=""
+SUPABASE_URL=$SUPABASE_URL
+SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SECRET_KEY=$SUPABASE_SECRET_KEY
+SUPABASE_JWKS_URL=${SUPABASE_URL}/auth/v1/.well-known/jwks.json
+SESSION_SECRET=ci_secret
+NODE_ENV=development
+PORT=8080
+DEMO_MODE=true
+DEMO_USER_EMAIL=${DEMO_USER_EMAIL:-aluno_teste@undf.edu.br}
+DEMO_USER_PASSWORD=${DEMO_USER_PASSWORD:-123456}
+VITE_SUPABASE_URL=$SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY
+EOF
+
+      - name: Run smoke script
+        run: pnpm -w -s run smoke:demo
