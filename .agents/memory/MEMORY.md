@@ -1,0 +1,2 @@
+- [Vercel deployment setup](vercel-setup.md) — project deploys to Vercel (not Replit); lockfile, settings, and env vars all fixed; VERCEL_TOKEN stored as secret
+- [Artifact registration](artifact-registration.md) — artifacts were imported from GitHub without Replit registration; fixed via verifyAndReplaceArtifactToml; duplicate api-server workflow exists (API Server=running, web=not_started)

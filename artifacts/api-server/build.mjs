@@ -14,6 +14,23 @@ async function buildAll() {
   const distDir = path.resolve(artifactDir, "dist");
   await rm(distDir, { recursive: true, force: true });
 
+  // CJS bundle of app.ts only (no listen) — used by Vercel serverless functions in api/
+  await esbuild({
+    entryPoints: [path.resolve(artifactDir, "src/app.ts")],
+    platform: "node",
+    bundle: true,
+    format: "cjs",
+    outfile: path.resolve(distDir, "app.cjs"),
+    logLevel: "info",
+    external: [
+      "*.node", "sharp", "better-sqlite3", "sqlite3", "canvas",
+      "bcrypt", "argon2", "fsevents", "re2", "farmhash", "xxhash-addon",
+      "bufferutil", "utf-8-validate", "ssh2", "cpu-features",
+    ],
+    sourcemap: "linked",
+  });
+
+  // ESM bundle of index.ts (with listen) — used for local dev server
   await esbuild({
     entryPoints: [path.resolve(artifactDir, "src/index.ts")],
     platform: "node",
