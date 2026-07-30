@@ -1,0 +1,226 @@
+Pasted-Para-subir-corretamente-na-Vercel-configure-o-projeto-a_1785428863470.txt
+Para subir corretamente na Vercel, configure o projeto a partir da raiz do repositório, não da pasta artifacts/api-server.
+
+1. Root Directory
+
+Na Vercel:
+
+Root Directory:
+./
+
+Ou deixe em branco, representando a raiz onde estão:
+
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+vercel.json
+api/
+artifacts/
+lib/
+
+Isso é importante porque a API depende de bibliotecas compartilhadas em lib/ e o frontend está em outro diretório do monorepo. A Vercel oferece suporte a monorepos e permite que o mesmo repositório tenha múltiplas aplicações, mas neste caso a configuração da raiz é mais simples porque já existe uma pasta /api serverless.
+
+2. Framework Settings
+
+Use:
+
+Framework Preset:
+Other
+Install Command
+pnpm install --frozen-lockfile
+Build Command
+pnpm run build
+Output Directory
+artifacts/undf-participa/dist/public
+
+A pasta de saída é o local que a Vercel publica como conteúdo estático depois do build.
+
+3. vercel.json
+
+Na raiz do GitHub, deixe o arquivo assim:
+
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "artifacts/undf-participa/dist/public",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/((?!api(?:/|$)).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
+O vercel.json pode sobrescrever as configurações definidas no painel. Por isso, ele precisa conter os mesmos comandos corretos.
+
+Não use no vercel.json:
+
+"runtime": "nodejs20.x"
+
+As funções TypeScript dentro da pasta /api usam o runtime Node.js automaticamente.
+
+4. Entrada da API
+
+Na raiz do projeto, confirme que existe:
+
+api/[...path].ts
+
+Com algo semelhante a:
+
+import app from "../artifacts/api-server/src/app";
+
+export default app;
+
+E, caso necessário:
+
+api/index.ts
+import app from "../artifacts/api-server/src/app";
+
+export default app;
+
+A Vercel transforma arquivos dentro de /api em funções Node.js.
+
+O arquivo app.ts deve exportar o Express:
+
+import express from "express";
+
+const app = express();
+
+// middlewares e rotas
+
+export default app;
+
+O app.listen() deve ficar apenas no servidor de desenvolvimento, não no arquivo importado pela função da Vercel.
+
+5. Variáveis de ambiente
+
+Na Vercel, abra:
+
+Settings
+→ Environment Variables
+
+Adicione:
+
+Backend
+DATABASE_URL
+DIRECT_URL
+SUPABASE_URL
+SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SECRET_KEY
+DEMO_MODE
+DEMO_USER_EMAIL
+DEMO_USER_PASSWORD
+NODE_ENV
+
+Valores específicos:
+
+DEMO_MODE=true
+DEMO_USER_EMAIL=aluno_teste@undf.edu.br
+DEMO_USER_PASSWORD=123456
+NODE_ENV=production
+Frontend
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
+VITE_DEMO_MODE
+
+Valor:
+
+VITE_DEMO_MODE=true
+
+Não crie:
+
+VITE_SUPABASE_SECRET_KEY
+VITE_DATABASE_URL
+
+Segredos nunca podem ser expostos como variáveis VITE_.
+
+6. Banco Supabase
+
+Antes do deploy final, execute as migrations necessárias no SQL Editor:
+
+lib/db/src/migrations/001_private_media_bucket.sql
+lib/db/src/migrations/002_expand_enums.sql
+
+Confirme que existem:
+
+users
+demands
+demand_supports
+demand_status_history
+proposals
+proposal_supports
+proposal_status_history
+
+Confirme também que o bucket:
+
+media
+
+está privado.
+
+7. Configuração do Supabase Auth
+
+Depois que a Vercel gerar o domínio, por exemplo:
+
+https://voz-undf.vercel.app
+
+No Supabase, configure:
+
+Authentication
+→ URL Configuration
+Site URL
+https://voz-undf.vercel.app
+Redirect URLs
+https://voz-undf.vercel.app/**
+http://localhost:5173/**
+8. Antes de fazer deploy
+
+No computador ou no Replit, execute:
+
+pnpm install --frozen-lockfile
+pnpm run build
+
+Se existir:
+
+pnpm run test
+
+E:
+
+pnpm run typecheck
+
+O build local precisa passar antes do deploy.
+
+9. Faça o deploy
+
+Depois de salvar tudo:
+
+Faça commit das alterações.
+Envie para o GitHub.
+Na Vercel, clique em Redeploy.
+Confirme no log:
+Running build command: pnpm run build
+
+Se ainda aparecer o comando antigo com vários filtros, o vercel.json ou as configurações da Vercel ainda não foram atualizados.
+
+Configuração final resumida
+Root Directory:
+./
+
+Framework:
+Other
+
+Install Command:
+pnpm install --frozen-lockfile
+
+Build Command:
+pnpm run build
+
+Output Directory:
+artifacts/undf-participa/dist/public
+
+Essa é a configuração que eu usaria para publicar o frontend Vite e as funções Express do Voz UnDF no mesmo projeto Vercel.
