@@ -17,8 +17,8 @@ export interface AuthState {
   session: Session | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ error?: string; session?: Session | null }>;
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ error?: string; session?: Session | null }>;
   signOut: () => Promise<void>;
   getAccessToken: () => Promise<string | null>;
 }
@@ -45,7 +45,7 @@ function sessionUserBasic(s: Session): AuthUser {
     email: s.user.email ?? null,
     fullName: meta.full_name ?? null,
     avatarUrl: meta.avatar_url ?? null,
-    role: 'estudante',
+    role: (meta.role as string) ?? 'estudante',
   };
 }
 
@@ -97,17 +97,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return error ? { error: error.message } : {};
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      return { error: error.message };
+    }
+    return { session: data.session ?? null };
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, fullName?: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } },
     });
-    return error ? { error: error.message } : {};
+    if (error) {
+      return { error: error.message };
+    }
+    return { session: data.session ?? null };
   }, []);
 
   const signOut = useCallback(async () => {

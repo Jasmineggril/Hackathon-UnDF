@@ -43,7 +43,7 @@ export default function Transparency() {
     <div className="min-h-screen bg-background">
 
       {/* Page header */}
-      <div className="px-6 md:px-12 pt-16 pb-16 border-b border-border">
+      <div className="px-6 md:px-12 pt-16 pb-16 border-b border-border" data-tour="transparencia">
         <span className="text-xs tracking-widest uppercase text-secondary font-semibold">dados abertos</span>
         <h1 className="text-[clamp(2.4rem,5vw,4.5rem)] font-bold leading-[0.95] tracking-tight text-foreground mt-3">
           transparência.

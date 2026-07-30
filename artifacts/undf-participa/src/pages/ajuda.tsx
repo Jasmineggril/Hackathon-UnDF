@@ -216,6 +216,7 @@ export default function Ajuda() {
               Reveja os principais recursos da plataforma em um tour interativo.
             </p>
             <Button
+              data-tour="ajuda"
               variant="outline"
               size="sm"
               onClick={reopen}

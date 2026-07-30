@@ -67,6 +67,7 @@ export default function Home() {
             <div className="flex flex-col gap-3">
               <Link href="/demandas/nova">
                 <Button
+                  data-tour="hero-intro"
                   size="lg"
                   className="w-full bg-[#1B3469] hover:bg-[#1B3469]/90 text-white font-semibold rounded-none px-8 justify-between"
                 >

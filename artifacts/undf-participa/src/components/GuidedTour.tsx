@@ -45,7 +45,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: "intro",
     route: "/",
-    targetSelector: "[data-tour='meu-painel']",
+    targetSelector: "[data-tour='hero-intro']",
     title: "Bem-vindo ao Voz UnDF",
     description:
       "Aqui você pode registrar demandas, apresentar propostas e acompanhar as respostas da Universidade. Sua voz participa. A Universidade transforma.",
@@ -154,7 +154,7 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     id: "ajuda",
-    route: "/",
+    route: "/ajuda",
     targetSelector: "[data-tour='ajuda']",
     title: "Central de ajuda",
     description:
@@ -269,6 +269,7 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
     <TourContext.Provider value={{ openTour: () => setOpen(true) }}>
       {children}
       <TourDialog open={open} setOpen={setOpen} />
+      <TourHighlightStyles />
     </TourContext.Provider>
   );
 }

@@ -106,7 +106,7 @@ export function Header() {
                     <Link href="/propostas" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70">
                       Minhas propostas
                     </Link>
-                    <Link href="/ajuda" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70 flex items-center gap-1.5">
+                    <Link href="/ajuda" data-tour="ajuda" className="text-sm px-3 py-2 hover:bg-[#1B3469]/5 text-[#1B3469]/70 flex items-center gap-1.5">
                       <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
                       Central de ajuda
                     </Link>

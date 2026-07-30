@@ -48,7 +48,7 @@ export default function Proposals() {
             </p>
           </div>
           <Link href="/propostas/nova">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-6 py-5">
+            <Button data-tour="propostas" className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-6 py-5">
               <Plus className="w-4 h-4" /> Nova Proposta
             </Button>
           </Link>
@@ -141,6 +141,7 @@ export default function Proposals() {
 
                   {/* support */}
                   <button
+                    data-tour={proposal.id === data?.data[0]?.id ? "apoiar-proposta" : undefined}
                     onClick={() => canSupport && handleSupport(proposal.id)}
                     disabled={!canSupport || toggleSupport.isPending}
                     className={`flex items-center justify-between w-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors ${

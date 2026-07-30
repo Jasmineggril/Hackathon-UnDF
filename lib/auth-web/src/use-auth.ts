@@ -9,8 +9,8 @@ export interface AuthState {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
-  signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ error?: string; session?: import('./supabase-client').Session | null }>;
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ error?: string; session?: import('./supabase-client').Session | null }>;
   signOut: () => Promise<void>;
   getAccessToken: () => Promise<string | null>;
 }

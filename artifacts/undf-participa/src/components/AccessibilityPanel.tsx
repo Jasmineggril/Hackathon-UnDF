@@ -58,6 +58,7 @@ export default function AccessibilityPanel() {
   return (
     <>
       <Button
+        data-tour="acessibilidade"
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 left-6 z-50 rounded-full w-12 h-12 p-0 shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground"
         aria-label="Opções de Acessibilidade"

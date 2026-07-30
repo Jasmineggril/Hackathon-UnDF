@@ -37,7 +37,7 @@ export default function Demands() {
     <div className="min-h-screen bg-background">
 
       {/* Page header */}
-      <div className="px-6 md:px-12 pt-16 pb-12 border-b border-border">
+      <div className="px-6 md:px-12 pt-16 pb-12 border-b border-border" data-tour="demandas-publicas">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
             <span className="text-xs tracking-widest uppercase text-secondary font-semibold">comunidade</span>
@@ -49,7 +49,7 @@ export default function Demands() {
             </p>
           </div>
           <Link href="/demandas/nova">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-6 py-5">
+            <Button data-tour="nova-demanda" className="bg-primary hover:bg-primary/90 text-primary-foreground flex items-center gap-2 px-6 py-5">
               <Plus className="w-4 h-4" /> Registrar Demanda
             </Button>
           </Link>
@@ -146,6 +146,7 @@ export default function Demands() {
 
                   {/* support button */}
                   <button
+                    data-tour={demand.id === data?.data[0]?.id ? "tambem-afetado" : undefined}
                     onClick={() => handleSupport(demand.id)}
                     disabled={toggleSupport.isPending}
                     className={`flex items-center justify-between w-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors ${

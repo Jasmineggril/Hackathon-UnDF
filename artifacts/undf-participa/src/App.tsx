@@ -23,6 +23,8 @@ import Ods16 from '@/pages/ods16';
 import Admin from '@/pages/admin';
 import About from '@/pages/about';
 import Login from '@/pages/login';
+import RecuperarSenha from '@/pages/recuperar-senha';
+import RedefinirSenha from '@/pages/redefinir-senha';
 import MeuPainel from '@/pages/meu-painel';
 import Ajuda from '@/pages/ajuda';
 import Cadastro from '@/pages/cadastro';
@@ -68,6 +70,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
+      <Route path="/recuperar-senha" component={RecuperarSenha} />
+      <Route path="/redefinir-senha" component={RedefinirSenha} />
       <Route path="/demandas" component={Demands} />
       <Route path="/demandas/nova" component={NewDemand} />
       <Route path="/protocolo" component={ProtocolLookup} />

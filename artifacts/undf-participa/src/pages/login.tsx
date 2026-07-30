@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, FlaskConical, Loader2 } from "lucide-react";
+import { Link } from "wouter";
 import { supabase } from "@workspace/auth-web";
 import { demoLogin } from "@/hooks/use-user-data";
 import logoPath from "@assets/logo-voz-undf.png";
@@ -54,7 +55,15 @@ export default function Login() {
     setIsSubmitting(true);
     setError(null);
     try {
-      await login(values.email, values.password);
+      const result = await login(values.email, values.password);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      if (!result.session) {
+        setError("Não foi possível autenticar. Verifique suas credenciais e tente novamente.");
+        return;
+      }
       window.location.href = "/";
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro ao realizar login");

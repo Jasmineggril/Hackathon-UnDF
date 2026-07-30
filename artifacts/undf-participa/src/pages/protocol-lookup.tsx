@@ -122,7 +122,7 @@ export default function ProtocolLookup() {
         <h1 className="text-[clamp(2.4rem,5vw,4.5rem)] font-bold leading-[0.95] tracking-tight text-foreground mt-3 mb-2">
           protocolo.
         </h1>
-        <div className="flex items-center gap-2 mb-8">
+        <div className="flex items-center gap-2 mb-8" data-tour="protocolos">
           <p className="text-muted-foreground text-sm">
             Formato: <code className="font-mono text-foreground/70">VUNDF-AAAAMMDD-XXXX</code>
           </p>

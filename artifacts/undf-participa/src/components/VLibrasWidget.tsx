@@ -22,7 +22,7 @@ export default function VLibrasWidget() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const props = (attrs: Record<string, string>) => attrs as any;
   return (
-    <div {...props({ vw: "true" })} className="enabled">
+    <div data-tour="libras" {...props({ vw: "true" })} className="enabled">
       <div {...props({ "vw-access-button": "true" })} className="active"></div>
       <div {...props({ "vw-plugin-wrapper": "true" })}>
         <div className="vw-plugin-top-wrapper"></div>
