@@ -1,0 +1,226 @@
+Faça somente as correções finais abaixo no projeto existente Voz UnDF.
+
+Não crie projeto novo.
+Não altere funcionalidades que já estão funcionando.
+Não avance para novos recursos.
+
+1. RECUPERAÇÃO DE SENHA
+
+Substituir o link:
+
+<a href="#">Esqueceu?</a>
+
+por navegação real para:
+
+/recuperar-senha
+
+Criar página /recuperar-senha usando:
+
+supabase.auth.resetPasswordForEmail()
+
+Criar página /redefinir-senha usando:
+
+supabase.auth.updateUser({ password })
+
+Adicionar:
+
+- validação;
+- loading;
+- mensagens amigáveis;
+- confirmação de senha;
+- mostrar e ocultar senha;
+- retorno ao login;
+- tratamento seguro de erro.
+
+Registrar as duas rotas no App.tsx.
+
+2. TOUR GUIADO REAL
+
+Transformar o tour atual, que hoje é apenas um modal, em um tour que destaque elementos reais.
+
+Cada etapa deve conter:
+
+- id;
+- route;
+- targetSelector;
+- title;
+- description;
+- placement;
+- optional.
+
+Adicionar data-tour nos elementos reais:
+
+data-tour="meu-painel"
+data-tour="nova-demanda"
+data-tour="protocolos"
+data-tour="demandas-publicas"
+data-tour="tambem-afetado"
+data-tour="propostas"
+data-tour="apoiar-proposta"
+data-tour="transparencia"
+data-tour="acessibilidade"
+data-tour="libras"
+data-tour="ajuda"
+
+O tour deve:
+
+- navegar para a rota;
+- aguardar o elemento renderizar;
+- localizar com document.querySelector();
+- rolar até o elemento;
+- aplicar destaque;
+- posicionar o popover próximo ao alvo;
+- salvar a etapa;
+- continuar após troca de página;
+- ignorar etapas opcionais sem elemento;
+- manter Escape, teclado, ARIA e redução de movimento.
+
+Não remover o conteúdo atual do tour, apenas adaptá-lo para elementos reais.
+
+3. DTO PÚBLICO DE PROTOCOLO
+
+Substituir sanitizeForPublic baseado em rest/spread por um objeto público explícito.
+
+Criar função:
+
+toPublicDemandResponse()
+
+Ela deve retornar apenas:
+
+- id público, somente se necessário;
+- protocol;
+- title;
+- content público;
+- type;
+- category;
+- status;
+- supportCount;
+- targetUnit público;
+- isAnonymous;
+- createdAt;
+- updatedAt;
+- resposta institucional pública;
+- userSupported.
+
+Nunca retornar:
+
+- userId;
+- mediaUrl;
+- storage path;
+- latitude;
+- longitude;
+- endereço completo;
+- observação interna;
+- notas administrativas;
+- identificadores internos desnecessários;
+- dados do autor;
+- e-mail;
+- matrícula;
+- avatar.
+
+Na consulta pública por protocolo:
+
+- normalizar para maiúsculas;
+- validar o formato;
+- retornar 404 para demanda privada;
+- não revelar que o protocolo privado existe;
+- não retornar anexos ou áudio.
+
+Usar o DTO também na listagem pública de demandas.
+
+Criar testes que confirmem que campos sensíveis não aparecem no JSON.
+
+4. PROTOCOLO COM RETENTATIVA
+
+Manter a restrição UNIQUE existente.
+
+Substituir a pré-consulta com uma única nova geração por uma função robusta:
+
+insertDemandWithUniqueProtocol()
+
+Fluxo:
+
+- gerar protocolo;
+- tentar inserir;
+- capturar erro PostgreSQL 23505 referente ao protocolo;
+- gerar outro;
+- tentar novamente;
+- máximo de 5 tentativas;
+- após 5 falhas, retornar erro 503 com mensagem segura.
+
+Não capturar outras violações de unicidade como se fossem colisão de protocolo.
+
+Adicionar teste simulando colisão.
+
+5. CORRIGIR ALIAS DO VITEST
+
+Em:
+
+artifacts/undf-participa/vitest.config.ts
+
+Alterar:
+
+"@assets": path.resolve(__dirname, "../../attached_assets")
+
+para:
+
+"@assets": path.resolve(__dirname, "src/assets")
+
+Confirmar que nenhum arquivo de produção importa attached_assets.
+
+6. LIMPEZA
+
+Garantir no .gitignore:
+
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vercel/
+coverage/
+*.log
+
+Não apagar pnpm-lock.yaml.
+
+Não usar npm ou yarn.
+
+7. TESTES E VALIDAÇÃO
+
+Adicionar testes para:
+
+- recuperação de senha;
+- redefinição de senha;
+- link Esqueceu funcionando;
+- tour localizando target real;
+- tour navegando entre rotas;
+- tour retomando progresso;
+- DTO público sem mediaUrl;
+- DTO público sem userId;
+- demanda privada retornando 404;
+- colisão de protocolo com retentativa;
+- alias de assets consistente.
+
+Executar:
+
+pnpm run typecheck
+
+Executar os testes pelo comando correto disponível no workspace.
+
+Executar:
+
+pnpm run build
+
+Ao finalizar, informar:
+
+- arquivos modificados;
+- rotas criadas;
+- funcionamento da recuperação de senha;
+- funcionamento do tour real;
+- campos removidos da resposta pública;
+- estratégia de colisão do protocolo;
+- resultado do typecheck;
+- resultado dos testes;
+- resultado do build;
+- limitações restantes.
+
+Não declarar concluído se algum comando falhar.

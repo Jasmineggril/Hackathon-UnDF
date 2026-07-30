@@ -157,9 +157,9 @@ export default function Login() {
                 <Label htmlFor="password" className="text-xs uppercase tracking-wider text-muted-foreground">
                   Senha
                 </Label>
-                <a href="#" className="text-xs text-primary hover:underline">
+                <Link href="/recuperar-senha" className="text-xs text-primary hover:underline" data-testid="link-forgot-password">
                   Esqueceu?
-                </a>
+                </Link>
               </div>
               <Input
                 id="password"
