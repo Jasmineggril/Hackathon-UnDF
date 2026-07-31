@@ -332,6 +332,12 @@ export default function Admin() {
                   <img src={selectedDemand.mediaUrl} alt="Imagem da demanda" className="max-h-64 object-contain rounded" />
                 </div>
               )}
+              {selectedDemand.type === "video" && selectedDemand.mediaUrl && (
+                <div className="bg-card border rounded-lg p-5">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Vídeo</h3>
+                  <video controls src={selectedDemand.mediaUrl} className="w-full rounded" />
+                </div>
+              )}
 
               {/* Histórico */}
               <div className="bg-card border rounded-lg">

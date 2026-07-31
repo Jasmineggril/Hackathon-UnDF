@@ -272,6 +272,26 @@ export default function ProtocolLookup() {
                   </div>
                 )}
 
+                {/* Mídia */}
+                {demand.type === "audio" && demand.mediaUrl && (
+                  <div className="border border-border p-6 bg-card">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">Áudio</p>
+                    <audio controls src={demand.mediaUrl} className="w-full" />
+                  </div>
+                )}
+                {demand.type === "image" && demand.mediaUrl && (
+                  <div className="border border-border p-6 bg-card">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">Imagem</p>
+                    <img src={demand.mediaUrl} alt="Imagem da demanda" className="max-h-96 object-contain rounded" />
+                  </div>
+                )}
+                {demand.type === "video" && demand.mediaUrl && (
+                  <div className="border border-border p-6 bg-card">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">Vídeo</p>
+                    <video controls src={demand.mediaUrl} className="w-full rounded" />
+                  </div>
+                )}
+
                 {/* Admin response */}
                 {demand.adminResponse && (
                   <div className="border border-[#5B9A6E]/30 bg-[#5B9A6E]/5 p-6">

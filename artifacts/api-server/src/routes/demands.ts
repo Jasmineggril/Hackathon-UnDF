@@ -99,7 +99,7 @@ async function insertDemandWithUniqueProtocol(
 /**
  * Converte uma demanda do banco em resposta pública segura.
  *
- * NUNCA retorna: userId, mediaUrl, latitude, longitude, endereço completo (se anônimo),
+ * NUNCA retorna: userId, latitude, longitude, endereço completo (se anônimo),
  * identificadores internos, dados do autor, e-mail, matrícula, avatar,
  * observações internas ou notas administrativas.
  */
@@ -124,10 +124,12 @@ export function toPublicDemandResponse(
     address: demand.isAnonymous ? null : (demand.address ?? null),
     // Institutional response — publicly visible
     adminResponse: demand.adminResponse ?? null,
+    // Media (audio/image/video) — publicly visible public URL (bucket "media" is public)
+    mediaUrl: demand.mediaUrl ?? null,
     // Whether the authenticated user has supported this demand
     userSupported: demand.userSupported ?? false,
     // NOTE: the following fields are intentionally excluded from this object:
-    //   userId, mediaUrl, latitude, longitude,
+    //   userId, latitude, longitude,
     //   internalNotes, adminNotes, authorEmail, authorAvatar, authorEnrollment
   };
 }

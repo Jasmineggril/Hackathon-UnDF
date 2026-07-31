@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Clock, ThumbsUp, Building2, MapPin, Loader2, ArrowLeft, Copy,
-  CheckCircle2, XCircle, Mic, Image as ImageIcon,
+  CheckCircle2, XCircle, Mic, Image as ImageIcon, Video as VideoIcon,
 } from "lucide-react";
 import {
   useGetDemandStatusHistory,
@@ -53,6 +53,7 @@ const TYPE_LABELS: Record<string, string> = {
 const TYPE_ICONS: Record<string, React.ReactNode> = {
   audio: <Mic className="w-4 h-4" />,
   image: <ImageIcon className="w-4 h-4" />,
+  video: <VideoIcon className="w-4 h-4" />,
 };
 
 // ---------------------------------------------------------------------------
@@ -244,6 +245,16 @@ export default function DemandDetail() {
                 alt="Imagem da demanda"
                 className="w-full max-h-96 object-contain rounded"
               />
+            </div>
+          )}
+
+          {/* Mídia — vídeo */}
+          {demand.type === "video" && demand.mediaUrl && (
+            <div className="border border-border bg-card p-6">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">
+                Vídeo da Manifestação
+              </p>
+              <video controls src={demand.mediaUrl} className="w-full rounded" />
             </div>
           )}
 

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-  ChevronRight, Loader2, Video, AlertTriangle,
+  ChevronRight, Loader2, Video,
 } from "lucide-react";
 import { useCreateDemand, DemandCategory, DemandType } from "@workspace/api-client-react";
 import { useAuth } from "@workspace/auth-web";
@@ -49,7 +49,7 @@ const DEMAND_TYPES: Array<{
   { value: "text",  label: "Texto",  description: "Descreva sua demanda por escrito" },
   { value: "audio", label: "Áudio",  description: "Grave um relato de voz" },
   { value: "image", label: "Imagem", description: "Envie uma foto da situação" },
-  { value: "video", label: "Vídeo",  description: "Em desenvolvimento", disabled: true },
+  { value: "video", label: "Vídeo",  description: "Envie um vídeo da situação" },
 ];
 
 const DEMAND_CATEGORIES = [
@@ -64,10 +64,12 @@ const DEMAND_CATEGORIES = [
 // Upload to Supabase Storage
 // ---------------------------------------------------------------------------
 
-async function uploadToStorage(fileOrBlob: File | Blob, type: "audio" | "image"): Promise<string> {
-  const ext = type === "audio" ? "webm" : ((fileOrBlob as File).name?.split(".").pop() || "jpg");
+async function uploadToStorage(fileOrBlob: File | Blob, type: "audio" | "image" | "video"): Promise<string> {
+  const fallbackExt = type === "audio" ? "webm" : type === "video" ? "mp4" : "jpg";
+  const ext = (fileOrBlob as File).name?.split(".").pop() || fallbackExt;
   const path = `demands/${Date.now()}.${ext}`;
-  const contentType = type === "audio" ? "audio/webm" : ((fileOrBlob as File).type || "image/jpeg");
+  const contentType =
+    type === "audio" ? "audio/webm" : type === "video" ? ((fileOrBlob as File).type || "video/mp4") : ((fileOrBlob as File).type || "image/jpeg");
 
   const { data, error } = await supabase.storage
     .from("media")
@@ -93,6 +95,8 @@ export default function NewDemand() {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const createDemand = useCreateDemand();
 
@@ -129,6 +133,19 @@ export default function NewDemand() {
     }
     const reader = new FileReader();
     reader.onload = (ev) => setImagePreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+    // mediaUrl will be set after upload on submit
+  };
+
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error("Arquivo muito grande. Máximo: 50 MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => setVideoPreview(ev.target?.result as string);
     reader.readAsDataURL(file);
     // mediaUrl will be set after upload on submit
   };
@@ -177,6 +194,20 @@ export default function NewDemand() {
       }
     }
 
+    // Upload video if selected
+    if (formValues.type === "video" && videoInputRef.current?.files?.[0] && !mediaUrl) {
+      try {
+        setUploading(true);
+        mediaUrl = await uploadToStorage(videoInputRef.current.files[0], "video");
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Erro ao enviar vídeo.");
+        setUploading(false);
+        return;
+      } finally {
+        setUploading(false);
+      }
+    }
+
     // Validate that non-text types have media
     if (formValues.type === "audio" && !mediaUrl) {
       toast.error("Grave um áudio antes de enviar.");
@@ -184,6 +215,10 @@ export default function NewDemand() {
     }
     if (formValues.type === "image" && !mediaUrl) {
       toast.error("Selecione uma imagem antes de enviar.");
+      return;
+    }
+    if (formValues.type === "video" && !mediaUrl) {
+      toast.error("Selecione um vídeo antes de enviar.");
       return;
     }
     if (formValues.type === "text" && !formValues.content?.trim()) {
@@ -232,6 +267,10 @@ export default function NewDemand() {
         toast.error("Selecione uma imagem antes de continuar.");
         return;
       }
+      if (values.type === "video" && !videoInputRef.current?.files?.[0] && !values.mediaUrl) {
+        toast.error("Selecione um vídeo antes de continuar.");
+        return;
+      }
       setStep(3);
       return;
     }
@@ -276,7 +315,6 @@ export default function NewDemand() {
                 </Label>
                 <div className="grid grid-cols-2 gap-2">
                   {DEMAND_TYPES.map(({ value, label, description, disabled }) => {
-                    const isVideo = value === "video";
                     return (
                       <button
                         key={value}
@@ -293,21 +331,10 @@ export default function NewDemand() {
                       >
                         <span className="block font-semibold">{label}</span>
                         <span className="block text-xs mt-0.5 opacity-70">{description}</span>
-                        {isVideo && (
-                          <span className="absolute top-2 right-2 flex items-center gap-1 text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold">
-                            <Video className="w-2.5 h-2.5" /> Em breve
-                          </span>
-                        )}
                       </button>
                     );
                   })}
                 </div>
-                {values.type === "video" && (
-                  <div className="mt-3 flex items-start gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 p-3 rounded">
-                    <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
-                    <span>Manifestações em vídeo estão em desenvolvimento e serão disponibilizadas em breve.</span>
-                  </div>
-                )}
               </div>
             </div>
           )}
@@ -427,6 +454,55 @@ export default function NewDemand() {
                 </div>
               )}
 
+              {/* Vídeo */}
+              {values.type === "video" && (
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">
+                    Vídeo <span className="text-destructive">*</span>
+                  </Label>
+                  <div
+                    className="border-2 border-dashed border-border bg-muted/20 p-6 flex flex-col items-center gap-3 cursor-pointer hover:border-primary/40 transition-colors"
+                    onClick={() => videoInputRef.current?.click()}
+                  >
+                    {videoPreview ? (
+                      <video
+                        src={videoPreview}
+                        controls
+                        className="max-h-48 w-full object-contain rounded"
+                      />
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Video className="w-6 h-6 text-primary/60" />
+                        </div>
+                        <p className="text-sm text-muted-foreground">Clique para selecionar um vídeo</p>
+                        <p className="text-xs text-muted-foreground/60">MP4, WebM, MOV — máx. 50 MB</p>
+                      </>
+                    )}
+                    {videoPreview && (
+                      <p className="text-xs text-[#5B9A6E] font-medium">✓ Vídeo selecionado — clique para trocar</p>
+                    )}
+                  </div>
+                  <input
+                    ref={videoInputRef}
+                    type="file"
+                    accept="video/*"
+                    className="hidden"
+                    onChange={handleVideoSelect}
+                  />
+                  <div className="mt-4">
+                    <Label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">
+                      Descrição complementar (opcional)
+                    </Label>
+                    <Textarea
+                      {...form.register("content")}
+                      placeholder="Descreva o que o vídeo mostra..."
+                      className="border-border bg-card min-h-[80px]"
+                    />
+                  </div>
+                </div>
+              )}
+
               <div>
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">
                   Unidade responsável (opcional)
@@ -517,6 +593,12 @@ export default function NewDemand() {
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Imagem</p>
                     <img src={imagePreview} alt="Pré-visualização" className="max-h-32 object-contain rounded" />
+                  </div>
+                )}
+                {values.type === "video" && videoPreview && (
+                  <div>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Vídeo</p>
+                    <video src={videoPreview} controls className="max-h-32 w-full object-contain rounded" />
                   </div>
                 )}
                 <div>
