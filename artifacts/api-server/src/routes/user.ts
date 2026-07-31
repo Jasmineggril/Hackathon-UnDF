@@ -12,6 +12,7 @@ import {
   demands,
   proposals,
   demandSupports,
+  proposalSupports,
   users,
 } from "@workspace/db";
 import { eq, desc, and, count, sql } from "drizzle-orm";
@@ -213,6 +214,19 @@ router.get("/user/supported-demands", async (req: Request, res: Response) => {
     limit,
     totalPages: Math.ceil(Number(total) / limit),
   });
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/user/supported-proposals — IDs de propostas apoiadas pelo usuário
+// ---------------------------------------------------------------------------
+router.get("/user/supported-proposals", async (req: Request, res: Response) => {
+  if (!requireAuth(req, res)) return;
+  const userId = req.user!.id;
+  const rows = await db
+    .select({ proposalId: proposalSupports.proposalId })
+    .from(proposalSupports)
+    .where(eq(proposalSupports.userId, userId));
+  res.json({ ids: rows.map((r) => r.proposalId) });
 });
 
 // ---------------------------------------------------------------------------

@@ -123,6 +123,15 @@ export function useUserSupportedDemands() {
   });
 }
 
+export function useUserSupportedProposalIds(enabled = true) {
+  return useQuery<{ ids: number[] }>({
+    queryKey: ["/api/user/supported-proposals"],
+    queryFn: () => authedFetch<{ ids: number[] }>("/api/user/supported-proposals"),
+    enabled,
+    staleTime: 30_000,
+  });
+}
+
 export function useRemoveSupport() {
   const qc = useQueryClient();
   return useMutation({

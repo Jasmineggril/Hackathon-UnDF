@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Filter, Megaphone, CheckCircle2, XCircle, Clock, ThumbsUp, Loader2, Plus, Search } from "lucide-react";
 import { useListProposals, useToggleProposalSupport, getListProposalsQueryKey } from "@workspace/api-client-react";
 import { ProposalStatus, ListProposalsSort } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@workspace/auth-web";
+import { useUserSupportedProposalIds } from "@/hooks/use-user-data";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -26,10 +28,41 @@ export default function Proposals() {
   const { data, isLoading } = useListProposals({ page, limit: 12, status, sort });
   const toggleSupport = useToggleProposalSupport();
 
+  // IDs de propostas já apoiadas pelo usuário (para feedback visual)
+  const { data: supportedData } = useUserSupportedProposalIds(isAuthenticated);
+  const [localSupported, setLocalSupported] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (supportedData?.ids) {
+      setLocalSupported(new Set(supportedData.ids));
+    }
+  }, [supportedData]);
+
   const handleSupport = async (id: number) => {
     if (!isAuthenticated) { window.location.href = "/login"; return; }
-    await toggleSupport.mutateAsync({ id });
-    queryClient.invalidateQueries({ queryKey: getListProposalsQueryKey() });
+
+    // Optimistic update
+    const wasSupported = localSupported.has(id);
+    setLocalSupported((prev) => {
+      const next = new Set(prev);
+      wasSupported ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+    try {
+      await toggleSupport.mutateAsync({ id });
+      queryClient.invalidateQueries({ queryKey: getListProposalsQueryKey() });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/supported-proposals"] });
+      toast.success(wasSupported ? "Apoio removido." : "Proposta apoiada com sucesso!");
+    } catch {
+      // Reverte optimistic update em caso de erro
+      setLocalSupported((prev) => {
+        const next = new Set(prev);
+        wasSupported ? next.add(id) : next.delete(id);
+        return next;
+      });
+      toast.error("Erro ao registrar apoio. Tente novamente.");
+    }
   };
 
   return (
@@ -101,6 +134,7 @@ export default function Proposals() {
             {data?.data.map((proposal) => {
               const sc = STATUS_CONFIG[proposal.status];
               const canSupport = proposal.status === "open";
+              const isSupported = localSupported.has(proposal.id);
               return (
                 <div
                   key={proposal.id}
@@ -147,12 +181,22 @@ export default function Proposals() {
                     className={`flex items-center justify-between w-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
                       !canSupport
                         ? "border-border/40 text-muted-foreground/40 cursor-not-allowed group-hover:border-white/15 group-hover:text-white/30"
-                        : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary group-hover:border-white/30 group-hover:text-white"
+                        : isSupported
+                          ? "border-primary/60 text-primary bg-primary/5 group-hover:border-white/40 group-hover:text-white group-hover:bg-white/10"
+                          : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary group-hover:border-white/30 group-hover:text-white"
                     }`}
                   >
                     <span className="flex items-center gap-2">
-                      <ThumbsUp className="w-3.5 h-3.5" />
-                      {canSupport ? "Apoiar proposta" : "Encerrada para apoios"}
+                      {toggleSupport.isPending ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <ThumbsUp className={`w-3.5 h-3.5 ${isSupported ? "fill-current" : ""}`} />
+                      )}
+                      {!canSupport
+                        ? "Encerrada para apoios"
+                        : isSupported
+                          ? "Apoio registrado ✓"
+                          : "Apoiar proposta"}
                     </span>
                     <span className="tabular-nums">{proposal.supportCount}</span>
                   </button>

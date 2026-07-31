@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -5,7 +6,7 @@ import { Clock, ThumbsUp, Building2, Loader2, ArrowLeft, XCircle } from "lucide-
 import { useToggleProposalSupport } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@workspace/auth-web";
-import { useProposalById } from "@/hooks/use-user-data";
+import { useProposalById, useUserSupportedProposalIds } from "@/hooks/use-user-data";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -29,18 +30,34 @@ export default function ProposalDetail() {
 
   const toggleSupport = useToggleProposalSupport();
 
+  // Estado visual de "já apoiado"
+  const { data: supportedData } = useUserSupportedProposalIds(isAuthenticated);
+  const [isSupported, setIsSupported] = useState(false);
+
+  useEffect(() => {
+    if (supportedData?.ids && !isNaN(proposalId)) {
+      setIsSupported(supportedData.ids.includes(proposalId));
+    }
+  }, [supportedData, proposalId]);
+
   const handleSupport = async () => {
     if (!isAuthenticated) {
       window.location.href = "/login";
       return;
     }
     if (!proposal || proposal.status !== "open") return;
+
+    const wasSupported = isSupported;
+    setIsSupported(!wasSupported); // optimistic
+
     try {
       await toggleSupport.mutateAsync({ id: proposal.id });
       queryClient.invalidateQueries({ queryKey: ["/api/proposals", proposalId] });
-      toast.success("Apoio registrado!");
+      queryClient.invalidateQueries({ queryKey: ["/api/user/supported-proposals"] });
+      toast.success(wasSupported ? "Apoio removido." : "Proposta apoiada com sucesso!");
     } catch {
-      toast.error("Erro ao registrar apoio.");
+      setIsSupported(wasSupported); // reverte
+      toast.error("Erro ao registrar apoio. Tente novamente.");
     }
   };
 
@@ -144,12 +161,22 @@ export default function ProposalDetail() {
           className={`flex items-center justify-between w-full border px-5 py-3.5 text-sm font-semibold uppercase tracking-wider transition-colors ${
             !canSupport
               ? "border-border/40 text-muted-foreground/40 cursor-not-allowed"
-              : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
+              : isSupported
+                ? "border-primary/60 text-primary bg-primary/5 hover:border-primary hover:bg-primary/10"
+                : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
           }`}
         >
           <span className="flex items-center gap-2">
-            <ThumbsUp className="w-4 h-4" />
-            {canSupport ? "Apoiar esta proposta" : "Encerrada para apoios"}
+            {toggleSupport.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ThumbsUp className={`w-4 h-4 ${isSupported ? "fill-current" : ""}`} />
+            )}
+            {!canSupport
+              ? "Encerrada para apoios"
+              : isSupported
+                ? "Apoio registrado ✓"
+                : "Apoiar esta proposta"}
           </span>
           <span className="tabular-nums">{proposal.supportCount} apoios</span>
         </button>
