@@ -5,7 +5,10 @@ import { eq } from "drizzle-orm";
 
 const DEMO_EMAIL = process.env.DEMO_USER_EMAIL;
 const DEMO_PASSWORD = process.env.DEMO_USER_PASSWORD;
+const DEMO_ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL;
+const DEMO_ADMIN_PASSWORD = process.env.DEMO_ADMIN_PASSWORD;
 const DEMO_FULL_NAME = "Aluno de Demonstração";
+const DEMO_ADMIN_FULL_NAME = "Gestor de Demonstração";
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 const DEMO_MODE = process.env.DEMO_MODE === "true";
@@ -20,7 +23,12 @@ if (!DEMO_EMAIL || !DEMO_PASSWORD || !SUPABASE_URL || !SUPABASE_SECRET_KEY) {
   process.exit(1);
 }
 
-async function getOrCreateSupabaseUser(email: string, password: string) {
+if ((DEMO_ADMIN_EMAIL && !DEMO_ADMIN_PASSWORD) || (!DEMO_ADMIN_EMAIL && DEMO_ADMIN_PASSWORD)) {
+  console.error("Para criar a conta administrativa de demonstração, defina tanto DEMO_ADMIN_EMAIL quanto DEMO_ADMIN_PASSWORD.");
+  process.exit(1);
+}
+
+async function getOrCreateSupabaseUser(email: string, password: string, fullName: string) {
   const headers = {
     apikey: SUPABASE_SECRET_KEY,
     Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
@@ -50,7 +58,7 @@ async function getOrCreateSupabaseUser(email: string, password: string) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { full_name: DEMO_FULL_NAME },
+      user_metadata: { full_name: fullName },
     }),
   });
 
@@ -62,7 +70,7 @@ async function getOrCreateSupabaseUser(email: string, password: string) {
   return await create.json();
 }
 
-async function upsertLocalUser(authUserId: string, email: string, fullName: string) {
+async function upsertLocalUser(authUserId: string, email: string, fullName: string, role: "estudante" | "administrador" = "estudante") {
   const [existing] = await db
     .select()
     .from(users)
@@ -71,14 +79,14 @@ async function upsertLocalUser(authUserId: string, email: string, fullName: stri
   if (existing) {
     await db
       .update(users)
-      .set({ email, fullName, role: "estudante" })
+      .set({ email, fullName, role })
       .where(eq(users.authUserId, authUserId));
     return existing;
   }
 
   const [created] = await db
     .insert(users)
-    .values({ authUserId, email, fullName, role: "estudante" })
+    .values({ authUserId, email, fullName, role })
     .returning();
 
   return created;
@@ -87,12 +95,24 @@ async function upsertLocalUser(authUserId: string, email: string, fullName: stri
 async function seed() {
   console.log("Preparando dados de demonstração do Voz UnDF...");
 
-  const supabaseUser = await getOrCreateSupabaseUser(DEMO_EMAIL!, DEMO_PASSWORD!);
+  const supabaseUser = await getOrCreateSupabaseUser(DEMO_EMAIL!, DEMO_PASSWORD!, DEMO_FULL_NAME);
   const localUser = await upsertLocalUser(
     supabaseUser.id,
     DEMO_EMAIL!,
     DEMO_FULL_NAME,
+    "estudante",
   );
+
+  if (DEMO_ADMIN_EMAIL && DEMO_ADMIN_PASSWORD) {
+    const adminSupabaseUser = await getOrCreateSupabaseUser(DEMO_ADMIN_EMAIL, DEMO_ADMIN_PASSWORD, DEMO_ADMIN_FULL_NAME);
+    await upsertLocalUser(
+      adminSupabaseUser.id,
+      DEMO_ADMIN_EMAIL,
+      DEMO_ADMIN_FULL_NAME,
+      "administrador",
+    );
+    console.log("Conta administrativa de demonstração criada ou atualizada.");
+  }
 
   const DEMO_DEMANDS = [
     {

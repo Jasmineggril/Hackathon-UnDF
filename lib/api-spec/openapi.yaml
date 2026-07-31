@@ -539,10 +539,17 @@ components:
         - Acessibilidade
         - "Cultura e Esporte"
         - "Sugestão de Melhoria"
+        - "Saúde e Bem-estar"
+        - Segurança
+        - Sustentabilidade
+        - Mobilidade
+        - "Comunicação Institucional"
+        - "Recursos Humanos"
+        - "Biblioteca e Acervo"
 
     DemandStatus:
       type: string
-      enum: [received, processing, completed, archived]
+      enum: [received, in_analysis, processing, awaiting_info, completed, rejected, archived, escalated]
 
     DemandType:
       type: string

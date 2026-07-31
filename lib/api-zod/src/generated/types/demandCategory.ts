@@ -29,4 +29,11 @@ export const DemandCategory = {
   Acessibilidade: 'Acessibilidade',
   Cultura_e_Esporte: 'Cultura e Esporte',
   Sugestão_de_Melhoria: 'Sugestão de Melhoria',
+  'Saúde_e_Bem-estar': 'Saúde e Bem-estar',
+  Segurança: 'Segurança',
+  Sustentabilidade: 'Sustentabilidade',
+  Mobilidade: 'Mobilidade',
+  Comunicação_Institucional: 'Comunicação Institucional',
+  Recursos_Humanos: 'Recursos Humanos',
+  Biblioteca_e_Acervo: 'Biblioteca e Acervo',
 } as const;

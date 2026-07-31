@@ -138,16 +138,21 @@ export function useRemoveSupport() {
 }
 
 /** Demo login — chama o backend que detém as credenciais */
-export async function demoLogin(): Promise<{
+export async function demoLogin(options?: { type?: "student" | "admin" }): Promise<{
   access_token: string;
   refresh_token: string;
   expires_in: number;
 }> {
   const BASE_URL = import.meta.env.BASE_URL?.replace(/\/+$/, "") || "";
-  const res = await fetch(`${BASE_URL}/api/demo/login`, { method: "POST" });
+  const body = JSON.stringify({ type: options?.type ?? "student" });
+  const res = await fetch(`${BASE_URL}/api/demo/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+  });
   if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error((body as { message?: string }).message ?? "Falha no acesso de demonstração");
+    const bodyData = await res.json().catch(() => ({}));
+    throw new Error((bodyData as { message?: string }).message ?? "Falha no acesso de demonstração");
   }
   return res.json();
 }

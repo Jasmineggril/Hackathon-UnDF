@@ -56,8 +56,8 @@ export const listDemandsQueryLimitMax = 100;
 export const listDemandsQuerySortDefault = `createdAt`;
 
 export const ListDemandsQueryParams = zod.object({
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']).optional(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']).optional(),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']).optional(),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']).optional(),
   "page": zod.coerce.number().min(1).default(listDemandsQueryPageDefault),
   "limit": zod.coerce.number().max(listDemandsQueryLimitMax).default(listDemandsQueryLimitDefault),
   "sort": zod.enum(['createdAt', 'supportCount']).default(listDemandsQuerySortDefault).describe('Campo de ordenação')
@@ -68,13 +68,13 @@ export const ListDemandsResponse = zod.object({
   "id": zod.number(),
   "protocol": zod.string(),
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().nullish(),
   "mediaUrl": zod.string().nullish(),
   "address": zod.string().nullish(),
   "isAnonymous": zod.boolean(),
   "targetUnit": zod.string().nullish(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish(),
   "supportCount": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -96,7 +96,7 @@ export const createDemandBodyIsAnonymousDefault = false;
 
 export const CreateDemandBody = zod.object({
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().max(createDemandBodyContentMax).nullish(),
   "mediaUrl": zod.string().nullish(),
   "latitude": zod.string().nullish(),
@@ -110,13 +110,13 @@ export const CreateDemandResponse = zod.object({
   "id": zod.number(),
   "protocol": zod.string(),
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().nullish(),
   "mediaUrl": zod.string().nullish(),
   "address": zod.string().nullish(),
   "isAnonymous": zod.boolean(),
   "targetUnit": zod.string().nullish(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish(),
   "supportCount": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -135,13 +135,13 @@ export const GetDemandByProtocolResponse = zod.object({
   "id": zod.number(),
   "protocol": zod.string(),
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().nullish(),
   "mediaUrl": zod.string().nullish(),
   "address": zod.string().nullish(),
   "isAnonymous": zod.boolean(),
   "targetUnit": zod.string().nullish(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish(),
   "supportCount": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -193,7 +193,7 @@ export const listProposalsQueryLimitDefault = 20;
 export const listProposalsQuerySortDefault = `supportCount`;
 
 export const ListProposalsQueryParams = zod.object({
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']).optional(),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']).optional(),
   "status": zod.enum(['open', 'under_review', 'approved', 'rejected', 'implemented']).optional(),
   "page": zod.coerce.number().default(listProposalsQueryPageDefault),
   "limit": zod.coerce.number().default(listProposalsQueryLimitDefault),
@@ -205,7 +205,7 @@ export const ListProposalsResponse = zod.object({
   "id": zod.number(),
   "title": zod.string(),
   "description": zod.string(),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "status": zod.enum(['open', 'under_review', 'approved', 'rejected', 'implemented']),
   "targetUnit": zod.string().nullish(),
   "adminDecision": zod.string().nullish(),
@@ -234,7 +234,7 @@ export const createProposalBodyDescriptionMax = 5000;
 export const CreateProposalBody = zod.object({
   "title": zod.string().min(createProposalBodyTitleMin).max(createProposalBodyTitleMax),
   "description": zod.string().min(createProposalBodyDescriptionMin).max(createProposalBodyDescriptionMax),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "targetUnit": zod.string().nullish()
 })
 
@@ -242,7 +242,7 @@ export const CreateProposalResponse = zod.object({
   "id": zod.number(),
   "title": zod.string(),
   "description": zod.string(),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "status": zod.enum(['open', 'under_review', 'approved', 'rejected', 'implemented']),
   "targetUnit": zod.string().nullish(),
   "adminDecision": zod.string().nullish(),
@@ -321,7 +321,7 @@ export const adminListDemandsQueryPageDefault = 1;
 export const adminListDemandsQueryLimitDefault = 50;
 
 export const AdminListDemandsQueryParams = zod.object({
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']).optional(),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']).optional(),
   "page": zod.coerce.number().default(adminListDemandsQueryPageDefault),
   "limit": zod.coerce.number().default(adminListDemandsQueryLimitDefault)
 })
@@ -331,13 +331,13 @@ export const AdminListDemandsResponse = zod.object({
   "id": zod.number(),
   "protocol": zod.string(),
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().nullish(),
   "mediaUrl": zod.string().nullish(),
   "address": zod.string().nullish(),
   "isAnonymous": zod.boolean(),
   "targetUnit": zod.string().nullish(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish(),
   "supportCount": zod.number(),
   "createdAt": zod.coerce.date(),
@@ -358,7 +358,7 @@ export const UpdateDemandStatusParams = zod.object({
 })
 
 export const UpdateDemandStatusBody = zod.object({
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish()
 })
 
@@ -366,13 +366,13 @@ export const UpdateDemandStatusResponse = zod.object({
   "id": zod.number(),
   "protocol": zod.string(),
   "type": zod.enum(['text', 'audio', 'image', 'video']),
-  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria']),
+  "category": zod.enum(['Infraestrutura', 'Ensino e Pesquisa', 'Assistência Estudantil', 'Administração', 'Tecnologia', 'Acessibilidade', 'Cultura e Esporte', 'Sugestão de Melhoria', 'Saúde e Bem-estar', 'Segurança', 'Sustentabilidade', 'Mobilidade', 'Comunicação Institucional', 'Recursos Humanos', 'Biblioteca e Acervo']),
   "content": zod.string().nullish(),
   "mediaUrl": zod.string().nullish(),
   "address": zod.string().nullish(),
   "isAnonymous": zod.boolean(),
   "targetUnit": zod.string().nullish(),
-  "status": zod.enum(['received', 'processing', 'completed', 'archived']),
+  "status": zod.enum(['received', 'in_analysis', 'processing', 'awaiting_info', 'completed', 'rejected', 'archived', 'escalated']),
   "adminResponse": zod.string().nullish(),
   "supportCount": zod.number(),
   "createdAt": zod.coerce.date(),

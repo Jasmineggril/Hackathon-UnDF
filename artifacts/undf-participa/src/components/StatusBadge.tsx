@@ -11,10 +11,18 @@ export function StatusBadge({ status, type = 'demand' }: StatusBadgeProps) {
     switch (status) {
       case DemandStatus.received:
         return <Badge variant="secondary" className="bg-slate-100 text-slate-700 hover:bg-slate-200">Recebida</Badge>;
-      case DemandStatus.processing:
+      case DemandStatus.in_analysis:
         return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-200">Em Análise</Badge>;
+      case DemandStatus.processing:
+        return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 border-purple-200">Em Execução</Badge>;
+      case DemandStatus.awaiting_info:
+        return <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 border-orange-200">Aguardando Info</Badge>;
       case DemandStatus.completed:
         return <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-emerald-200">Concluída</Badge>;
+      case DemandStatus.rejected:
+        return <Badge variant="destructive" className="bg-red-100 text-red-800 hover:bg-red-200 border-red-200">Não Aprovada</Badge>;
+      case DemandStatus.escalated:
+        return <Badge variant="destructive" className="bg-red-100 text-red-800 hover:bg-red-200 border-red-200">Escalada</Badge>;
       case DemandStatus.archived:
         return <Badge variant="outline" className="text-slate-500 border-slate-200">Arquivada</Badge>;
       default:

@@ -5,7 +5,7 @@
   "buildCommand": "pnpm run build",
   "outputDirectory": "artifacts/undf-participa/dist/public",
   "functions": {
-    "api/**/*.js": {
+    "api/**/*.{js,ts}": {
       "runtime": "nodejs20.x"
     }
   },

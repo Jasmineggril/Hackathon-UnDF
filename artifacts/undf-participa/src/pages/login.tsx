@@ -18,8 +18,12 @@ const loginSchema = z.object({
 });
 
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
-const DEMO_EMAIL = "aluno_teste@undf.edu.br";
-const DEMO_PASSWORD = "123456";
+const DEMO_USER_UI_ENABLED = import.meta.env.VITE_DEMO_USER_ENABLED !== "false";
+const DEMO_ADMIN_UI_ENABLED = import.meta.env.VITE_DEMO_ADMIN_ENABLED === "true";
+const DEMO_EMAIL = String(import.meta.env.VITE_DEMO_USER_EMAIL ?? "aluno_teste@undf.edu.br");
+const DEMO_PASSWORD = String(import.meta.env.VITE_DEMO_USER_PASSWORD ?? "123456");
+const DEMO_ADMIN_EMAIL = String(import.meta.env.VITE_DEMO_ADMIN_EMAIL ?? "gestor_demo@undf.edu.br");
+const DEMO_ADMIN_PASSWORD = String(import.meta.env.VITE_DEMO_ADMIN_PASSWORD ?? "123456");
 
 export default function Login() {
   const { signIn: login, isAuthenticated } = useAuth();
@@ -27,6 +31,9 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
   const [demoEnabled, setDemoEnabled] = useState(false);
+  const [adminDemoEnabled, setAdminDemoEnabled] = useState(false);
+  const [adminDemoLoading, setAdminDemoLoading] = useState(false);
+  const [adminDemoError, setAdminDemoError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -47,7 +54,10 @@ export default function Login() {
     const BASE = devBackend || import.meta.env.BASE_URL?.replace(/\/+$/, "") || "";
     fetch(`${BASE}/api/demo/status`)
       .then((r) => r.json())
-      .then((data: { enabled?: boolean }) => setDemoEnabled(!!data.enabled))
+      .then((data: { enabled?: boolean; adminEnabled?: boolean }) => {
+        setDemoEnabled(!!data.enabled);
+        setAdminDemoEnabled(!!data.adminEnabled);
+      })
       .catch(() => {});
   }, []);
 
@@ -88,7 +98,6 @@ export default function Login() {
       });
       if (sessionError) throw new Error(sessionError.message);
       localStorage.removeItem("voz-undf:tour-completed");
-      // sinaliza para a próxima página abrir o tour automaticamente
       try {
         localStorage.setItem("voz-undf:open-tour-next", "true");
       } catch {}
@@ -98,6 +107,25 @@ export default function Login() {
       setError(err instanceof Error ? err.message : "Falha ao entrar como demonstração");
     } finally {
       setDemoLoading(false);
+    }
+  };
+
+  const handleAdminDemoAccess = async () => {
+    setAdminDemoLoading(true);
+    setAdminDemoError(null);
+    try {
+      const session = await demoLogin({ type: "admin" });
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      });
+      if (sessionError) throw new Error(sessionError.message);
+      window.location.href = "/admin";
+      return;
+    } catch (err: unknown) {
+      setAdminDemoError(err instanceof Error ? err.message : "Falha ao entrar como demonstração administrativa");
+    } finally {
+      setAdminDemoLoading(false);
     }
   };
 
@@ -198,7 +226,7 @@ export default function Login() {
           </form>
 
           {/* Demo access — visível apenas quando habilitado */}
-          {DEMO_MODE && demoEnabled && (
+          {DEMO_MODE && DEMO_USER_UI_ENABLED && demoEnabled && (
             <div className="mt-8 border border-amber-200 bg-amber-50 p-4" data-testid="demo-access-section">
               <div className="mb-4">
                 <p className="text-xs uppercase tracking-widest font-semibold text-amber-900">
@@ -248,12 +276,53 @@ export default function Login() {
             </div>
           )}
 
-          <p className="mt-8 text-xs text-muted-foreground text-center">
-            Não tem conta?{" "}
-            <a href="/cadastro" className="text-primary font-semibold hover:underline">
-              Criar conta
-            </a>
-          </p>
+          {DEMO_MODE && DEMO_ADMIN_UI_ENABLED && adminDemoEnabled && (
+            <div className="mt-8 border border-sky-200 bg-sky-50 p-4" data-testid="admin-demo-access-section">
+              <div className="mb-4">
+                <p className="text-xs uppercase tracking-widest font-semibold text-sky-900">
+                  Acesso administrativo de demonstração
+                </p>
+                <p className="text-sm text-sky-900 mt-2">
+                  Essa conta permite explorar o painel de gestão e testar a experiência administrativa.
+                </p>
+              </div>
+
+              <div className="grid gap-2 rounded-md bg-white/80 p-4 text-sm text-sky-900 border border-sky-100">
+                <div>
+                  <span className="font-semibold">E-mail:</span> {DEMO_ADMIN_EMAIL}
+                </div>
+                <div>
+                  <span className="font-semibold">Senha:</span> {DEMO_ADMIN_PASSWORD}
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-3">
+                <Button
+                  type="button"
+                  onClick={handleAdminDemoAccess}
+                  disabled={adminDemoLoading}
+                  className="w-full bg-sky-600 hover:bg-sky-700 text-white text-sm py-4"
+                  data-testid="button-login-admin-demo"
+                >
+                  {adminDemoLoading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Entrando…</>
+                  ) : (
+                    "Entrar como gestor de demonstração"
+                  )}
+                </Button>
+              </div>
+
+              {adminDemoError && (
+                <div className="mt-4 p-3 rounded-md border border-sky-200 bg-sky-100 text-sky-900 text-sm">
+                  {adminDemoError}
+                </div>
+              )}
+
+              <p className="mt-4 text-xs text-sky-700 leading-relaxed">
+                Esta conta de demonstração tem role <strong>administrador</strong> e acesso ao painel de gestão. Use-a apenas para testes.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

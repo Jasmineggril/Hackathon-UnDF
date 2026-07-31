@@ -22,7 +22,11 @@ export type DemandStatus = typeof DemandStatus[keyof typeof DemandStatus];
 
 export const DemandStatus = {
   received: 'received',
+  in_analysis: 'in_analysis',
   processing: 'processing',
+  awaiting_info: 'awaiting_info',
   completed: 'completed',
+  rejected: 'rejected',
   archived: 'archived',
+  escalated: 'escalated',
 } as const;

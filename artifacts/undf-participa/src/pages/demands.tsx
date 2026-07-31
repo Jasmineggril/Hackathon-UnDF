@@ -11,10 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const STATUS_CONFIG: Record<DemandStatus, { label: string; dot: string }> = {
-  received:   { label: "Recebida",   dot: "bg-blue-500" },
-  processing: { label: "Em Análise", dot: "bg-amber-500" },
-  completed:  { label: "Resolvida",  dot: "bg-[#5B9A6E]" },
-  archived:   { label: "Arquivada",  dot: "bg-foreground/30" },
+  received:     { label: "Recebida",         dot: "bg-blue-500" },
+  in_analysis:  { label: "Em Análise",        dot: "bg-amber-500" },
+  processing:   { label: "Em Execução",       dot: "bg-purple-500" },
+  awaiting_info: { label: "Aguardando Info",  dot: "bg-orange-500" },
+  completed:    { label: "Resolvida",         dot: "bg-[#5B9A6E]" },
+  rejected:     { label: "Não Aprovada",      dot: "bg-red-500" },
+  escalated:    { label: "Escalada",          dot: "bg-red-500" },
+  archived:     { label: "Arquivada",         dot: "bg-foreground/30" },
 };
 
 export default function Demands() {
@@ -67,11 +71,15 @@ export default function Demands() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os status</SelectItem>
-            <SelectItem value="received">Recebida</SelectItem>
-            <SelectItem value="processing">Em Análise</SelectItem>
-            <SelectItem value="completed">Resolvida</SelectItem>
-            <SelectItem value="archived">Arquivada</SelectItem>
-          </SelectContent>
+          <SelectItem value="received">Recebida</SelectItem>
+          <SelectItem value="in_analysis">Em Análise</SelectItem>
+          <SelectItem value="processing">Em Execução</SelectItem>
+          <SelectItem value="awaiting_info">Aguardando Info</SelectItem>
+          <SelectItem value="completed">Resolvida</SelectItem>
+          <SelectItem value="rejected">Não Aprovada</SelectItem>
+          <SelectItem value="escalated">Escalada</SelectItem>
+          <SelectItem value="archived">Arquivada</SelectItem>
+        </SelectContent>
         </Select>
         <Select value={sort} onValueChange={(v) => { setSort(v as ListDemandsSort); setPage(1); }}>
           <SelectTrigger className="w-44 border-border bg-transparent text-sm">

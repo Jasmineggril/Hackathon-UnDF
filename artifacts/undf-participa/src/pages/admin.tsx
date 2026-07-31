@@ -69,8 +69,12 @@ export default function Admin() {
   const getStatusLabel = (s: string) => {
     switch(s) {
       case 'received': return "Recebida";
-      case 'processing': return "Em Análise";
+      case 'in_analysis': return "Em Análise";
+      case 'processing': return "Em Execução";
+      case 'awaiting_info': return "Aguardando Info";
       case 'completed': return "Resolvida";
+      case 'rejected': return "Não Aprovada";
+      case 'escalated': return "Escalada";
       case 'archived': return "Arquivada";
       default: return s;
     }
@@ -189,8 +193,12 @@ export default function Admin() {
                         <SelectValue placeholder="Selecione..." />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="processing">Em Análise</SelectItem>
+                        <SelectItem value="in_analysis">Em Análise</SelectItem>
+                        <SelectItem value="processing">Em Execução</SelectItem>
+                        <SelectItem value="awaiting_info">Aguardando Info</SelectItem>
                         <SelectItem value="completed">Resolvida</SelectItem>
+                        <SelectItem value="rejected">Não Aprovada</SelectItem>
+                        <SelectItem value="escalated">Escalada</SelectItem>
                         <SelectItem value="archived">Arquivar</SelectItem>
                       </SelectContent>
                     </Select>

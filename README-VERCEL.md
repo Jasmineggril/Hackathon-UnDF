@@ -27,10 +27,14 @@ Este monorepo publica:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 - `VITE_DEMO_MODE` (opcional)
+- `VITE_DEMO_USER_ENABLED` (opcional, padrão true)
+- `VITE_DEMO_ADMIN_ENABLED` (opcional, padrão false)
+- `VITE_DEMO_USER_EMAIL`, `VITE_DEMO_USER_PASSWORD`, `VITE_DEMO_ADMIN_EMAIL` e `VITE_DEMO_ADMIN_PASSWORD` podem ser usados para exibir as credenciais no frontend.
 
 ### Backend demo mode
 - `DEMO_MODE=true` habilita o endpoint de demo no backend.
 - `DEMO_USER_EMAIL` e `DEMO_USER_PASSWORD` configuram a conta demo segura.
+- `DEMO_ADMIN_EMAIL` e `DEMO_ADMIN_PASSWORD` configuram uma conta administrativa de demonstração.
 - `VITE_DEMO_MODE=true` habilita a interface de demo no frontend.
 
 ### Regras

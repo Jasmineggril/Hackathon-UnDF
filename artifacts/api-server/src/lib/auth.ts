@@ -120,16 +120,32 @@ export async function verifyToken(token: string): Promise<VerifiedToken> {
 export async function loadProfile(authUserId: string, email?: string) {
   let profile = await getProfile(authUserId);
 
+  const isDemoAdmin =
+    process.env.DEMO_MODE === 'true' &&
+    email &&
+    email.toLowerCase() === String(process.env.DEMO_ADMIN_EMAIL ?? '').toLowerCase();
+
   if (!profile) {
     const [created] = await db
       .insert(users)
       .values({
         authUserId,
         email: email ?? null,
-        role: 'estudante',
+        role: isDemoAdmin ? 'administrador' : 'estudante',
       })
       .returning();
     profile = created;
+    getProfile.clear?.();
+    return profile;
+  }
+
+  if (isDemoAdmin && profile.role !== 'administrador') {
+    const [updated] = await db
+      .update(users)
+      .set({ role: 'administrador' })
+      .where(eq(users.authUserId, authUserId))
+      .returning();
+    profile = updated;
     getProfile.clear?.();
   }
 

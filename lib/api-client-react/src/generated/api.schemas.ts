@@ -78,6 +78,13 @@ export const DemandCategory = {
   Acessibilidade: 'Acessibilidade',
   Cultura_e_Esporte: 'Cultura e Esporte',
   Sugestão_de_Melhoria: 'Sugestão de Melhoria',
+  'Saúde_e_Bem-estar': 'Saúde e Bem-estar',
+  Segurança: 'Segurança',
+  Sustentabilidade: 'Sustentabilidade',
+  Mobilidade: 'Mobilidade',
+  Comunicação_Institucional: 'Comunicação Institucional',
+  Recursos_Humanos: 'Recursos Humanos',
+  Biblioteca_e_Acervo: 'Biblioteca e Acervo',
 } as const;
 
 export type DemandStatus = typeof DemandStatus[keyof typeof DemandStatus];
@@ -85,9 +92,13 @@ export type DemandStatus = typeof DemandStatus[keyof typeof DemandStatus];
 
 export const DemandStatus = {
   received: 'received',
+  in_analysis: 'in_analysis',
   processing: 'processing',
+  awaiting_info: 'awaiting_info',
   completed: 'completed',
+  rejected: 'rejected',
   archived: 'archived',
+  escalated: 'escalated',
 } as const;
 
 export type DemandType = typeof DemandType[keyof typeof DemandType];
