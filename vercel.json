@@ -10,6 +10,14 @@
       "destination": "/api/:path*"
     },
     {
+      "source": "/demandas/?",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/demandas/nova/?",
+      "destination": "/index.html"
+    },
+    {
       "source": "/((?!api(?:/|$)).*)",
       "destination": "/index.html"
     }

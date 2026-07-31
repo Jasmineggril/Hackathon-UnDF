@@ -72,8 +72,8 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/recuperar-senha" component={RecuperarSenha} />
       <Route path="/redefinir-senha" component={RedefinirSenha} />
-      <Route path="/demandas" component={Demands} />
       <Route path="/demandas/nova" component={NewDemand} />
+      <Route path="/demandas" component={Demands} />
       <Route path="/protocolo" component={ProtocolLookup} />
       <Route path="/propostas" component={Proposals} />
       <Route path="/propostas/nova" component={NewProposal} />

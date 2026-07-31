@@ -24,7 +24,7 @@ export default function Demands() {
   const [sort, setSort] = useState<ListDemandsSort>("createdAt");
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useListDemands({ page, limit: 12, status, sort });
+  const { data, isLoading, isError, error } = useListDemands({ page, limit: 12, status, sort });
   const toggleSupport = useToggleDemandSupport();
 
   const handleSupport = async (id: number) => {
@@ -89,6 +89,16 @@ export default function Demands() {
         {isLoading ? (
           <div className="flex justify-center items-center py-32">
             <Loader2 className="w-8 h-8 animate-spin text-primary/40" />
+          </div>
+        ) : isError ? (
+          <div className="py-32 text-center border border-dashed border-red-200 rounded-xl bg-red-50">
+            <p className="text-red-700 text-lg font-semibold mb-3">Erro ao carregar demandas</p>
+            <p className="text-sm text-red-600 mb-6">
+              {error instanceof Error ? error.message : "Ocorreu um problema ao buscar as demandas."}
+            </p>
+            <Button variant="outline" onClick={() => queryClient.invalidateQueries({ queryKey: getListDemandsQueryKey() })}>
+              Tentar novamente
+            </Button>
           </div>
         ) : data?.data.length === 0 ? (
           <div className="py-32 text-center border border-dashed border-border">
