@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-900 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página ADM - Gestão em Tempo Real</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.15);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans bg-slate-950 text-slate-100 overflow-x-hidden selection:bg-sky-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 ring-1 ring-white/20">
+                <i class="fa-solid me-0 fa-shield-halved text-white text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="font-bold text-lg text-white tracking-tight">PÁGINA ADM</h1>
+                    <span class="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Em Tempo Real
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400">Portal de Edição Institucional UnDF</p>
+            </div>
+        </div>
+
+        <!-- User Info & Actions -->
+        <div class="flex items-center space-x-3">
+            <div class="hidden md:flex flex-col items-end mr-2">
+                <span class="text-xs font-medium text-slate-200" id="userEmailDisplay">ADM_teste@undf.edu.br</span>
+                <span class="text-[10px] text-sky-400 font-mono">ID: 123456 • Acesso Total</span>
+            </div>
+            
+            <!-- Toggle Mode: ADM vs Portal Público -->
+            <button onclick="toggleViewMode()" id="viewModeToggle" class="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow-md shadow-emerald-900/30 transition flex items-center gap-2 border border-emerald-400/30">
+                <i class="fa-solid fa-eye" id="viewModeIcon"></i>
+                <span id="viewModeLabel">Visualizar Portal Público (Na Frente)</span>
+            </button>
+
+            <!-- Add New Module Button -->
+            <button onclick="openAddModal()" id="addModuleBtn" class="px-3 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold shadow-md shadow-sky-600/30 transition flex items-center gap-2 border border-sky-400/30">
+                <i class="fa-solid fa-plus"></i>
+                <span class="hidden sm:inline">Novo Módulo</span>
+            </button>
+
+            <button onclick="showQuickToast('Sessão mantida para ADM')" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition" title="Configurações">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+        
+        <!-- Status Banner / Welcome Card -->
+        <section class="glass-panel rounded-2xl p-6 relative overflow-hidden border border-slate-800" id="welcomeBanner">
+            <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="modeBadge" class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span> Modo Administrador (Edição Total)
+                        </span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-1" id="bannerTitle">Painel Geral de Gestão do ADM</h2>
+                    <p class="text-sm text-slate-400 max-w-2xl" id="bannerDesc">
+                        Gerencie todos os módulos: **Edite**, **Adicione** novos cards ou **Exclua** conforme necessário. Clique em **"Visualizar Portal Público"** no topo para conferir exatamente o que o cidadão/aluno vê na frente.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 w-full md:w-auto">
+                    <button onclick="openAddModal()" id="bannerAddBtn" class="w-full md:w-auto px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-sky-600/30 border border-sky-400/30">
+                        <i class="fa-solid fa-plus-circle text-sm"></i> + Criar Novo Card
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Grid Section -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-table-cells-large text-sky-400"></i>
+                    <span id="gridSectionTitle">Grid de Módulos (Edição & Gerenciamento)</span>
+                </h3>
+                <span class="text-xs text-slate-400 font-mono" id="modulesCountDisplay">Carregando módulos...</span>
+            </div>
+
+            <!-- Dynamic Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="modulesGrid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- Special Highlighted Section: SOBRE & GOVERNANÇA -->
+        <section class="glass-panel border-2 border-sky-500/30 rounded-2xl p-6 relative bg-gradient-to-r from-slate-900/90 via-sky-950/20 to-slate-900/90 shadow-xl">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="p-4 bg-sky-500/20 border border-sky-500/40 text-sky-300 rounded-2xl shadow-inner">
+                        <i class="fa-solid fa-circle-nodes text-3xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-bold uppercase bg-sky-500/20 text-sky-300 border border-sky-500/30 rounded-md">
+                                Destaque Central
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mt-1">Eixo Institucional Central</h3>
+                        <p class="text-xs text-slate-400 mt-1 max-w-xl">
+                            Módulos integrados de apresentação da instituição e diretrizes administrativas de Governança.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto" id="centralHighlightActions">
+                    <!-- SOBRE -->
+                    <button onclick="handleModuleClick('sobre')" class="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-xl text-sm shadow-lg shadow-sky-600/30 transition flex items-center justify-center gap-2 border border-sky-400/30">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span id="btnTextSobre">Abrir Pop-up SOBRE</span>
+                    </button>
+                    <!-- GOVERNANÇA -->
+                    <button onclick="handleModuleClick('governanca')" class="w-full sm:w-auto px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold rounded-xl text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-landmark"></i>
+                        <span id="btnTextGovernanca">Abrir Pop-up GOVERNANÇA</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UNIVERSAL EDITABLE POP-UP MODAL -->
+    <div id="popupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        
+        <div class="glass-panel w-full max-w-2xl rounded-2xl border border-slate-700/80 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transform scale-95 transition-all duration-300" id="modalContainer">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 bg-slate-900/80 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div id="modalIconBg" class="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
+                        <i id="modalIcon" class="fa-solid fa-pen"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-sky-400" id="modalSubtypeLabel">Gerenciamento ADM</span>
+                        <h3 id="modalTitleDisplay" class="text-lg font-bold text-white">Título do Módulo</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Tab Nav (Hidden in Public Mode or Add Mode) -->
+            <div id="modalTabNav" class="px-6 pt-3 bg-slate-900/40 border-b border-slate-800 flex items-center gap-4">
+                <button onclick="switchTab('edit')" id="tabEditBtn" class="pb-2.5 text-xs font-semibold text-sky-400 border-b-2 border-sky-500 flex items-center gap-1.5">
+                    <i class="fa-solid fa-sliders"></i> Editor ADM (Mudar na Hora)
+                </button>
+                <button onclick="switchTab('preview')" id="tabPreviewBtn" class="pb-2.5 text-xs font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-1.5">
+                    <i class="fa-solid fa-eye"></i> Visualização Final (Pop-up Público)
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-6 overflow-y-auto space-y-5 flex-1">
+                
+                <!-- FORM: ADM EDITOR / CREATOR -->
+                <form id="editForm" onsubmit="saveModalData(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Título do Módulo / Pop-up</label>
+                            <input type="text" id="inputTitle" required placeholder="Ex: NOTÍCIAS UNID" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Ícone FontAwesome</label>
+                            <select id="inputIcon" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+                                <option value="fa-list-check">📋 Demandas</option>
+                                <option value="fa-scale-balanced">⚖️ ODS 16</option>
+                                <option value="fa-user-shield">🛡️ Privacidade</option>
+                                <option value="fa-lightbulb">💡 Propostas</option>
+                                <option value="fa-folder-open">📁 Arquivos</option>
+                                <option value="fa-file-contract">📄 Termos</option>
+                                <option value="fa-eye">👁️ Transparência</option>
+                                <option value="fa-circle-question">❓ Ajuda</option>
+                                <option value="fa-universal-access">♿ Acessibilidade</option>
+                                <option value="fa-newspaper">📰 Notícias</option>
+                                <option value="fa-calendar-days">📅 Eventos</option>
+                                <option value="fa-graduation-cap">🎓 Cursos</option>
+                                <option value="fa-bullhorn">📢 Avisos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Descrição Curta (Aparece no Card)</label>
+                        <input type="text" id="inputDesc" required placeholder="Ex: Descrição resumida para exibição rápida" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Conteúdo Completo do Pop-Up</label>
+                        <textarea id="inputBody" rows="5" required placeholder="Digite o conteúdo integral que aparecerá no pop-up do usuário..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-sm text-slate-200 focus:outline-none focus:border-sky-500 transition leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Status do Módulo</label>
+                            <select id="inputStatus" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500 transition">
+                                <option value="Ativo e Visível">Ativo e Visível</option>
+                                <option value="Em Manutenção">Em Manutenção</option>
+                                <option value="Rascunho Interno">Rascunho Interno</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Última Atualização</label>
+                            <input type="text" id="inputUpdated" readonly class="w-full bg-slate-900 border border-slate-800/60 rounded-xl px-3.5 py-2.5 text-xs text-slate-400 font-mono">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="hidden" id="hiddenSubmitBtn"></button>
+                </form>
+
+                <!-- PREVIEW / PUBLIC POP-UP VIEW MODE -->
+                <div id="previewArea" class="hidden space-y-4 bg-slate-950/60 border border-slate-800 rounded-xl p-5">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                        <span id="previewStatusBadge" class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            Ativo e Visível
+                        </span>
+                        <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-globe text-sky-400"></i> Pop-Up Oficial para o Público
+                        </span>
+                    </div>
+                    <div id="previewBodyContent" class="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer Controls -->
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between" id="modalFooter">
+                <span class="text-xs text-slate-400 flex items-center gap-1.5" id="modalFooterNote">
+                    <i class="fa-solid fa-check text-emerald-400"></i> Atualização em tempo real
+                </span>
+                <div class="flex items-center space-x-3">
+                    <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">
+                        Fechar
+                    </button>
+                    <button onclick="triggerFormSubmit()" id="saveModalBtn" class="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-sky-600/30 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span id="saveModalBtnText">Salvar na Hora</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION DELETE MODAL -->
+    <div id="deleteConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-rose-500/30 shadow-2xl p-6 space-y-4 text-center">
+            <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-white">Excluir Módulo?</h3>
+                <p class="text-xs text-slate-400 mt-1">
+                    Tem certeza de que deseja remover o módulo <strong class="text-slate-200" id="deleteTargetTitle">...</strong>? Esta ação pode ser revertida atualizando a página.
+                </p>
+            </div>
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">
+                    Cancelar
+                </button>
+                <button onclick="executeDeleteModule()" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-rose-600/30 transition">
+                    Sim, Excluir Agora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 border border-sky-500/40 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+            <div class="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg" id="toastIcon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+                <p id="toastMessage" class="text-xs font-medium">Alteração salva com sucesso!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Store representing the modules drawn in the sketch + dynamic ones
+        let modulesData = {
+            demandas: {
+                id: 'demandas',
+                title: 'DEMANDAS',
+                desc: 'Gestão de solicitações, chamados e requerimentos dos usuários.',
+                body: 'Módulo de gerenciamento de Demandas do cidadão e servidores. Permite o acompanhamento de prazos, triagem de chamados e encaminhamento para setores responsáveis.',
+                icon: 'fa-list-check',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            ods16: {
+                id: 'ods16',
+                title: 'ODS 16',
+                desc: 'Paz, Justiça e Instituições Eficazes - Metas e Indicadores ONU.',
+                body: 'Compromisso institucional com a ODS 16 da ONU: Promover sociedades transparentes, pacíficas e inclusivas para o desenvolvimento sustentável.',
+                icon: 'fa-scale-balanced',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            privacidade: {
+                id: 'privacidade',
+                title: 'PRIVACIDADE',
+                desc: 'Política de Proteção de Dados (LGPD) e Termos de Privacidade.',
+                body: 'Informações detalhadas sobre o tratamento de dados pessoais de acordo com a LGPD (Lei Geral de Proteção de Dados - Lei nº 13.709/2018).',
+                icon: 'fa-user-shield',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            propostas: {
+                id: 'propostas',
+                title: 'PROPOSTAS',
+                desc: 'Propostas institucionais, acadêmicas e projetos em análise.',
+                body: 'Canal para submissão, avaliação e acompanhamento de propostas de inovação pedagógica, pesquisas e parcerias acadêmicas.',
+                icon: 'fa-lightbulb',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            arquivos: {
+                id: 'arquivos',
+                title: 'ARQUIVOS',
+                desc: 'Repositório de documentos oficiais, anexos e mídias do sistema.',
+                body: 'Repositório centralizado de arquivos em PDF, regimentos, portarias e formulários oficiais disponíveis para download.',
+                icon: 'fa-folder-open',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            termo_uso: {
+                id: 'termo_uso',
+                title: 'TERMO DE USO',
+                desc: 'Diretrizes e termos de utilização do portal e serviços.',
+                body: 'Regras e condições gerais de uso das plataformas digitais da instituição, direitos dos usuários e deveres de acesso.',
+                icon: 'fa-file-contract',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            transparencia: {
+                id: 'transparencia',
+                title: 'TRANSPARÊNCIA',
+                desc: 'Portal da Transparência, dados abertos e prestação de contas.',
+                body: 'Acesso às informações de execução orçamentária, licitações, relatórios de gestão e dados abertos em cumprimento à Lei de Acesso à Informação (LAI).',
+                icon: 'fa-eye',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            ajuda: {
+                id: 'ajuda',
+                title: 'AJUDA',
+                desc: 'Perguntas frequentes, tutoriais de navegação e suporte técnico.',
+                body: 'Central de Suporte ao Usuário. Encontre respostas rápidas sobre login, navegação na plataforma e atendimento suporte ADM.',
+                icon: 'fa-circle-question',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            acessibilidade: {
+                id: 'acessibilidade',
+                title: 'ACESSIBILIDADE',
+                desc: 'Recursos de inclusão, leitor de tela, atalhos e suporte a Libras.',
+                body: 'Recursos e atalhos de acessibilidade digital: Alto contraste, redimensionamento de fonte, interpretação em Libras e navegação por teclado.',
+                icon: 'fa-universal-access',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            sobre: {
+                id: 'sobre',
+                title: 'SOBRE A INSTITUIÇÃO',
+                desc: 'Missão, visão, história e diretrizes fundamentais da UnDF.',
+                body: 'Página oficial de apresentação da instituição. Histórico de fundação, pilares de ensino, pesquisa e extensão universitária.',
+                icon: 'fa-circle-info',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            },
+            governanca: {
+                id: 'governanca',
+                title: 'GOVERNANÇA',
+                desc: 'Estrutura organizacional, conselhos e atos normativos.',
+                body: 'Estrutura de Governança corporativa e acadêmica. Composição de conselhos, organograma oficial e atas de reuniões administrativas.',
+                icon: 'fa-landmark',
+                status: 'Ativo e Visível',
+                updated: new Date().toLocaleDateString('pt-BR')
+            }
+        };
+
+        // State variables
+        let isPublicViewMode = false; // false = ADM Mode (Edit/Add/Delete), true = Portal Público (Read-Only)
+        let activeModuleKey = null;
+        let isCreatingNew = false;
+        let deleteTargetKey = null;
+
+        // Render Cards in Grid
+        function renderGrid() {
+            const gridContainer = document.getElementById('modulesGrid');
+            if (!gridContainer) return;
+
+            gridContainer.innerHTML = '';
+            
+            // Exclude central highlights from normal grid count if present
+            const keys = Object.keys(modulesData).filter(k => k !== 'sobre' && k !== 'governanca');
+
+            document.getElementById('modulesCountDisplay').innerText = `${keys.length} Módulos em Grid`;
+
+            keys.forEach(key => {
+                const item = modulesData[key];
+                
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-5 cursor-pointer group flex flex-col justify-between h-48 relative border border-slate-800 hover:border-sky-500/50 transition-all shadow-lg";
+
+                // Inner Card Content
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-sky-500/10 border border-sky-500/20 text-sky-400 rounded-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid ${item.icon} text-xl"></i>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            ${!isPublicViewMode ? `
+                                <button onclick="event.stopPropagation(); requestDeleteModule('${key}')" class="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition" title="Excluir Módulo">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); openEditModal('${key}')" class="p-1.5 text-slate-400 hover:text-sky-300 hover:bg-sky-500/10 rounded-lg transition" title="Editar em Pop-up">
+                                    <i class="fa-solid fa-pen text-xs"></i>
+                                </button>
+                            ` : `
+                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                    Público
+                                </span>
+                            `}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition line-clamp-1">${item.title}</h4>
+                        <p class="text-xs text-slate-400 line-clamp-2 mt-1">${item.desc}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                        <span class="text-[11px]">${isPublicViewMode ? 'Clique para abrir Pop-up' : 'Clique para Gerenciar'}</span>
+                        <i class="fa-solid ${isPublicViewMode ? 'fa-window-restore' : 'fa-sliders'} text-sky-400"></i>
+                    </div>
+                `;
+
+                card.onclick = () => handleModuleClick(key);
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // Handle Click on Module
+        function handleModuleClick(key) {
+            if (isPublicViewMode) {
+                openPublicPreviewModal(key);
+            } else {
+                openEditModal(key);
+            }
+        }
+
+        // Toggle View Mode (ADM vs Public Portal View "Na Frente")
+        function toggleViewMode() {
+            isPublicViewMode = !isPublicViewMode;
+
+            const toggleBtn = document.getElementById('viewModeToggle');
+            const modeLabel = document.getElementById('viewModeLabel');
+            const modeIcon = document.getElementById('viewModeIcon');
+            const modeBadge = document.getElementById('modeBadge');
+            const bannerTitle = document.getElementById('bannerTitle');
+            const bannerDesc = document.getElementById('bannerDesc');
+            const addBtn = document.getElementById('addModuleBtn');
+            const bannerAddBtn = document.getElementById('bannerAddBtn');
+            const gridSectionTitle = document.getElementById('gridSectionTitle');
+
+            if (isPublicViewMode) {
+                // PUBLIC MODE ACTIVE
+                toggleBtn.className = "px-3.5 py-2 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-lg text-xs font-semibold shadow-md transition flex items-center gap-2 border border-sky-400/30";
+                modeLabel.innerText = "Voltar para Modo ADM (Edição)";
+                modeIcon.className = "fa-solid fa-user-gear";
+
+                modeBadge.className = "px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5";
+                modeBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Visualização do Público na Frente`;
+
+                bannerTitle.innerText = "Portal Público da UnDF (Visão do Usuário)";
+                bannerDesc.innerText = "Esta é exatamente a tela que o cidadão ou aluno vê 'na frente'. Qualquer card que for clicado aqui abrirá o Pop-up de leitura final.";
+
+                addBtn.classList.add('hidden');
+                bannerAddBtn.classList.add('hidden');
+                gridSectionTitle.innerText = "Navegação por Módulos e Pop-ups Públicos";
+
+                showQuickToast("👁️ Exibindo visão frontal do usuário público!");
+            } else {
+                // ADM MODE ACTIVE
+                toggleBtn.className = "px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow-md shadow-emerald-900/30 transition flex items-center gap-2 border border-emerald-400/30";
+                modeLabel.innerText = "Visualizar Portal Público (Na Frente)";
+                modeIcon.className = "fa-solid fa-eye";
+
+                modeBadge.className = "px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center gap-1.5";
+                modeBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span> Modo Administrador (Edição Total)`;
+
+                bannerTitle.innerText = "Painel Geral de Gestão do ADM";
+                bannerDesc.innerText = "Gerencie todos os módulos: Edite, Adicione novos cards ou Exclua conforme necessário. Clique em 'Visualizar Portal Público' no topo para conferir exatamente o que o cidadão vê.";
+
+                addBtn.classList.remove('hidden');
+                bannerAddBtn.classList.remove('hidden');
+                gridSectionTitle.innerText = "Grid de Módulos (Edição & Gerenciamento)";
+
+                showQuickToast("🛠️ Modo Administrador de Edição Ativado.");
+            }
+
+            renderGrid();
+        }
+
+        // Open Modal for Editing existing item
+        function openEditModal(key) {
+            const data = modulesData[key];
+            if (!data) return;
+
+            activeModuleKey = key;
+            isCreatingNew = false;
+
+            document.getElementById('modalSubtypeLabel').innerText = "Edição do ADM em Tempo Real";
+            document.getElementById('modalTitleDisplay').innerText = data.title;
+            document.getElementById('inputTitle').value = data.title;
+            document.getElementById('inputDesc').value = data.desc;
+            document.getElementById('inputBody').value = data.body;
+            document.getElementById('inputStatus').value = data.status || 'Ativo e Visível';
+            document.getElementById('inputIcon').value = data.icon || 'fa-list-check';
+            document.getElementById('inputUpdated').value = data.updated || new Date().toLocaleDateString('pt-BR');
+
+            document.getElementById('modalIcon').className = `fa-solid ${data.icon || 'fa-pen'}`;
+            document.getElementById('modalTabNav').classList.remove('hidden');
+            document.getElementById('saveModalBtnText').innerText = "Salvar na Hora";
+
+            switchTab('edit');
+            showModalContainer();
+        }
+
+        // Open Modal for Public Read-Only Preview
+        function openPublicPreviewModal(key) {
+            const data = modulesData[key];
+            if (!data) return;
+
+            activeModuleKey = key;
+
+            document.getElementById('modalSubtypeLabel').innerText = "Pop-up Público";
+            document.getElementById('modalTitleDisplay').innerText = data.title;
+            document.getElementById('previewBodyContent').innerText = data.body;
+            document.getElementById('previewStatusBadge').innerText = data.status || 'Ativo e Visível';
+            document.getElementById('modalIcon').className = `fa-solid ${data.icon || 'fa-info-circle'}`;
+
+            document.getElementById('modalTabNav').classList.add('hidden');
+            document.getElementById('editForm').classList.add('hidden');
+            document.getElementById('previewArea').classList.remove('hidden');
+            document.getElementById('saveModalBtn').classList.add('hidden');
+
+            showModalContainer();
+        }
+
+        // Open Modal for Adding new item
+        function openAddModal() {
+            isCreatingNew = true;
+            activeModuleKey = null;
+
+            document.getElementById('modalSubtypeLabel').innerText = "Criar Novo Módulo";
+            document.getElementById('modalTitleDisplay').innerText = "Novo Módulo do Sistema";
+            document.getElementById('inputTitle').value = "";
+            document.getElementById('inputDesc').value = "";
+            document.getElementById('inputBody').value = "";
+            document.getElementById('inputStatus').value = "Ativo e Visível";
+            document.getElementById('inputIcon').value = "fa-newspaper";
+            document.getElementById('inputUpdated').value = new Date().toLocaleDateString('pt-BR');
+
+            document.getElementById('modalIcon').className = "fa-solid fa-plus";
+            document.getElementById('modalTabNav').classList.add('hidden');
+            document.getElementById('saveModalBtn').classList.remove('hidden');
+            document.getElementById('saveModalBtnText').innerText = "Adicionar Módulo";
+
+            switchTab('edit');
+            showModalContainer();
+        }
+
+        // Show Modal Utility
+        function showModalContainer() {
+            const modal = document.getElementById('popupModal');
+            const container = document.getElementById('modalContainer');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }
+
+        // Close Modal Function
+        function closeModal() {
+            const modal = document.getElementById('popupModal');
+            const container = document.getElementById('modalContainer');
+
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+
+            document.getElementById('saveModalBtn').classList.remove('hidden');
+            activeModuleKey = null;
+            isCreatingNew = false;
+        }
+
+        // Switch Tab inside Modal
+        function switchTab(tab) {
+            const editForm = document.getElementById('editForm');
+            const previewArea = document.getElementById('previewArea');
+            const editBtn = document.getElementById('tabEditBtn');
+            const previewBtn = document.getElementById('tabPreviewBtn');
+
+            if (tab === 'edit') {
+                editForm.classList.remove('hidden');
+                previewArea.classList.add('hidden');
+                if (editBtn) editBtn.className = "pb-2.5 text-xs font-semibold text-sky-400 border-b-2 border-sky-500 flex items-center gap-1.5";
+                if (previewBtn) previewBtn.className = "pb-2.5 text-xs font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-1.5";
+            } else {
+                document.getElementById('previewBodyContent').innerText = document.getElementById('inputBody').value;
+                document.getElementById('previewStatusBadge').innerText = document.getElementById('inputStatus').value;
+
+                editForm.classList.add('hidden');
+                previewArea.classList.remove('hidden');
+                if (previewBtn) previewBtn.className = "pb-2.5 text-xs font-semibold text-sky-400 border-b-2 border-sky-500 flex items-center gap-1.5";
+                if (editBtn) editBtn.className = "pb-2.5 text-xs font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-1.5";
+            }
+        }
+
+        function triggerFormSubmit() {
+            document.getElementById('hiddenSubmitBtn').click();
+        }
+
+        // Save Modal Data (Handles both Edit and Add)
+        function saveModalData(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('inputTitle').value.trim();
+            const desc = document.getElementById('inputDesc').value.trim();
+            const body = document.getElementById('inputBody').value.trim();
+            const status = document.getElementById('inputStatus').value;
+            const icon = document.getElementById('inputIcon').value;
+            const now = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+
+            if (!title) return;
+
+            if (isCreatingNew) {
+                // Generate unique key
+                const newKey = 'mod_' + Date.now();
+                modulesData[newKey] = {
+                    id: newKey,
+                    title: title.toUpperCase(),
+                    desc: desc,
+                    body: body,
+                    icon: icon,
+                    status: status,
+                    updated: now
+                };
+                showQuickToast(`✨ Módulo "${title}" adicionado com sucesso!`);
+            } else if (activeModuleKey && modulesData[activeModuleKey]) {
+                modulesData[activeModuleKey].title = title;
+                modulesData[activeModuleKey].desc = desc;
+                modulesData[activeModuleKey].body = body;
+                modulesData[activeModuleKey].status = status;
+                modulesData[activeModuleKey].icon = icon;
+                modulesData[activeModuleKey].updated = now;
+
+                showQuickToast(`💾 Módulo "${title}" atualizado na hora!`);
+            }
+
+            renderGrid();
+            closeModal();
+        }
+
+        // Request Delete Confirmation
+        function requestDeleteModule(key) {
+            deleteTargetKey = key;
+            const target = modulesData[key];
+            if (!target) return;
+
+            document.getElementById('deleteTargetTitle').innerText = target.title;
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            deleteTargetKey = null;
+        }
+
+        // Execute Delete
+        function executeDeleteModule() {
+            if (deleteTargetKey && modulesData[deleteTargetKey]) {
+                const deletedTitle = modulesData[deleteTargetKey].title;
+                delete modulesData[deleteTargetKey];
+                renderGrid();
+                showQuickToast(`🗑️ Módulo "${deletedTitle}" foi removido.`);
+            }
+            closeDeleteModal();
+        }
+
+        // Toast Helper
+        function showQuickToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initial Render on Load
+        window.onload = function() {
+            renderGrid();
+        };
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeDeleteModal();
+            }
+        });
+    </script>
+</body>
+</html>
