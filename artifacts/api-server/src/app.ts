@@ -10,7 +10,7 @@
  * 5. router — rotas da API
  */
 
-import cors, { type CorsOptions } from "cors";
+import cors from "cors";
 import express, { type Express, type Request, type Response, type NextFunction } from "express";
 import pinoHttp from "pino-http";
 import { authMiddleware } from "./middlewares/authMiddleware";
@@ -25,44 +25,50 @@ const app: Express = express();
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const corsOptions: CorsOptions = {
-  credentials: true,
-  origin: (origin, callback) => {
-    // Requisições same-origin não enviam Origin
-    if (!origin) return callback(null, true);
-
-    // Desenvolvimento: aceita localhost e domínio Replit
-    if (isDev) {
-      if (/^https?:\/\/localhost(:\d+)?$/.test(origin)) {
-        return callback(null, true);
-      }
-      const replitDomain = process.env.REPLIT_DEV_DOMAIN;
-      if (replitDomain && origin.endsWith(replitDomain)) {
-        return callback(null, true);
-      }
-      // Em dev, aceita qualquer origem para facilitar testes
-      return callback(null, true);
+function isAllowedOrigin(origin: string, host?: string): boolean {
+  // Origem idêntica ao Host da requisição (same-origin — o SPA e a API são
+  // servidos pelo mesmo domínio Vercel, inclusive aliases customizados como
+  // voz-undf.vercel.app que não correspondem a VERCEL_URL). A comparação é
+  // feita pelo hostname para tolerar diferenças de esquema (http/https).
+  if (host) {
+    const originHost = /^https?:\/\//.test(origin) ? new URL(origin).host : null;
+    if (originHost === host) {
+      return true;
     }
+  }
 
-    // Produção: apenas domínios explicitamente autorizados
-    const allowed: string[] = [];
+  // Domínios explicitamente autorizados (separados por vírgula)
+  const allowed = (process.env.CORS_ALLOWED_ORIGINS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-    // Domínio de produção configurado manualmente (ex: https://voz.undf.edu.br)
-    if (process.env.PRODUCTION_DOMAIN) {
-      allowed.push(process.env.PRODUCTION_DOMAIN);
-    }
+  // Domínio de produção configurado manualmente (ex: https://voz.undf.edu.br)
+  if (process.env.PRODUCTION_DOMAIN) {
+    allowed.push(process.env.PRODUCTION_DOMAIN);
+  }
 
-    // VERCEL_URL é definido automaticamente pela Vercel em cada deploy
-    if (process.env.VERCEL_URL) {
-      allowed.push(`https://${process.env.VERCEL_URL}`);
-    }
+  // VERCEL_URL é definido automaticamente pela Vercel em cada deploy
+  if (process.env.VERCEL_URL) {
+    allowed.push(`https://${process.env.VERCEL_URL}`);
+  }
 
-    if (allowed.includes(origin)) {
-      return callback(null, true);
-    }
+  return allowed.includes(origin);
+}
 
-    return callback(new Error(`Origem não autorizada: ${origin}`));
-  },
+// A lib `cors` não expõe o `req` no callback de `origin`, então montamos um
+// middleware que captura `req.headers.host` e delega para o cors com a closure.
+const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const host = req.headers.host;
+  cors({
+    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (isDev) return callback(null, true);
+      if (isAllowedOrigin(origin, host)) return callback(null, true);
+      return callback(new Error(`Origem não autorizada: ${origin}`));
+    },
+  })(req, res, next);
 };
 
 app.use(
@@ -85,7 +91,7 @@ app.use(
   }),
 );
 
-app.use(cors(corsOptions));
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
