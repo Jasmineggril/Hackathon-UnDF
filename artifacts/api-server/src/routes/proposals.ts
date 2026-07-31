@@ -90,6 +90,22 @@ router.post("/proposals", async (req: Request, res: Response) => {
   res.status(201).json(sanitized);
 });
 
+// GET /proposals/:id — Detalhe público de uma proposta
+router.get("/proposals/:id", async (req: Request, res: Response) => {
+  const id = parseInt(String(req.params.id), 10);
+  if (isNaN(id)) {
+    res.status(400).json({ message: "ID inválido." });
+    return;
+  }
+  const [proposal] = await db.select().from(proposals).where(eq(proposals.id, id));
+  if (!proposal) {
+    res.status(404).json({ message: "Proposta não encontrada." });
+    return;
+  }
+  const { userId, ...sanitized } = proposal;
+  res.json(sanitized);
+});
+
 // POST /proposals/:id/support — Toggle apoio (requer auth)
 router.post("/proposals/:id/support", async (req: Request, res: Response) => {
   if (!req.isAuthenticated()) {

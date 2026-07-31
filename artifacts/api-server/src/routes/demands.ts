@@ -253,6 +253,33 @@ router.get("/demands/protocol/:protocol", async (req: Request, res: Response) =>
   res.json(toPublicDemandResponse({ ...demand, userSupported }));
 });
 
+// ── GET /demands/:id — Detalhe público de uma demanda ────────────────────────
+
+router.get("/demands/:id", async (req: Request, res: Response) => {
+  const id = parseInt(String(req.params.id), 10);
+  if (isNaN(id)) {
+    res.status(400).json({ message: "ID inválido." });
+    return;
+  }
+
+  const [demand] = await db.select().from(demands).where(eq(demands.id, id));
+  if (!demand) {
+    res.status(404).json({ message: "Demanda não encontrada." });
+    return;
+  }
+
+  let userSupported = false;
+  if (req.isAuthenticated()) {
+    const [support] = await db
+      .select()
+      .from(demandSupports)
+      .where(and(eq(demandSupports.demandId, id), eq(demandSupports.userId, req.user.id)));
+    userSupported = !!support;
+  }
+
+  res.json(toPublicDemandResponse({ ...demand, userSupported }));
+});
+
 // ── POST /demands/:id/support — Toggle apoio (requer auth) ───────────────────
 
 router.post("/demands/:id/support", async (req: Request, res: Response) => {
@@ -371,11 +398,19 @@ router.patch(
       return;
     }
 
+    // targetUnit pode ser atualizado pelo admin mesmo não estando no schema gerado
+    const rawTargetUnit = req.body?.targetUnit;
+    const targetUnitUpdate: Record<string, unknown> = {};
+    if (typeof rawTargetUnit === "string") {
+      targetUnitUpdate.targetUnit = rawTargetUnit.trim() || null;
+    }
+
     const [updated] = await db
       .update(demands)
       .set({
         status: parsed.data.status,
         adminResponse: parsed.data.adminResponse ?? null,
+        ...targetUnitUpdate,
         updatedAt: new Date(),
       })
       .where(eq(demands.id, id))

@@ -137,6 +137,59 @@ export function useRemoveSupport() {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Types for public demand/proposal responses
+// ---------------------------------------------------------------------------
+
+export interface DemandPublic {
+  id: number;
+  protocol: string;
+  type: string;
+  category: string;
+  content: string | null;
+  mediaUrl: string | null;
+  status: string;
+  isAnonymous: boolean;
+  targetUnit: string | null;
+  address: string | null;
+  supportCount: number;
+  adminResponse: string | null;
+  userSupported: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProposalPublic {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  status: string;
+  supportCount: number;
+  adminDecision: string | null;
+  targetUnit: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export function useDemandById(id: number | null) {
+  return useQuery<DemandPublic>({
+    queryKey: ["/api/demands", id],
+    queryFn: () => authedFetch<DemandPublic>(`/api/demands/${id}`),
+    enabled: id !== null && !isNaN(id as number),
+    staleTime: 30_000,
+  });
+}
+
+export function useProposalById(id: number | null) {
+  return useQuery<ProposalPublic>({
+    queryKey: ["/api/proposals", id],
+    queryFn: () => authedFetch<ProposalPublic>(`/api/proposals/${id}`),
+    enabled: id !== null && !isNaN(id as number),
+    staleTime: 30_000,
+  });
+}
+
 /** Demo login — chama o backend que detém as credenciais */
 export async function demoLogin(options?: { type?: "student" | "admin" }): Promise<{
   access_token: string;

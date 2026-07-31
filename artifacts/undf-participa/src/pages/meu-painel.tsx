@@ -300,7 +300,7 @@ function DemandsTab() {
                   )}
                 </div>
               </div>
-              <Link href={`/protocolo?q=${d.protocol}`}>
+              <Link href={`/demandas/${d.id}`}>
                 <Button variant="outline" size="sm" className="shrink-0 border-[#1B3469]/15 text-[#1B3469]">
                   <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
                   Ver detalhes

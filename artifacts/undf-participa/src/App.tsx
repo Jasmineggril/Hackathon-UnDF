@@ -15,9 +15,12 @@ import { GuidedTour, TourProvider } from '@/components/GuidedTour';
 import Home from '@/pages/home';
 import Demands from '@/pages/demands';
 import NewDemand from '@/pages/new-demand';
+import DemandDetail from '@/pages/demand-detail';
+import DemandSuccess from '@/pages/demand-success';
 import ProtocolLookup from '@/pages/protocol-lookup';
 import Proposals from '@/pages/proposals';
 import NewProposal from '@/pages/new-proposal';
+import ProposalDetail from '@/pages/proposal-detail';
 import Transparency from '@/pages/transparency';
 import Ods16 from '@/pages/ods16';
 import Admin from '@/pages/admin';
@@ -72,16 +75,27 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/recuperar-senha" component={RecuperarSenha} />
       <Route path="/redefinir-senha" component={RedefinirSenha} />
+      {/* Demandas — ordem importa: rotas específicas antes de parâmetros */}
       <Route path="/demandas/nova" component={NewDemand} />
+      <Route path="/demandas/:id/sucesso" component={DemandSuccess} />
+      <Route path="/demandas/:id" component={DemandDetail} />
       <Route path="/demandas" component={Demands} />
       <Route path="/protocolo" component={ProtocolLookup} />
-      <Route path="/propostas" component={Proposals} />
+      {/* Propostas */}
       <Route path="/propostas/nova" component={NewProposal} />
+      <Route path="/propostas/:id" component={ProposalDetail} />
+      <Route path="/propostas" component={Proposals} />
+      {/* Transparência e informações */}
       <Route path="/transparencia" component={Transparency} />
       <Route path="/ods16" component={Ods16} />
+      {/* Admin */}
+      <Route path="/admin/demandas/:id" component={Admin} />
+      <Route path="/admin/demandas" component={Admin} />
       <Route path="/admin" component={Admin} />
-      <Route path="/sobre" component={About} />
+      {/* Área do usuário */}
       <Route path="/meu-painel" component={MeuPainel} />
+      {/* Informações */}
+      <Route path="/sobre" component={About} />
       <Route path="/ajuda" component={Ajuda} />
       <Route path="/cadastro" component={Cadastro} />
       <Route path="/governanca" component={Governanca} />

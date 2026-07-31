@@ -11,7 +11,7 @@
  */
 
 import cors, { type CorsOptions } from "cors";
-import express, { type Express } from "express";
+import express, { type Express, type Request, type Response, type NextFunction } from "express";
 import pinoHttp from "pino-http";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import router from "./routes";
@@ -92,5 +92,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(authMiddleware);
 
 app.use("/api", router);
+
+// ---------------------------------------------------------------------------
+// Global error handler — must be LAST middleware (4 params = error handler)
+// Garante que todos os erros não tratados retornem JSON, nunca HTML.
+// ---------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  const statusCode =
+    (err as unknown as { status?: number }).status ??
+    (err as unknown as { statusCode?: number }).statusCode ??
+    500;
+  const message =
+    process.env.NODE_ENV === "production"
+      ? "Erro interno do servidor."
+      : (err.message || "Erro interno do servidor.");
+  logger.error({ err, statusCode }, "unhandled_route_error");
+  if (!res.headersSent) {
+    res.status(statusCode).json({ message });
+  }
+});
 
 export default app;

@@ -104,7 +104,7 @@ export default function Proposals() {
               return (
                 <div
                   key={proposal.id}
-                  className="bg-background p-8 flex flex-col group hover:bg-primary transition-colors duration-300"
+                  className="bg-background p-8 flex flex-col group hover:bg-primary transition-colors duration-300 relative"
                 >
                   {/* top meta */}
                   <div className="flex items-center justify-between mb-5">
@@ -156,6 +156,15 @@ export default function Proposals() {
                     </span>
                     <span className="tabular-nums">{proposal.supportCount}</span>
                   </button>
+
+                  {/* Ver detalhes */}
+                  <Link
+                    href={`/propostas/${proposal.id}`}
+                    className="mt-3 flex items-center gap-1 text-xs text-muted-foreground group-hover:text-white/60 transition-colors hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Ver detalhes <Search className="w-3 h-3" />
+                  </Link>
                 </div>
               );
             })}

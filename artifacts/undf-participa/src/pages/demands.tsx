@@ -121,10 +121,7 @@ export default function Demands() {
               const sc = STATUS_CONFIG[demand.status];
               const supported = (demand as any).userSupported;
               return (
-                <div
-                  key={demand.id}
-                  className="bg-background flex flex-col p-7 group hover:bg-primary transition-colors duration-300"
-                >
+                <Link key={demand.id} href={`/demandas/${demand.id}`} className="bg-background flex flex-col p-7 group hover:bg-primary transition-colors duration-300 cursor-pointer">
                   {/* top meta */}
                   <div className="flex items-center justify-between mb-5">
                     <span className="text-xs uppercase tracking-widest text-muted-foreground group-hover:text-white/50 transition-colors font-medium">
@@ -162,10 +159,10 @@ export default function Demands() {
                     )}
                   </div>
 
-                  {/* support button */}
+                  {/* support button — stopPropagation para não navegar ao clicar */}
                   <button
                     data-tour={demand.id === data?.data[0]?.id ? "tambem-afetado" : undefined}
-                    onClick={() => handleSupport(demand.id)}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSupport(demand.id); }}
                     disabled={toggleSupport.isPending}
                     className={`flex items-center justify-between w-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
                       supported
@@ -179,7 +176,7 @@ export default function Demands() {
                     </span>
                     <span className="tabular-nums">{demand.supportCount}</span>
                   </button>
-                </div>
+                </Link>
               );
             })}
           </div>
